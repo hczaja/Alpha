@@ -38,18 +38,20 @@ namespace Main.Utils
 
         private void _window_Closed(object? sender, EventArgs e)
         {
-            // Ask user for save the current game state
-            this._window.Close();
+            if (this._gameState.TrySave())
+            {
+                this._window.Close();
+            }
         }
 
         private void _window_LostFocus(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            this._gameState.Handle(new WindowFocusEvent(WindowFocusEventType.FocusLost));
         }
 
         private void _window_GainedFocus(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            this._gameState.Handle(new WindowFocusEvent(WindowFocusEventType.FocusGained));
         }
 
         private void _window_MouseMoved(object? sender, MouseMoveEventArgs e)

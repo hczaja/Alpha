@@ -12,7 +12,7 @@ namespace Main.Utils.Events
         Unknown, KeyPressed, KeyReleased
     }
 
-    internal class KeyboardEvent
+    internal record KeyboardEvent
     {
         public Keyboard.Key Key { get; init; }
         public KeyboardEventType Type { get; init; }
