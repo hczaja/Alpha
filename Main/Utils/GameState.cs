@@ -1,4 +1,8 @@
-﻿using Main.Utils.Events;
+﻿using Main.Content;
+using Main.Content.MainMenu;
+using Main.Utils.Events;
+using Main.Utils.Graphic;
+using SFML.Graphics;
 using SFML.Window;
 using System;
 using System.Collections.Generic;
@@ -8,34 +12,64 @@ using System.Threading.Tasks;
 
 namespace Main.Utils
 {
-    internal class GameState : 
+    internal class GameState :
+        IDrawable,
         IEventHandler<MouseEvent>,
         IEventHandler<KeyboardEvent>,
-        IEventHandler<WindowFocusEvent>
+        IEventHandler<WindowFocusEvent>,
+        IEventHandler<WindowContentChangedEvent>
     {
-        public GameState()
+        private readonly GameWindow _windowHandler;
+        private IWindowContent ActualContent { get; set; }
+
+        public GameState(GameWindow windowHandler)
         {
-                
+            this._windowHandler = windowHandler;
+            this.ActualContent = new MainMenuContent(this);
         }
 
-        public void Draw() { }
-        public void Update() { }
-        public bool TrySave() => true;
+        public void Draw(RenderTarget drawer) 
+        { 
+            this.ActualContent.Draw(drawer); 
+        }
+
+        public void Update() 
+        { 
+            this.ActualContent.Update(); 
+        }
+
+        public bool TrySave()
+        {
+            return true;
+        }
 
         public void Handle(MouseEvent e)
         {
             // event contains the current position of the mouse cursor relative to the window!
-            throw new NotImplementedException();
+            this.ActualContent.Handle(e);
         }
 
         public void Handle(KeyboardEvent e)
         {
-            throw new NotImplementedException();
+            this.ActualContent.Handle(e);
         }
 
-        public void Handle(WindowFocusEvent e)
+        public void Handle(WindowFocusEvent e) { }
+
+        public void Handle(WindowContentChangedEvent e)
         {
-            throw new NotImplementedException();
+            switch (e.Type)
+            {
+                case WindowContentEventType.MainMenu:
+                    this.ActualContent = new MainMenuContent(this);
+                    break;
+                case WindowContentEventType.Exit:
+                    this._windowHandler.TryClose();
+                    break;
+                case WindowContentEventType.Unknown:
+                default:
+                    break;
+            }
         }
     }
 }

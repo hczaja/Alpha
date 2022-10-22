@@ -20,8 +20,8 @@ namespace Main.Utils.Events
         public Mouse.Button Button { get; init; }
         public MouseEventType Type { get; init; }
 
-        public MouseEvent(MouseEventType _type, float _x, float _y, Mouse.Button _button) => 
-            (Type, X, Y, Button) = (_type, _x, _y, _button);
+        public MouseEvent(MouseEventType type, float x, float y, Mouse.Button button) => 
+            (Type, X, Y, Button) = (type, x, y, button);
 
         public static bool IsMouseEventRaisedIn(FloatRect rect, MouseEvent e) =>
             rect.Left < e.X && e.X < rect.Left + rect.Width &&

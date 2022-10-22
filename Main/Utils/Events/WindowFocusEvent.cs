@@ -15,6 +15,6 @@ namespace Main.Utils.Events
     {
         public WindowFocusEventType Type { get; init; }
 
-        public WindowFocusEvent(WindowFocusEventType _type) => (Type) = (_type);
+        public WindowFocusEvent(WindowFocusEventType type) => (Type) = (type);
     }
 }

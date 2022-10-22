@@ -17,7 +17,7 @@ namespace Main.Utils.Events
         public Keyboard.Key Key { get; init; }
         public KeyboardEventType Type { get; init; }
 
-        public KeyboardEvent(KeyboardEventType _type, Keyboard.Key _key) =>
-            (Type, Key) = (_type, _key);
+        public KeyboardEvent(KeyboardEventType type, Keyboard.Key key) =>
+            (Type, Key) = (type, key);
     }
 }
