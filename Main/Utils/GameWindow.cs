@@ -33,15 +33,12 @@ namespace Main.Utils
             this._window.MouseButtonReleased += _window_MouseButtonReleased;
             this._window.MouseMoved += _window_MouseMoved;
 
-            this._gameState = new GameState();
+            this._gameState = new GameState(this);
         }
 
         private void _window_Closed(object? sender, EventArgs e)
         {
-            if (this._gameState.TrySave())
-            {
-                this._window.Close();
-            }
+            this.TryClose();
         }
 
         private void _window_LostFocus(object? sender, EventArgs e)
@@ -80,10 +77,23 @@ namespace Main.Utils
         }
 
         public void Clear() => this._window.Clear(Color.Black);
+
         public void DispatchEvents() => this._window.DispatchEvents();
+
         public void Display() => this._window.Display();
-        public void Draw() => this._gameState.Draw();
+
+        public void Draw() => this._gameState.Draw(this._window);
+
         public void Update() => this._gameState.Update();
+
         public bool IsOpen() => this._window.IsOpen;
+
+        public void TryClose()
+        {
+            if (this._gameState.TrySave())
+            {
+                this._window.Close();
+            }
+        }
     }
 }
