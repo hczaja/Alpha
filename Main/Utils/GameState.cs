@@ -1,4 +1,5 @@
 ﻿using Main.Content;
+using Main.Content.Game;
 using Main.Content.MainMenu;
 using Main.Utils.Events;
 using Main.Utils.Graphic;
@@ -62,6 +63,9 @@ namespace Main.Utils
             {
                 case WindowContentEventType.MainMenu:
                     this.ActualContent = new MainMenuContent(this);
+                    break;
+                case WindowContentEventType.Game:
+                    this.ActualContent = new GameContent(this);
                     break;
                 case WindowContentEventType.Exit:
                     this._windowHandler.TryClose();

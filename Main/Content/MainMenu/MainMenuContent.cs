@@ -43,7 +43,7 @@ namespace Main.Content.MainMenu
                 if (MouseEvent.IsMouseEventRaisedIn(this.StartButton.Rectangle.GetGlobalBounds(), e))
                 {
                     this._gameState.Handle(
-                        new WindowContentChangedEvent(WindowContentEventType.GamePreparation));
+                        new WindowContentChangedEvent(WindowContentEventType.Game));
                 }
                 else if (MouseEvent.IsMouseEventRaisedIn(this.ExitButton.Rectangle.GetGlobalBounds(), e))
                 {
