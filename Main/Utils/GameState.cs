@@ -34,9 +34,9 @@ namespace Main.Utils
             this.ActualContent.Draw(drawer); 
         }
 
-        public void Update() 
+        public void Update(RenderTarget window) 
         { 
-            this.ActualContent.Update(); 
+            this.ActualContent.Update(window); 
         }
 
         public bool TrySave()
@@ -65,7 +65,7 @@ namespace Main.Utils
                     this.ActualContent = new MainMenuContent(this);
                     break;
                 case WindowContentEventType.Game:
-                    this.ActualContent = new GameContent(this);
+                    this.ActualContent = new GameContent(this, this._windowHandler);
                     break;
                 case WindowContentEventType.Exit:
                     this._windowHandler.TryClose();

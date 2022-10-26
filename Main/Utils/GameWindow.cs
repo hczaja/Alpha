@@ -84,7 +84,7 @@ namespace Main.Utils
 
         public void Draw() => this._gameState.Draw(this._window);
 
-        public void Update() => this._gameState.Update();
+        public void Update() => this._gameState.Update(this._window);
 
         public bool IsOpen() => this._window.IsOpen;
 
