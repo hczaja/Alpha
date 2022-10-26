@@ -55,6 +55,6 @@ namespace Main.Content.MainMenu
 
         public void Handle(KeyboardEvent e) { }
 
-        public void Update() { }
+        public void Update(RenderTarget window) { }
     }
 }
