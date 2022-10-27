@@ -10,9 +10,8 @@ using System.Threading.Tasks;
 
 namespace Main.Utils.Graphic
 {
-    internal class Button :
-        IDrawable,
-        IEventHandler<MouseEvent>
+    internal class Button : IDrawable
+
     {
         public string Name { get; init; }
         public RectangleShape Rectangle { get; init; }
@@ -31,17 +30,6 @@ namespace Main.Utils.Graphic
         public void Draw(RenderTarget drawer)
         {
             drawer.Draw(this.Rectangle);
-        }
-
-        public void Handle(MouseEvent e)
-        {
-            this.Rectangle.OutlineThickness = 0.0f;
-
-            if (e.Type == MouseEventType.Move
-                && MouseEvent.IsMouseEventRaisedIn(this.Rectangle.GetGlobalBounds(), e))
-            {
-                this.Rectangle.OutlineThickness = 2.0f;
-            }
         }
     }
 }

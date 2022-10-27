@@ -35,7 +35,7 @@ namespace Main.Utils
         }
 
         public void Update(RenderTarget window) 
-        { 
+        {
             this.ActualContent.Update(window); 
         }
 
@@ -65,7 +65,7 @@ namespace Main.Utils
                     this.ActualContent = new MainMenuContent(this);
                     break;
                 case WindowContentEventType.Game:
-                    this.ActualContent = new GameContent(this, this._windowHandler);
+                    this.ActualContent = new GameContent(this);
                     break;
                 case WindowContentEventType.Exit:
                     this._windowHandler.TryClose();

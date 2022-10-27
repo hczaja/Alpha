@@ -22,11 +22,11 @@ namespace Main.Utils
         {
             while (this._gameWindow.IsOpen())
             {
-                this._gameWindow.DispatchEvents();
-
                 this._gameClock.Update();
                 if (this._gameClock.IsUpdated())
                 {
+                    this._gameWindow.DispatchEvents();
+
                     this._gameWindow.Update();
                     
                     this._gameWindow.Clear();

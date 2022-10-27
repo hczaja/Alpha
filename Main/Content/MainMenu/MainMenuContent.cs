@@ -34,8 +34,6 @@ namespace Main.Content.MainMenu
 
         public void Handle(MouseEvent e)
         {
-            this.StartButton.Handle(e);
-            this.ExitButton.Handle(e);
 
             if (e.Type == MouseEventType.ButtonPressed
                 && e.Button == Mouse.Button.Left)

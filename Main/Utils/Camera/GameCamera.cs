@@ -1,5 +1,6 @@
 ﻿using Main.Utils.Events;
 using SFML.System;
+using SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +9,16 @@ using System.Threading.Tasks;
 
 namespace Main.Utils.Camera
 {
-    internal class GameCamera
-        : IEventHandler<MouseEvent>
+    internal class GameCamera : IEventHandler<MouseEvent>
     {
         public GameCameraMoveDirection MoveDirection { get; private set; }
         public static readonly float MoveSpeed = 2.0f;
         public static readonly float ViewBandwith = 64.0f;
 
-        public float MoveX { get; set; } = 0.0f;
-        public float MoveY { get; set; } = 0.0f;
+        public float MoveX { get; private set; }
+        public float MoveY { get; private set; }
+        
+        public bool CanMove { get; private set; }
 
         private float workspaceWidth;
         private float workspaceHeight;
@@ -31,27 +33,19 @@ namespace Main.Utils.Camera
 
         public void Handle(MouseEvent e)
         {
-            //if (e.Type != MouseEventType.Move)
-            //{
-            //    this.MoveDirection = GameCameraMoveDirection.NoMove;
-            //    return;
-            //}
+            if (e.Type == MouseEventType.ButtonPressed && e.Button == Mouse.Button.Middle) this.CanMove = true;
+            else if (e.Type == MouseEventType.ButtonReleased && e.Button == Mouse.Button.Middle) this.CanMove = false;
 
-            bool moveTop =
-                   0.0f + this.MoveY <= e.Y
-                && e.Y < 0.0f + this.MoveY + ViewBandwith;
+            if (!this.CanMove)
+            {
+                this.MoveDirection = GameCameraMoveDirection.NoMove;
+                return;
+            }
 
-            bool moveBottom = true
-                && workspaceHeight + this.MoveY - ViewBandwith <= e.Y
-                && e.Y < workspaceHeight + this.MoveY;
-
-            bool moveLeft = true
-                && 0.0f + this.MoveX <= e.X
-                && e.X < 0.0f + this.MoveX + ViewBandwith;
-
-            bool moveRight = true
-                && workspaceWidth + this.MoveX - ViewBandwith <= e.X
-                && e.X < workspaceWidth + this.MoveX;
+            bool moveTop = 0.0f <= e.Y && e.Y < 0.0f + ViewBandwith;
+            bool moveBottom = workspaceHeight - ViewBandwith <= e.Y && e.Y < workspaceHeight;
+            bool moveLeft = 0.0f <= e.X && e.X < 0.0f + ViewBandwith;
+            bool moveRight = workspaceWidth - ViewBandwith <= e.X && e.X < workspaceWidth;
 
             if (!moveTop && !moveBottom && !moveLeft && !moveRight)
             {
@@ -60,13 +54,13 @@ namespace Main.Utils.Camera
             }
 
             if (moveTop && moveLeft) this.MoveDirection = GameCameraMoveDirection.TopLeft;
-            if (moveTop && moveRight) this.MoveDirection = GameCameraMoveDirection.TopRight;
-            if (moveBottom && moveLeft) this.MoveDirection = GameCameraMoveDirection.BottomLeft;
-            if (moveBottom && moveRight) this.MoveDirection = GameCameraMoveDirection.BottomRight;
-            if (moveLeft) this.MoveDirection = GameCameraMoveDirection.Left;
-            if (moveRight) this.MoveDirection = GameCameraMoveDirection.Right;
-            if (moveTop) this.MoveDirection = GameCameraMoveDirection.Top;
-            if (moveBottom) this.MoveDirection = GameCameraMoveDirection.Bottom;
+            else if (moveTop && moveRight) this.MoveDirection = GameCameraMoveDirection.TopRight;
+            else if (moveBottom && moveLeft) this.MoveDirection = GameCameraMoveDirection.BottomLeft;
+            else if (moveBottom && moveRight) this.MoveDirection = GameCameraMoveDirection.BottomRight;
+            else if (moveLeft) this.MoveDirection = GameCameraMoveDirection.Left;
+            else if (moveRight) this.MoveDirection = GameCameraMoveDirection.Right;
+            else if (moveTop) this.MoveDirection = GameCameraMoveDirection.Top;
+            else if (moveBottom) this.MoveDirection = GameCameraMoveDirection.Bottom;
         }
     }
 }
