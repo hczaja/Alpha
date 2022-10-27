@@ -12,7 +12,7 @@ namespace Main.Utils.Camera
         : IEventHandler<MouseEvent>
     {
         public GameCameraMoveDirection MoveDirection { get; private set; }
-        public static readonly float MoveSpeed = 2.0f;
+        public static readonly float MoveSpeed = 8.0f;
         public static readonly float ViewBandwith = 64.0f;
 
         public float MoveX { get; set; } = 0.0f;
@@ -31,27 +31,21 @@ namespace Main.Utils.Camera
 
         public void Handle(MouseEvent e)
         {
-            //if (e.Type != MouseEventType.Move)
-            //{
-            //    this.MoveDirection = GameCameraMoveDirection.NoMove;
-            //    return;
-            //}
-
             bool moveTop =
-                   0.0f + this.MoveY <= e.Y
-                && e.Y < 0.0f + this.MoveY + ViewBandwith;
+                   0.0f <= e.Y
+                && e.Y < 0.0f + ViewBandwith;
 
             bool moveBottom = true
-                && workspaceHeight + this.MoveY - ViewBandwith <= e.Y
-                && e.Y < workspaceHeight + this.MoveY;
+                && workspaceHeight - ViewBandwith <= e.Y
+                && e.Y < workspaceHeight;
 
             bool moveLeft = true
-                && 0.0f + this.MoveX <= e.X
-                && e.X < 0.0f + this.MoveX + ViewBandwith;
+                && 0.0f <= e.X
+                && e.X < 0.0f+ ViewBandwith;
 
             bool moveRight = true
-                && workspaceWidth + this.MoveX - ViewBandwith <= e.X
-                && e.X < workspaceWidth + this.MoveX;
+                && workspaceWidth - ViewBandwith <= e.X
+                && e.X < workspaceWidth;
 
             if (!moveTop && !moveBottom && !moveLeft && !moveRight)
             {
@@ -60,13 +54,13 @@ namespace Main.Utils.Camera
             }
 
             if (moveTop && moveLeft) this.MoveDirection = GameCameraMoveDirection.TopLeft;
-            if (moveTop && moveRight) this.MoveDirection = GameCameraMoveDirection.TopRight;
-            if (moveBottom && moveLeft) this.MoveDirection = GameCameraMoveDirection.BottomLeft;
-            if (moveBottom && moveRight) this.MoveDirection = GameCameraMoveDirection.BottomRight;
-            if (moveLeft) this.MoveDirection = GameCameraMoveDirection.Left;
-            if (moveRight) this.MoveDirection = GameCameraMoveDirection.Right;
-            if (moveTop) this.MoveDirection = GameCameraMoveDirection.Top;
-            if (moveBottom) this.MoveDirection = GameCameraMoveDirection.Bottom;
+            else if (moveTop && moveRight) this.MoveDirection = GameCameraMoveDirection.TopRight;
+            else if (moveBottom && moveLeft) this.MoveDirection = GameCameraMoveDirection.BottomLeft;
+            else if (moveBottom && moveRight) this.MoveDirection = GameCameraMoveDirection.BottomRight;
+            else if (moveLeft) this.MoveDirection = GameCameraMoveDirection.Left;
+            else if (moveRight) this.MoveDirection = GameCameraMoveDirection.Right;
+            else if (moveTop) this.MoveDirection = GameCameraMoveDirection.Top;
+            else if (moveBottom) this.MoveDirection = GameCameraMoveDirection.Bottom;
         }
     }
 }
