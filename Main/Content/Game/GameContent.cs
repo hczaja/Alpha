@@ -10,36 +10,33 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game
 {
-    internal class GameContent 
-        : IWindowContent
+    internal class GameContent : IWindowContent
     {
         private readonly GameState _gameState;
-        private readonly GameWindow _gameWindow;
         
         private readonly GameCamera Camera;
         private readonly GameView View;
 
         private Grid Grid { get; init; }
 
-        public GameContent(GameState gameState, GameWindow gameWindow)
+        public GameContent(GameState gameState)
         {
             _gameState = gameState;
-            _gameWindow = gameWindow;
 
             this.Camera = new GameCamera(GameSettings.WindowWidth, GameSettings.WindowHeight);
             this.View = new GameView(this.Camera);
 
-            this.Grid = new Grid(GridSize.Small);
+            this.Grid = new Grid(GridSize.Small, this.Camera);
         }
 
         public void Draw(RenderTarget drawer) 
         {
             this.Grid.Draw(drawer);
         }
-
-        public void Handle(MouseEvent e) 
+        public void Handle(MouseEvent e)
         {
             this.Camera.Handle(e);
+            this.Grid.Handle(e);
         }
 
         public void Handle(KeyboardEvent e) 

@@ -1,4 +1,5 @@
-﻿using Main.Utils.Graphic;
+﻿using Main.Utils.Behaviours;
+using Main.Utils.Graphic;
 using SFML.Graphics;
 using SFML.System;
 using System;
@@ -9,12 +10,14 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game
 {
-    internal class Cell : IDrawable
+    internal class Cell : IDrawable, IClickable
     {
         public static readonly float _CellSizeX = 32;
         public static readonly float _CellSizeY = 32;
 
         public RectangleShape Rectangle { get; init; }
+
+        public bool Selected { get; private set; }
 
         public Cell(int i, int j)
         {
@@ -29,7 +32,23 @@ namespace Main.Content.Game
 
         public void Draw(RenderTarget drawer)
         {
+            this.Rectangle.OutlineColor = Color.White;
+
+            if (this.Selected)
+            {
+                this.Rectangle.OutlineColor = Color.Red;
+            }
+            
             drawer.Draw(this.Rectangle);
         }
+
+        public void OnClick()
+        {
+            this.Select();
+        }
+
+        public void Select() => this.Selected = true;
+
+        public void Unselect() => this.Selected = false;
     }
 }

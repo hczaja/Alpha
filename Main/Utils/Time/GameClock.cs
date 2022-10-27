@@ -29,7 +29,6 @@ namespace Main.Utils.Time
 
         public new void Restart()
         {
-            base.Restart();
             this._totalTimeBeforeUpdate = 0.0f;
         }
     }

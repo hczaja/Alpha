@@ -25,13 +25,10 @@ namespace Main.Utils
             this._window.SetKeyRepeatEnabled(enable: false);
 
             this._window.Closed += _window_Closed;
-            this._window.GainedFocus += _window_GainedFocus;
-            this._window.LostFocus += _window_LostFocus;
             this._window.KeyPressed += _window_KeyPressed;
             this._window.KeyReleased += _window_KeyReleased;
             this._window.MouseButtonPressed += _window_MouseButtonPressed;
             this._window.MouseButtonReleased += _window_MouseButtonReleased;
-            this._window.MouseMoved += _window_MouseMoved;
 
             this._gameState = new GameState(this);
         }
@@ -41,38 +38,27 @@ namespace Main.Utils
             this.TryClose();
         }
 
-        private void _window_LostFocus(object? sender, EventArgs e)
-        {
-            this._gameState.Handle(new WindowFocusEvent(WindowFocusEventType.FocusLost));
-        }
-
-        private void _window_GainedFocus(object? sender, EventArgs e)
-        {
-            this._gameState.Handle(new WindowFocusEvent(WindowFocusEventType.FocusGained));
-        }
-
-        private void _window_MouseMoved(object? sender, MouseMoveEventArgs e)
-        {
-            this._gameState.Handle(new MouseEvent(MouseEventType.Move, e.X, e.Y, default));
-        }
-
         private void _window_MouseButtonReleased(object? sender, MouseButtonEventArgs e)
         {
+            Console.WriteLine($"{DateTime.Now} - {nameof(_window_MouseButtonReleased)} - {e.Button}");
             this._gameState.Handle(new MouseEvent(MouseEventType.ButtonReleased, e.X, e.Y, e.Button));
         }
 
         private void _window_MouseButtonPressed(object? sender, MouseButtonEventArgs e)
         {
+            Console.WriteLine($"{DateTime.Now} - {nameof(_window_MouseButtonPressed)} - {e.Button}");
             this._gameState.Handle(new MouseEvent(MouseEventType.ButtonPressed, e.X, e.Y, e.Button));
         }
 
         private void _window_KeyReleased(object? sender, KeyEventArgs e)
         {
+            Console.WriteLine($"{DateTime.Now} - {nameof(_window_KeyReleased)} - {e.Code}");
             this._gameState.Handle(new KeyboardEvent(KeyboardEventType.KeyReleased, e.Code));
         }
 
         private void _window_KeyPressed(object? sender, KeyEventArgs e)
         {
+            Console.WriteLine($"{DateTime.Now} - {nameof(_window_KeyPressed)} - {e.Code}");
             this._gameState.Handle(new KeyboardEvent(KeyboardEventType.KeyPressed, e.Code));
         }
 
