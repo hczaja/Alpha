@@ -21,6 +21,7 @@ namespace Main.Content.MainMenu
         public MainMenuContent(GameState gameState)
         {
             _gameState = gameState;
+            _gameState.RestartView();
 
             this.StartButton = new StartButton();
             this.ExitButton = new ExitButton();

@@ -81,5 +81,10 @@ namespace Main.Utils
                 this._window.Close();
             }
         }
+
+        public void RestartView()
+        {
+            this._window.SetView(this._window.DefaultView);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using Main.Utils.Camera;
 using Main.Utils.Events;
 using SFML.Graphics;
+using SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace Main.Content.Game
             this.Camera = new GameCamera(GameSettings.WindowWidth, GameSettings.WindowHeight);
             this.View = new GameView(this.Camera);
 
-            this.Grid = new Grid(GridSize.Small, this.Camera);
+            this.Grid = new Grid(GridSize.Medium, this.Camera);
         }
 
         public void Draw(RenderTarget drawer) 
@@ -41,7 +42,10 @@ namespace Main.Content.Game
 
         public void Handle(KeyboardEvent e) 
         { 
-        
+            if (e.Type == KeyboardEventType.KeyPressed && e.Key == Keyboard.Key.Escape)
+            {
+                this._gameState.Handle(new WindowContentChangedEvent(WindowContentEventType.MainMenu));
+            }
         }
 
         public void Update(RenderTarget window) 

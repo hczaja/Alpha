@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace Main.Utils
 {
+    // extract an interface
     internal class GameState :
         IDrawable,
         IEventHandler<MouseEvent>,
@@ -42,6 +43,11 @@ namespace Main.Utils
         public bool TrySave()
         {
             return true;
+        }
+
+        public void RestartView()
+        {
+            this._windowHandler.RestartView();
         }
 
         public void Handle(MouseEvent e)

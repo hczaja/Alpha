@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Main.Utils.Behaviours
+namespace Main.Content.Game.Terrains
 {
-    internal interface IClickable
+    internal enum TerrainType
     {
-        public void OnClick();
+        Unknown, Water, Dirt, Grass
     }
 }
