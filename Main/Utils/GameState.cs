@@ -24,6 +24,9 @@ namespace Main.Utils
         private readonly GameWindow _windowHandler;
         private IWindowContent ActualContent { get; set; }
 
+        private Player[] Players { get; init; }
+        private Player CurrentPlayer;
+
         public GameState(GameWindow windowHandler)
         {
             this._windowHandler = windowHandler;
@@ -35,9 +38,9 @@ namespace Main.Utils
             this.ActualContent.Draw(drawer); 
         }
 
-        public void Update(RenderTarget window) 
+        public void Update() 
         {
-            this.ActualContent.Update(window); 
+            this.ActualContent.Update(); 
         }
 
         public bool TrySave()

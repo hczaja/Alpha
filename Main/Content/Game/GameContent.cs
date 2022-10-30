@@ -1,4 +1,5 @@
-﻿using Main.Utils;
+﻿using Main.Content.Game.Panels;
+using Main.Utils;
 using Main.Utils.Camera;
 using Main.Utils.Events;
 using SFML.Graphics;
@@ -16,29 +17,30 @@ namespace Main.Content.Game
         private readonly GameState _gameState;
         
         private readonly GameCamera Camera;
-        private readonly GameView View;
 
-        private Grid Grid { get; init; }
+        private readonly MapPanel MapPanel;
+        private readonly RightBarPanel RightBarPanel;
 
         public GameContent(GameState gameState)
         {
             _gameState = gameState;
 
-            this.Camera = new GameCamera(GameSettings.WindowWidth, GameSettings.WindowHeight);
-            this.View = new GameView(this.Camera);
+            this.Camera = new GameCamera(MapPanel.Size.X, MapPanel.Size.Y);
 
-            this.Grid = new Grid(GridSize.Small, this.Camera);
+            this.MapPanel = new MapPanel(this.Camera);
+            this.RightBarPanel = new RightBarPanel();
         }
 
         public void Draw(RenderTarget drawer) 
         {
-            this.Grid.Draw(drawer);
+            this.MapPanel.Draw(drawer);
+            this.RightBarPanel.Draw(drawer);
         }
 
         public void Handle(MouseEvent e)
         {
             this.Camera.Handle(e);
-            this.Grid.Handle(e);
+            this.MapPanel.Handle(e);
         }
 
         public void Handle(KeyboardEvent e) 
@@ -49,10 +51,10 @@ namespace Main.Content.Game
             }
         }
 
-        public void Update(RenderTarget window) 
+        public void Update() 
         {
-            this.View.Update();
-            window.SetView(this.View);
+            this.MapPanel.Update();
+            this.RightBarPanel.Update();
         }
     }
 }
