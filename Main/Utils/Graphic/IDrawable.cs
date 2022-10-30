@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Main.Utils.Graphic
 {
-    internal interface IDrawable
+    public interface IDrawable
     {
         public void Draw(RenderTarget drawer);
     }

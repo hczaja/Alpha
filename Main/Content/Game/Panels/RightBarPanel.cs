@@ -17,7 +17,7 @@ namespace Main.Content.Game.Panels
 
         private RectangleShape Shape { get; init; }
 
-        public RightBarPanel()
+        public RightBarPanel(IGameState gameState) : base(gameState)
         {
             this.Rectangle = new FloatRect(Position, Size);
             this.View = new RightBarView(this.Rectangle);
@@ -36,6 +36,8 @@ namespace Main.Content.Game.Panels
         }
 
         public override void Handle(MouseEvent e) { }
+
+        public override void Handle(KeyboardEvent e) { }
 
         public override void Update() { }
     }

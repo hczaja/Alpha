@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Main.Utils.Events
 {
-    internal enum MouseEventType
+    public enum MouseEventType
     {
         Unknown, ButtonPressed, ButtonReleased
     }
 
-    internal record MouseEvent
+    public record MouseEvent
     {
         public float X { get; init; }
         public float Y { get; init; }

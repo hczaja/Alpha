@@ -11,7 +11,7 @@ namespace Main.Content.MainMenu
 {
     internal sealed class ExitButton : Button
     {
-        private static Texture ExitButtonTexture = new Texture("Assets/Button_ExitGame.png");
+        private static Texture ExitButtonTexture = new Texture("Assets/Utils/Button_ExitGame.png");
 
         private static Vector2f ExitButtonSizeVector = new Vector2f(60.0f, 20.0f);
         private static Vector2f ExitButtonPositionVector = new Vector2f(20.0f, 50.0f);

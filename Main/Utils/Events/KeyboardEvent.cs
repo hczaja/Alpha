@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Main.Utils.Events
 {
-    internal enum KeyboardEventType
+    public enum KeyboardEventType
     {
         Unknown, KeyPressed, KeyReleased
     }
 
-    internal record KeyboardEvent
+    public record KeyboardEvent
     {
         public Keyboard.Key Key { get; init; }
         public KeyboardEventType Type { get; init; }

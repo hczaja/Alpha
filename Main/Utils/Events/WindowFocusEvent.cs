@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Main.Utils.Events
 {
-    internal enum WindowFocusEventType
+    public enum WindowFocusEventType
     {
         Unknown, FocusGained, FocusLost
     }
 
-    internal class WindowFocusEvent
+    public class WindowFocusEvent
     {
         public WindowFocusEventType Type { get; init; }
 

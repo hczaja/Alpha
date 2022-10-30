@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Main.Utils.Camera
 {
-    internal enum GameCameraMoveDirection
+    internal enum Direction
     {
-        NoMove, Left, TopLeft, Top, TopRight, Right, BottomRight, Bottom, BottomLeft 
+        Unknown, Left, TopLeft, Top, TopRight, Right, BottomRight, Bottom, BottomLeft 
     }
 }

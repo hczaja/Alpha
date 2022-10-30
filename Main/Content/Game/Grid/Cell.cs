@@ -1,6 +1,8 @@
-﻿using Main.Content.Game.GameObjects.Resources;
+﻿using Main.Content.Game.GameObjects.Buildings;
+using Main.Content.Game.GameObjects.Resources;
 using Main.Content.Game.GameObjects.Units;
 using Main.Content.Game.Terrains;
+using Main.Utils.Camera;
 using Main.Utils.Graphic;
 using SFML.Graphics;
 using SFML.System;
@@ -22,8 +24,11 @@ namespace Main.Content.Game
 
         public bool Selected { get; private set; }
 
-        public Unit Unit { get; private set; }
-        public Resource Resource { get; private set; }
+        public Unit? Unit { get; private set; }
+        public Resource? Resource { get; private set; }
+        public Building? Building { get; private set; }
+
+        public Dictionary<Direction, Cell?> Surrounding { get; init; }
 
         public Cell(int i, int j, Terrain terrain)
         {
@@ -35,6 +40,8 @@ namespace Main.Content.Game
             this.Rectangle.FillColor = this.Terrain.GetColor();
             this.Rectangle.OutlineColor = Color.White;
             this.Rectangle.OutlineThickness = 2.0f;
+
+            this.Surrounding = new Dictionary<Direction, Cell?>();
         }
 
         public void AddUnit(Unit u) => this.Unit = u;
@@ -42,6 +49,9 @@ namespace Main.Content.Game
 
         public void AddResource(Resource r) => this.Resource = r;
         public void RemoveResource() => this.Resource = null;
+
+        public void AddBuilding(Building b) => this.Building = b;
+        public void RemoveBuilding() => this.Building = null;
 
         public void Draw(RenderTarget drawer)
         {
@@ -56,6 +66,7 @@ namespace Main.Content.Game
 
             this.Unit?.Draw(drawer);
             this.Resource?.Draw(drawer);
+            this.Building?.Draw(drawer);
         }
 
         public void Select()
@@ -65,9 +76,19 @@ namespace Main.Content.Game
                 $"[{this.Rectangle.Position.X / _CellSizeX},{this.Rectangle.Position.Y / _CellSizeY}]" +
                 $" - {this.Terrain.Name}" +
                 $" - {this.Unit?.ToString()}" +
+                $" - {this.Building?.ToString()}" +
                 $" - {this.Resource?.ToString()}");
         }
 
         public void Unselect() => this.Selected = false;
+
+        public bool IsOccupied()
+        {
+            if (this.Unit is not null) return true;
+            if (this.Building is not null) return true;
+            if (this.Resource is not null) return true;
+
+            return false;
+        }
     }
 }
