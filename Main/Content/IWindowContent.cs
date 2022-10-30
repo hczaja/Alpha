@@ -14,6 +14,6 @@ namespace Main.Content
         IEventHandler<MouseEvent>,
         IEventHandler<KeyboardEvent>
     {
-        public void Update(RenderTarget window);
+        public void Update();
     }
 }

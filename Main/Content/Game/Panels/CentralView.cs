@@ -1,4 +1,6 @@
-﻿using SFML.Graphics;
+﻿using Main.Utils;
+using Main.Utils.Camera;
+using SFML.Graphics;
 using SFML.System;
 using System;
 using System.Collections.Generic;
@@ -6,26 +8,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Main.Utils.Camera
+namespace Main.Content.Game.Panels
 {
-    internal class GameView : View
+    internal class CentralView : GamePanelView
     {
         private readonly GameCamera _camera;
 
         public static readonly float GameViewBorderTolerance = 32.0f;
 
-        public GameView(GameCamera camera) : base(
-            new FloatRect(
-                new Vector2f(0.0f, 0.0f),
-                new Vector2f(GameSettings.WindowWidth, GameSettings.WindowHeight)))
+        public CentralView(GameCamera camera, FloatRect viewRect) : base(viewRect)
             => (_camera) = (camera);
 
         private bool CanMoveLeft() => this._camera.MoveX + GameViewBorderTolerance - GameCamera.MoveSpeed >= 0.0f;
         private bool CanMoveTop() => this._camera.MoveY + GameViewBorderTolerance - GameCamera.MoveSpeed >= 0.0f;
-        private bool CanMoveRight() => this._camera.MoveX - GameViewBorderTolerance + GameCamera.MoveSpeed <= 6000.0f; 
-        private bool CanMoveBottom() => this._camera.MoveY - GameViewBorderTolerance + GameCamera.MoveSpeed <= 6000.0f;
+        private bool CanMoveRight() => this._camera.MoveX - GameViewBorderTolerance + GameCamera.MoveSpeed <= 0.0f + _viewRectangle.Width; 
+        private bool CanMoveBottom() => this._camera.MoveY - GameViewBorderTolerance + GameCamera.MoveSpeed <= 0.0f + _viewRectangle.Height;
     
-        public void Update()
+        public override void Update()
         {
             if (!this._camera.CanMove)
                 return;

@@ -70,7 +70,7 @@ namespace Main.Utils
 
         public void Draw() => this._gameState.Draw(this._window);
 
-        public void Update() => this._gameState.Update(this._window);
+        public void Update() => this._gameState.Update();
 
         public bool IsOpen() => this._window.IsOpen;
 
@@ -80,6 +80,11 @@ namespace Main.Utils
             {
                 this._window.Close();
             }
+        }
+
+        public void RestartView()
+        {
+            this._window.SetView(this._window.DefaultView);
         }
     }
 }

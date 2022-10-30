@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace Main.Utils
 {
+    // extract an interface
     internal class GameState :
         IDrawable,
         IEventHandler<MouseEvent>,
@@ -22,6 +23,9 @@ namespace Main.Utils
     {
         private readonly GameWindow _windowHandler;
         private IWindowContent ActualContent { get; set; }
+
+        private Player[] Players { get; init; }
+        private Player CurrentPlayer;
 
         public GameState(GameWindow windowHandler)
         {
@@ -34,14 +38,19 @@ namespace Main.Utils
             this.ActualContent.Draw(drawer); 
         }
 
-        public void Update(RenderTarget window) 
+        public void Update() 
         {
-            this.ActualContent.Update(window); 
+            this.ActualContent.Update(); 
         }
 
         public bool TrySave()
         {
             return true;
+        }
+
+        public void RestartView()
+        {
+            this._windowHandler.RestartView();
         }
 
         public void Handle(MouseEvent e)
