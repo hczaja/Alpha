@@ -27,13 +27,14 @@ namespace Main.Content.Game
             this.Camera = new GameCamera(GameSettings.WindowWidth, GameSettings.WindowHeight);
             this.View = new GameView(this.Camera);
 
-            this.Grid = new Grid(GridSize.Medium, this.Camera);
+            this.Grid = new Grid(GridSize.Small, this.Camera);
         }
 
         public void Draw(RenderTarget drawer) 
         {
             this.Grid.Draw(drawer);
         }
+
         public void Handle(MouseEvent e)
         {
             this.Camera.Handle(e);

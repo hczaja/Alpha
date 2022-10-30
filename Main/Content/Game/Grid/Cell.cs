@@ -1,4 +1,6 @@
-﻿using Main.Content.Game.Terrains;
+﻿using Main.Content.Game.GameObjects.Resources;
+using Main.Content.Game.GameObjects.Units;
+using Main.Content.Game.Terrains;
 using Main.Utils.Graphic;
 using SFML.Graphics;
 using SFML.System;
@@ -20,13 +22,13 @@ namespace Main.Content.Game
 
         public bool Selected { get; private set; }
 
-        public Cell(int i, int j)
+        public Unit Unit { get; private set; }
+        public Resource Resource { get; private set; }
+
+        public Cell(int i, int j, Terrain terrain)
         {
             this.Rectangle = new RectangleShape();
-
-            // temporary solution
-            var randomType = Terrain.GetAllTerrainTypes()[Random.Shared.Next(0, 4)];
-            this.Terrain = new Terrain(randomType);
+            this.Terrain = terrain;
 
             this.Rectangle.Size = new Vector2f(_CellSizeX, _CellSizeY);
             this.Rectangle.Position = new Vector2f(i * _CellSizeX, j * _CellSizeY);
@@ -34,6 +36,12 @@ namespace Main.Content.Game
             this.Rectangle.OutlineColor = Color.White;
             this.Rectangle.OutlineThickness = 2.0f;
         }
+
+        public void AddUnit(Unit u) => this.Unit = u;
+        public void RemoveUnit() => this.Unit = null;
+
+        public void AddResource(Resource r) => this.Resource = r;
+        public void RemoveResource() => this.Resource = null;
 
         public void Draw(RenderTarget drawer)
         {
@@ -45,12 +53,19 @@ namespace Main.Content.Game
             }
             
             drawer.Draw(this.Rectangle);
+
+            this.Unit?.Draw(drawer);
+            this.Resource?.Draw(drawer);
         }
 
         public void Select()
         {
             this.Selected = true;
-            Console.WriteLine($"Selected Cell [{this.Rectangle.Position.X / _CellSizeX},{this.Rectangle.Position.Y / _CellSizeY}] - {this.Terrain.Name}");
+            Console.WriteLine($"Selected Cell " +
+                $"[{this.Rectangle.Position.X / _CellSizeX},{this.Rectangle.Position.Y / _CellSizeY}]" +
+                $" - {this.Terrain.Name}" +
+                $" - {this.Unit?.ToString()}" +
+                $" - {this.Resource?.ToString()}");
         }
 
         public void Unselect() => this.Selected = false;

@@ -24,7 +24,7 @@ namespace Main.Content.Game.Terrains
                 { TerrainType.Grass, new Color(56, 102, 58) }, // green
             };
 
-        public static TerrainType[] GetAllTerrainTypes() => new TerrainType[] { TerrainType.Unknown, TerrainType.Water, TerrainType.Dirt, TerrainType.Grass };
+        public static TerrainType[] GetAllTerrainTypes() => new TerrainType[] { TerrainType.Water, TerrainType.Dirt, TerrainType.Grass };
 
         public Color GetColor() => _terrainToColor[this.Type];
     }

@@ -1,4 +1,6 @@
-﻿using Main.Utils.Camera;
+﻿using Main.Content.Game.GameObjects.Resources;
+using Main.Content.Game.Terrains;
+using Main.Utils.Camera;
 using Main.Utils.Events;
 using Main.Utils.Graphic;
 using SFML.Graphics;
@@ -41,7 +43,14 @@ namespace Main.Content.Game
             {
                 for (int j = 0; j < _height; j++)
                 {
-                    this.Cells[i, j] = new Cell(i, j);
+                    // temporary solution
+                    var randomType = Terrain.GetAllTerrainTypes()[Random.Shared.Next(0, 3)];
+                    this.Cells[i, j] = new Cell(i, j, new Terrain(randomType));
+
+                    if (randomType == TerrainType.Dirt || randomType == TerrainType.Grass)
+                    {
+                        this.Cells[i, j].AddResource(new Tree(this.Cells[i, j].Rectangle.Position));
+                    }
                 }
             }
         }
