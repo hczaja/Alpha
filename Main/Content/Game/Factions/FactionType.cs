@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Main.Content.Game
+namespace Main.Content.Game.Factions
 {
-    internal class Player
+    internal enum FactionType
     {
-        
+        Undeads,
     }
 }

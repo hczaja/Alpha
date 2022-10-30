@@ -13,12 +13,12 @@ namespace Main.Content.MainMenu
 {
     internal class MainMenuContent : IWindowContent
     {
-        private readonly GameState _gameState;
+        private readonly IGameState _gameState;
 
         private Button StartButton { get; init; }
         private Button ExitButton { get; init; }
 
-        public MainMenuContent(GameState gameState)
+        public MainMenuContent(IGameState gameState)
         {
             _gameState = gameState;
             _gameState.RestartView();

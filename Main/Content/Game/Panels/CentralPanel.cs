@@ -18,7 +18,7 @@ namespace Main.Content.Game.Panels
 
         private Grid Grid { get; init; }
 
-        public CentralPanel(GameCamera camera)
+        public CentralPanel(GameCamera camera, IGameState gameState) : base(gameState)
         {
             this.Rectangle = new FloatRect(Position, Size);
             this.View = new CentralView(camera, this.Rectangle);
@@ -36,6 +36,8 @@ namespace Main.Content.Game.Panels
         {
             this.Grid.Handle(e);
         }
+
+        public override void Handle(KeyboardEvent e) { }
 
         public override void Update()
         {

@@ -13,13 +13,7 @@ using System.Threading.Tasks;
 
 namespace Main.Utils
 {
-    // extract an interface
-    internal class GameState :
-        IDrawable,
-        IEventHandler<MouseEvent>,
-        IEventHandler<KeyboardEvent>,
-        IEventHandler<WindowFocusEvent>,
-        IEventHandler<WindowContentChangedEvent>
+    internal class GameState : IGameState
     {
         private readonly GameWindow _windowHandler;
         private IWindowContent ActualContent { get; set; }

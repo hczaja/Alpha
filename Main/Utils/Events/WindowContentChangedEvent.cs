@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Main.Utils.Events
 {
-    internal enum WindowContentEventType
+    public enum WindowContentEventType
     {
         Unknown, Exit, MainMenu, GamePreparation, Game
     }
 
-    internal record WindowContentChangedEvent
+    public record WindowContentChangedEvent
     {
         public WindowContentEventType Type { get; init; }
 

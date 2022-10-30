@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Main.Utils.Events
 {
-    internal interface IEventHandler<T>
+    public interface IEventHandler<T>
     {
         public void Handle(T e);
     }

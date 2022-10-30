@@ -12,7 +12,7 @@ namespace Main.Utils
     internal class GameWindow
     {
         private readonly RenderWindow _window;
-        private readonly GameState _gameState;
+        private readonly IGameState _gameState;
 
         public GameWindow()
         {

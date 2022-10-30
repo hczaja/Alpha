@@ -14,28 +14,28 @@ namespace Main.Content.Game
 {
     internal class GameContent : IWindowContent
     {
-        private readonly GameState _gameState;
+        private readonly IGameState _gameState;
         
         private readonly GameCamera Camera;
 
-        private readonly CentralPanel MapPanel;
+        private readonly CentralPanel CentralPanel;
         private readonly RightBarPanel RightBarPanel;
         private readonly BottomBarPanel BottomBarPanel;
 
-        public GameContent(GameState gameState)
+        public GameContent(IGameState gameState)
         {
             _gameState = gameState;
 
             this.Camera = new GameCamera(CentralPanel.Size.X, CentralPanel.Size.Y);
 
-            this.MapPanel = new CentralPanel(this.Camera);
-            this.RightBarPanel = new RightBarPanel();
-            this.BottomBarPanel = new BottomBarPanel();
+            this.CentralPanel = new CentralPanel(this.Camera, this._gameState);
+            this.RightBarPanel = new RightBarPanel(this._gameState);
+            this.BottomBarPanel = new BottomBarPanel(this._gameState);
         }
 
         public void Draw(RenderTarget drawer) 
         {
-            this.MapPanel.Draw(drawer);
+            this.CentralPanel.Draw(drawer);
             this.RightBarPanel.Draw(drawer);
             this.BottomBarPanel.Draw(drawer);
         }
@@ -43,7 +43,9 @@ namespace Main.Content.Game
         public void Handle(MouseEvent e)
         {
             this.Camera.Handle(e);
-            this.MapPanel.Handle(e);
+            this.CentralPanel.Handle(e);
+            this.RightBarPanel.Handle(e);
+            this.BottomBarPanel.Handle(e);
         }
 
         public void Handle(KeyboardEvent e) 
@@ -52,11 +54,17 @@ namespace Main.Content.Game
             {
                 this._gameState.Handle(new WindowContentChangedEvent(WindowContentEventType.MainMenu));
             }
+
+            this.CentralPanel.Handle(e);
+            this.RightBarPanel.Handle(e);
+            this.BottomBarPanel.Handle(e);
         }
 
         public void Update() 
         {
-            this.MapPanel.Update();
+            this.CentralPanel.Update();
+            this.RightBarPanel.Update();
+            this.BottomBarPanel.Update();
         }
     }
 }
