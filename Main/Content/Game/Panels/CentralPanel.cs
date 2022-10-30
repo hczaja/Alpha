@@ -11,17 +11,17 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game.Panels
 {
-    internal class MapPanel : GamePanel
+    internal class CentralPanel : GamePanel
     {
         public static readonly Vector2f Position = new Vector2f(0f, 0f);
         public static readonly Vector2f Size = new Vector2f(0.8f * GameSettings.WindowWidth, 0.8f * GameSettings.WindowHeight);
 
         private Grid Grid { get; init; }
 
-        public MapPanel(GameCamera camera)
+        public CentralPanel(GameCamera camera)
         {
             this.Rectangle = new FloatRect(Position, Size);
-            this.View = new MapView(camera, this.Rectangle);
+            this.View = new CentralView(camera, this.Rectangle);
 
             this.Grid = new Grid(GridSize.Small, camera);
         }

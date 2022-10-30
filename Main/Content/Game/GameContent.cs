@@ -18,23 +18,26 @@ namespace Main.Content.Game
         
         private readonly GameCamera Camera;
 
-        private readonly MapPanel MapPanel;
+        private readonly CentralPanel MapPanel;
         private readonly RightBarPanel RightBarPanel;
+        private readonly BottomBarPanel BottomBarPanel;
 
         public GameContent(GameState gameState)
         {
             _gameState = gameState;
 
-            this.Camera = new GameCamera(MapPanel.Size.X, MapPanel.Size.Y);
+            this.Camera = new GameCamera(CentralPanel.Size.X, CentralPanel.Size.Y);
 
-            this.MapPanel = new MapPanel(this.Camera);
+            this.MapPanel = new CentralPanel(this.Camera);
             this.RightBarPanel = new RightBarPanel();
+            this.BottomBarPanel = new BottomBarPanel();
         }
 
         public void Draw(RenderTarget drawer) 
         {
             this.MapPanel.Draw(drawer);
             this.RightBarPanel.Draw(drawer);
+            this.BottomBarPanel.Draw(drawer);
         }
 
         public void Handle(MouseEvent e)
@@ -54,7 +57,6 @@ namespace Main.Content.Game
         public void Update() 
         {
             this.MapPanel.Update();
-            this.RightBarPanel.Update();
         }
     }
 }

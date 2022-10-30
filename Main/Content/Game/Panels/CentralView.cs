@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game.Panels
 {
-    internal class MapView : GamePanelView
+    internal class CentralView : GamePanelView
     {
         private readonly GameCamera _camera;
 
         public static readonly float GameViewBorderTolerance = 32.0f;
 
-        public MapView(GameCamera camera, FloatRect viewRect) : base(viewRect)
+        public CentralView(GameCamera camera, FloatRect viewRect) : base(viewRect)
             => (_camera) = (camera);
 
         private bool CanMoveLeft() => this._camera.MoveX + GameViewBorderTolerance - GameCamera.MoveSpeed >= 0.0f;
