@@ -1,4 +1,5 @@
-﻿using Main.Utils;
+﻿using Main.Content.Game.Turns;
+using Main.Utils;
 using Main.Utils.Events;
 using SFML.Graphics;
 using SFML.System;
@@ -38,6 +39,8 @@ namespace Main.Content.Game.Panels
         public override void Handle(MouseEvent e) { }
 
         public override void Handle(KeyboardEvent e) { }
+
+        public override void Handle(NewTurnEvent e) { }
 
         public override void Update() { }
     }

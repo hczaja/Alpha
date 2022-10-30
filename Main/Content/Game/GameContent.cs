@@ -1,4 +1,5 @@
 ﻿using Main.Content.Game.Panels;
+using Main.Content.Game.Turns;
 using Main.Utils;
 using Main.Utils.Camera;
 using Main.Utils.Events;
@@ -16,36 +17,44 @@ namespace Main.Content.Game
     {
         private readonly IGameState _gameState;
         
-        private readonly GameCamera Camera;
+        private readonly GameCamera _camera;
 
-        private readonly CentralPanel CentralPanel;
-        private readonly RightBarPanel RightBarPanel;
-        private readonly BottomBarPanel BottomBarPanel;
+        private readonly CentralPanel _centralPanel;
+        private readonly RightBarPanel _rightBarPanel;
+        private readonly BottomBarPanel _bottomBarPanel;
+
+        private readonly TurnManager _turnManager;
 
         public GameContent(IGameState gameState)
         {
             _gameState = gameState;
 
-            this.Camera = new GameCamera(CentralPanel.Size.X, CentralPanel.Size.Y);
+            this._camera = new GameCamera(CentralPanel.Size.X, CentralPanel.Size.Y);
 
-            this.CentralPanel = new CentralPanel(this.Camera, this._gameState);
-            this.RightBarPanel = new RightBarPanel(this._gameState);
-            this.BottomBarPanel = new BottomBarPanel(this._gameState);
+            this._centralPanel = new CentralPanel(this._camera, this._gameState);
+            this._rightBarPanel = new RightBarPanel(this._gameState);
+            this._bottomBarPanel = new BottomBarPanel(this._gameState);
+
+            var players = new Player[2];
+            players[0] = new Player();
+            players[1] = new Player();
+
+            this._turnManager = new TurnManager(players);
         }
 
         public void Draw(RenderTarget drawer) 
         {
-            this.CentralPanel.Draw(drawer);
-            this.RightBarPanel.Draw(drawer);
-            this.BottomBarPanel.Draw(drawer);
+            this._centralPanel.Draw(drawer);
+            this._rightBarPanel.Draw(drawer);
+            this._bottomBarPanel.Draw(drawer);
         }
 
         public void Handle(MouseEvent e)
         {
-            this.Camera.Handle(e);
-            this.CentralPanel.Handle(e);
-            this.RightBarPanel.Handle(e);
-            this.BottomBarPanel.Handle(e);
+            this._camera.Handle(e);
+            this._centralPanel.Handle(e);
+            this._rightBarPanel.Handle(e);
+            this._bottomBarPanel.Handle(e);
         }
 
         public void Handle(KeyboardEvent e) 
@@ -55,16 +64,16 @@ namespace Main.Content.Game
                 this._gameState.Handle(new WindowContentChangedEvent(WindowContentEventType.MainMenu));
             }
 
-            this.CentralPanel.Handle(e);
-            this.RightBarPanel.Handle(e);
-            this.BottomBarPanel.Handle(e);
+            this._centralPanel.Handle(e);
+            this._rightBarPanel.Handle(e);
+            this._bottomBarPanel.Handle(e);
         }
 
         public void Update() 
         {
-            this.CentralPanel.Update();
-            this.RightBarPanel.Update();
-            this.BottomBarPanel.Update();
+            this._centralPanel.Update();
+            this._rightBarPanel.Update();
+            this._bottomBarPanel.Update();
         }
     }
 }

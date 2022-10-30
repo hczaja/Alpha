@@ -1,4 +1,5 @@
-﻿using Main.Utils;
+﻿using Main.Content.Game.Turns;
+using Main.Utils;
 using Main.Utils.Events;
 using Main.Utils.Graphic;
 using SFML.Graphics;
@@ -13,7 +14,8 @@ namespace Main.Content.Game.Panels
     internal abstract class GamePanel : 
         IDrawable, 
         IEventHandler<MouseEvent>,
-        IEventHandler<KeyboardEvent>
+        IEventHandler<KeyboardEvent>,
+        IEventHandler<NewTurnEvent>
     {
         public FloatRect Rectangle { get; init; }
         public GamePanelView View { get; init; }
@@ -25,6 +27,7 @@ namespace Main.Content.Game.Panels
 
         public abstract void Handle(MouseEvent e);
         public abstract void Handle(KeyboardEvent e);
+        public abstract void Handle(NewTurnEvent e);
         public abstract void Update();
     }
 }
