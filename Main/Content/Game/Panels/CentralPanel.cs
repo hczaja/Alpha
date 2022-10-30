@@ -23,7 +23,7 @@ namespace Main.Content.Game.Panels
             this.Rectangle = new FloatRect(Position, Size);
             this.View = new CentralView(camera, this.Rectangle);
 
-            this.Grid = new Grid(GridSize.Small, camera);
+            this.Grid = new Grid(GridSize.Medium, camera);
         }
 
         public override void Draw(RenderTarget drawer)

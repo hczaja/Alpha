@@ -1,4 +1,5 @@
-﻿using Main.Content.Game.GameObjects.Resources;
+﻿using Main.Content.Game.GameObjects.Buildings;
+using Main.Content.Game.GameObjects.Resources;
 using Main.Content.Game.Terrains;
 using Main.Utils.Camera;
 using Main.Utils.Events;
@@ -46,13 +47,10 @@ namespace Main.Content.Game
                     // temporary solution
                     var randomType = Terrain.GetAllTerrainTypes()[Random.Shared.Next(0, 3)];
                     this.Cells[i, j] = new Cell(i, j, new Terrain(randomType));
-
-                    if (randomType == TerrainType.Dirt || randomType == TerrainType.Grass)
-                    {
-                        this.Cells[i, j].AddResource(new Tree(this.Cells[i, j].Rectangle.Position));
-                    }
                 }
             }
+
+            this.Cells[5, 5].AddBuilding(new Tower(this.Cells[5, 5].Rectangle.Position));
         }
 
         public void Draw(RenderTarget drawer)

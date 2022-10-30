@@ -1,4 +1,5 @@
-﻿using Main.Content.Game.GameObjects.Resources;
+﻿using Main.Content.Game.GameObjects.Buildings;
+using Main.Content.Game.GameObjects.Resources;
 using Main.Content.Game.GameObjects.Units;
 using Main.Content.Game.Terrains;
 using Main.Utils.Graphic;
@@ -24,6 +25,7 @@ namespace Main.Content.Game
 
         public Unit Unit { get; private set; }
         public Resource Resource { get; private set; }
+        public Building Building { get; private set; }
 
         public Cell(int i, int j, Terrain terrain)
         {
@@ -43,6 +45,9 @@ namespace Main.Content.Game
         public void AddResource(Resource r) => this.Resource = r;
         public void RemoveResource() => this.Resource = null;
 
+        public void AddBuilding(Building b) => this.Building = b;
+        public void RemoveBuilding() => this.Building = null;
+
         public void Draw(RenderTarget drawer)
         {
             this.Rectangle.OutlineColor = Color.White;
@@ -56,6 +61,7 @@ namespace Main.Content.Game
 
             this.Unit?.Draw(drawer);
             this.Resource?.Draw(drawer);
+            this.Building?.Draw(drawer);
         }
 
         public void Select()
@@ -65,6 +71,7 @@ namespace Main.Content.Game
                 $"[{this.Rectangle.Position.X / _CellSizeX},{this.Rectangle.Position.Y / _CellSizeY}]" +
                 $" - {this.Terrain.Name}" +
                 $" - {this.Unit?.ToString()}" +
+                $" - {this.Building?.ToString()}" +
                 $" - {this.Resource?.ToString()}");
         }
 
