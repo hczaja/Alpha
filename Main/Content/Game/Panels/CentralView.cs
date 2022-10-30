@@ -31,34 +31,34 @@ namespace Main.Content.Game.Panels
 
             switch (this._camera.MoveDirection)
             {
-                case GameCameraMoveDirection.NoMove:
+                case Utils.Camera.Direction.Unknown:
                     break;
-                case GameCameraMoveDirection.TopLeft:
+                case Utils.Camera.Direction.TopLeft:
                     this.UpdateMoveView(this.CanMoveLeft(), new Vector2f(-GameCamera.MoveSpeed, 0.0f));
                     this.UpdateMoveView(this.CanMoveTop(), new Vector2f(0.0f, -GameCamera.MoveSpeed));
                     break;
-                case GameCameraMoveDirection.TopRight:
+                case Utils.Camera.Direction.TopRight:
                     this.UpdateMoveView(this.CanMoveRight(), new Vector2f(+GameCamera.MoveSpeed, 0.0f));
                     this.UpdateMoveView(this.CanMoveTop(), new Vector2f(0.0f, -GameCamera.MoveSpeed));
                     break;
-                case GameCameraMoveDirection.BottomRight:
+                case Utils.Camera.Direction.BottomRight:
                     this.UpdateMoveView(this.CanMoveRight(), new Vector2f(+GameCamera.MoveSpeed, 0.0f));
                     this.UpdateMoveView(this.CanMoveBottom(), new Vector2f(0.0f, +GameCamera.MoveSpeed));
                     break;
-                case GameCameraMoveDirection.BottomLeft:
+                case Utils.Camera.Direction.BottomLeft:
                     this.UpdateMoveView(this.CanMoveLeft(), new Vector2f(-GameCamera.MoveSpeed, 0.0f));
                     this.UpdateMoveView(this.CanMoveBottom(), new Vector2f(0.0f, +GameCamera.MoveSpeed));
                     break;
-                case GameCameraMoveDirection.Left:
+                case Utils.Camera.Direction.Left:
                     this.UpdateMoveView(this.CanMoveLeft(), new Vector2f(-GameCamera.MoveSpeed, 0.0f));
                     break;
-                case GameCameraMoveDirection.Top:
+                case Utils.Camera.Direction.Top:
                     this.UpdateMoveView(this.CanMoveTop(), new Vector2f(0.0f, -GameCamera.MoveSpeed));
                     break;
-                case GameCameraMoveDirection.Right:
+                case Utils.Camera.Direction.Right:
                     this.UpdateMoveView(this.CanMoveRight(), new Vector2f(+GameCamera.MoveSpeed, 0.0f));
                     break;
-                case GameCameraMoveDirection.Bottom:
+                case Utils.Camera.Direction.Bottom:
                     this.UpdateMoveView(this.CanMoveBottom(), new Vector2f(0.0f, +GameCamera.MoveSpeed));
                     break;
             }

@@ -11,7 +11,7 @@ namespace Main.Utils.Camera
 {
     internal class GameCamera : IEventHandler<MouseEvent>
     {
-        public GameCameraMoveDirection MoveDirection { get; private set; }
+        public Direction MoveDirection { get; private set; }
         public static readonly float MoveSpeed = 2.0f;
         public static readonly float ViewBandwith = 64.0f;
 
@@ -38,7 +38,7 @@ namespace Main.Utils.Camera
 
             if (!this.CanMove)
             {
-                this.MoveDirection = GameCameraMoveDirection.NoMove;
+                this.MoveDirection = Direction.Unknown;
                 return;
             }
 
@@ -49,18 +49,18 @@ namespace Main.Utils.Camera
 
             if (!moveTop && !moveBottom && !moveLeft && !moveRight)
             {
-                this.MoveDirection = GameCameraMoveDirection.NoMove;
+                this.MoveDirection = Direction.Unknown;
                 return;
             }
 
-            if (moveTop && moveLeft) this.MoveDirection = GameCameraMoveDirection.TopLeft;
-            else if (moveTop && moveRight) this.MoveDirection = GameCameraMoveDirection.TopRight;
-            else if (moveBottom && moveLeft) this.MoveDirection = GameCameraMoveDirection.BottomLeft;
-            else if (moveBottom && moveRight) this.MoveDirection = GameCameraMoveDirection.BottomRight;
-            else if (moveLeft) this.MoveDirection = GameCameraMoveDirection.Left;
-            else if (moveRight) this.MoveDirection = GameCameraMoveDirection.Right;
-            else if (moveTop) this.MoveDirection = GameCameraMoveDirection.Top;
-            else if (moveBottom) this.MoveDirection = GameCameraMoveDirection.Bottom;
+            if (moveTop && moveLeft) this.MoveDirection = Direction.TopLeft;
+            else if (moveTop && moveRight) this.MoveDirection = Direction.TopRight;
+            else if (moveBottom && moveLeft) this.MoveDirection = Direction.BottomLeft;
+            else if (moveBottom && moveRight) this.MoveDirection = Direction.BottomRight;
+            else if (moveLeft) this.MoveDirection = Direction.Left;
+            else if (moveRight) this.MoveDirection = Direction.Right;
+            else if (moveTop) this.MoveDirection = Direction.Top;
+            else if (moveBottom) this.MoveDirection = Direction.Bottom;
         }
     }
 }

@@ -2,6 +2,7 @@
 using Main.Content.Game.GameObjects.Resources;
 using Main.Content.Game.GameObjects.Units;
 using Main.Content.Game.Terrains;
+using Main.Utils.Camera;
 using Main.Utils.Graphic;
 using SFML.Graphics;
 using SFML.System;
@@ -23,9 +24,11 @@ namespace Main.Content.Game
 
         public bool Selected { get; private set; }
 
-        public Unit Unit { get; private set; }
-        public Resource Resource { get; private set; }
-        public Building Building { get; private set; }
+        public Unit? Unit { get; private set; }
+        public Resource? Resource { get; private set; }
+        public Building? Building { get; private set; }
+
+        public Dictionary<Direction, Cell?> Surrounding { get; init; }
 
         public Cell(int i, int j, Terrain terrain)
         {
@@ -37,6 +40,8 @@ namespace Main.Content.Game
             this.Rectangle.FillColor = this.Terrain.GetColor();
             this.Rectangle.OutlineColor = Color.White;
             this.Rectangle.OutlineThickness = 2.0f;
+
+            this.Surrounding = new Dictionary<Direction, Cell?>();
         }
 
         public void AddUnit(Unit u) => this.Unit = u;
@@ -76,5 +81,14 @@ namespace Main.Content.Game
         }
 
         public void Unselect() => this.Selected = false;
+
+        public bool IsOccupied()
+        {
+            if (this.Unit is not null) return true;
+            if (this.Building is not null) return true;
+            if (this.Resource is not null) return true;
+
+            return false;
+        }
     }
 }
