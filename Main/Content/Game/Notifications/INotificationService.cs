@@ -10,7 +10,8 @@ namespace Main.Content.Game.Notifications
     {
         bool HasNotificationsFor(int playerId);
 
-        void Notify(int playerId, Notification notification);
+        void EnqueueNotification(int playerId, Notification notification);
+        void DequeueNotification(int playerId);
         bool TryGetNotification(int playerId, out Notification? result);
     }
 }

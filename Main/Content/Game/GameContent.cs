@@ -76,6 +76,12 @@ namespace Main.Content.Game
             {
                 this._gameState.Handle(new WindowContentChangedEvent(WindowContentEventType.MainMenu));
             }
+            
+            if (e.Type == KeyboardEventType.KeyPressed && e.Key == Keyboard.Key.Enter)
+            {
+                var currentPlayer = this._turnManager.GetCurrentPlayer();
+                this._notificationService.EnqueueNotification(0, new NewTurnNotification(this._notificationService, currentPlayer));
+            }
 
             this._centralPanel.Handle(e);
             this._rightBarPanel.Handle(e);

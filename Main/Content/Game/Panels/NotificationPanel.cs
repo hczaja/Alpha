@@ -20,7 +20,7 @@ namespace Main.Content.Game.Panels
         private RectangleShape Background { get; init; }
 
         private readonly INotificationService _notificationService;
-        private Notification? CurrentNotification { get; set; }
+        private Notification? currentNotification;
 
         public NotificationPanel(IGameState gameState, ITurnManager turnManager, INotificationService notificationService) : base(gameState, turnManager)
         {
@@ -32,23 +32,23 @@ namespace Main.Content.Game.Panels
             this.Background.FillColor = Color.Black;
 
             this._notificationService = notificationService;
-            this.CurrentNotification = null;
+            this.currentNotification = null;
         }
 
         public override void Draw(RenderTarget drawer)
         {
-            if (this.CurrentNotification is not null)
+            if (this.currentNotification is not null)
             {
                 drawer.SetView(this.View);
 
-                if (this.CurrentNotification.DrawBackground) drawer.Draw(this.Background);
-                this.CurrentNotification.Draw(drawer);
+                if (this.currentNotification.DrawBackground) drawer.Draw(this.Background);
+                this.currentNotification.Draw(drawer);
             }
         }
 
         public override void Handle(MouseEvent e) 
         {
-            this.CurrentNotification?.Handle(e);
+            this.currentNotification?.Handle(e);
         }
 
         public override void Handle(KeyboardEvent e) { }
@@ -57,13 +57,12 @@ namespace Main.Content.Game.Panels
 
         public override void Update() 
         { 
-            if (this.CurrentNotification is null)
+            int currentPlayerId = this._turnMangaer.GetCurrentPlayer().ID;
+            this._notificationService.TryGetNotification(currentPlayerId, out var notification);
+            
+            if (this.currentNotification != notification)
             {
-                int currentPlayerId = this._turnMangaer.GetCurrentPlayer().ID;
-                if (this._notificationService.TryGetNotification(currentPlayerId, out var notification))
-                {
-                    this.CurrentNotification = notification;
-                }
+                this.currentNotification = notification;
             }
         }
     }

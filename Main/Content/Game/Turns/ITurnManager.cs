@@ -8,7 +8,7 @@ namespace Main.Content.Game.Turns
 {
     public interface ITurnManager
     {
-        static int turnCounter = 0;
+        static int turnCounter = 1;
 
         Player GetNextPlayer();
         Player GetCurrentPlayer();

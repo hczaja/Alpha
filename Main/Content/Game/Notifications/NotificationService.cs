@@ -24,10 +24,12 @@ namespace Main.Content.Game.Notifications
         }
 
         public bool HasNotificationsFor(int playerId) => this._notifications[playerId].Any();
+        
+        public void DequeueNotification(int playerId) => this._notifications[playerId].Dequeue();
 
-        public void Notify(int playerID, Notification notification)
+        public void EnqueueNotification(int playerId, Notification notification)
         {
-            if (playerID == 0)
+            if (playerId == 0)
             {
                 foreach (var notifications in _notifications)
                 {
@@ -36,9 +38,9 @@ namespace Main.Content.Game.Notifications
             }    
         }
 
-        public bool TryGetNotification(int playerID, out Notification? result)
+        public bool TryGetNotification(int playerId, out Notification? result)
         {
-            result = this._notifications[playerID].FirstOrDefault();
+            result = this._notifications[playerId].FirstOrDefault();
             return result is not null;
         }
     }

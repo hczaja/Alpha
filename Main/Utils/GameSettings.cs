@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SFML.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace Main.Utils
         public static readonly uint WindowHeight = 768;
 
         public static readonly string GameTitle = "Alpha";
+        public static readonly Font Font = new Font("Assets/Fonts/rainyhearts.ttf");
 
         public static readonly int FPS = 30;
     }

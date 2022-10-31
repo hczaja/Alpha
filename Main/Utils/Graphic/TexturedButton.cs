@@ -10,13 +10,12 @@ using System.Threading.Tasks;
 
 namespace Main.Utils.Graphic
 {
-    internal class Button : IDrawable
-
+    public class TexturedButton : IDrawable
     {
         public string Name { get; init; }
         public RectangleShape Rectangle { get; init; }
 
-        public Button(string name, Vector2f size, Vector2f position, Texture texture)
+        public TexturedButton(string name, Vector2f size, Vector2f position, Texture texture)
         {
             this.Name = name;
             this.Rectangle = new RectangleShape();
