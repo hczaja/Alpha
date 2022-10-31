@@ -1,4 +1,5 @@
-﻿using Main.Content.Game.Panels;
+﻿using Main.Content.Game.Notifications;
+using Main.Content.Game.Panels;
 using Main.Content.Game.Turns;
 using Main.Utils;
 using Main.Utils.Camera;
@@ -22,24 +23,28 @@ namespace Main.Content.Game
         private readonly CentralPanel _centralPanel;
         private readonly RightBarPanel _rightBarPanel;
         private readonly BottomBarPanel _bottomBarPanel;
+        private readonly NotificationPanel _notificationPanel;
 
-        private readonly TurnManager _turnManager;
+        private readonly ITurnManager _turnManager;
+        private readonly INotificationService _notificationService;
 
         public GameContent(IGameState gameState)
         {
             _gameState = gameState;
 
-            this._camera = new GameCamera(CentralPanel.Size.X, CentralPanel.Size.Y);
-
-            this._centralPanel = new CentralPanel(this._camera, this._gameState);
-            this._rightBarPanel = new RightBarPanel(this._gameState);
-            this._bottomBarPanel = new BottomBarPanel(this._gameState);
-
             var players = new Player[2];
             players[0] = new Player();
             players[1] = new Player();
 
+            this._camera = new GameCamera(CentralPanel.Size.X, CentralPanel.Size.Y);
             this._turnManager = new TurnManager(players);
+
+            this._centralPanel = new CentralPanel(this._camera, this._gameState, this._turnManager);
+            this._rightBarPanel = new RightBarPanel(this._gameState, this._turnManager);
+            this._bottomBarPanel = new BottomBarPanel(this._gameState, this._turnManager);
+
+            this._notificationService = new NotificationService(players);
+            this._notificationPanel = new NotificationPanel(this._gameState, this._turnManager, this._notificationService);
         }
 
         public void Draw(RenderTarget drawer) 
@@ -47,10 +52,18 @@ namespace Main.Content.Game
             this._centralPanel.Draw(drawer);
             this._rightBarPanel.Draw(drawer);
             this._bottomBarPanel.Draw(drawer);
+            this._notificationPanel.Draw(drawer);
         }
 
         public void Handle(MouseEvent e)
         {
+            int currentPlayerId = this._turnManager.GetCurrentPlayer().ID;
+            if (this._notificationService.HasNotificationsFor(currentPlayerId))
+            {
+                this._notificationPanel.Handle(e);
+                return;
+            }
+
             this._camera.Handle(e);
             this._centralPanel.Handle(e);
             this._rightBarPanel.Handle(e);
@@ -74,6 +87,7 @@ namespace Main.Content.Game
             this._centralPanel.Update();
             this._rightBarPanel.Update();
             this._bottomBarPanel.Update();
+            this._notificationPanel.Update();
         }
     }
 }

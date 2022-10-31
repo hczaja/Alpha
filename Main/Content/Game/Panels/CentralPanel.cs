@@ -19,7 +19,7 @@ namespace Main.Content.Game.Panels
 
         private Grid Grid { get; init; }
 
-        public CentralPanel(GameCamera camera, IGameState gameState) : base(gameState)
+        public CentralPanel(GameCamera camera, IGameState gameState, ITurnManager turnManager) : base(gameState, turnManager)
         {
             this.Rectangle = new FloatRect(Position, Size);
             this.View = new CentralView(camera, this.Rectangle);

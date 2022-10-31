@@ -39,7 +39,7 @@ namespace Main.Content.Game
             this.Rectangle.Position = new Vector2f(i * _CellSizeX, j * _CellSizeY);
             this.Rectangle.FillColor = this.Terrain.GetColor();
             this.Rectangle.OutlineColor = Color.White;
-            this.Rectangle.OutlineThickness = 2.0f;
+            this.Rectangle.OutlineThickness = 1.0f;
 
             this.Surrounding = new Dictionary<Direction, Cell?>();
         }
