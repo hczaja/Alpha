@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Main.Utils.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,42 +7,44 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game.Turns
 {
-    internal class TurnManager
+    internal class TurnManager : ITurnManager
     {
-        public static int turnCounter = 0;
-
         private Player[] PlayerOrder { get; init; }
-        public Player CurrentPlayer { get; private set; }
+        private Player currentPlayer;
 
         public TurnManager(Player[] players)
         {
             this.PlayerOrder = players;
-            this.CurrentPlayer = this.PlayerOrder.First();
+            this.currentPlayer = this.PlayerOrder.First();
         }
 
-        public void ProcessNextPlayer()
+        public Player GetCurrentPlayer() => this.currentPlayer;
+
+        public Player GetNextPlayer()
         {
-            int index = Array.IndexOf(this.PlayerOrder, this.CurrentPlayer);
+            int index = Array.IndexOf(this.PlayerOrder, this.currentPlayer);
             if (index != this.PlayerOrder.Length - 1)
             {
-                this.CurrentPlayer = this.PlayerOrder[index + 1];
+                this.currentPlayer = this.PlayerOrder[index + 1];
             }
             else
             {
                 this.ProcessNewTurn();
             }
+
+            return this.currentPlayer;
         }
 
         private void ProcessNewTurn()
         {
-            turnCounter++;
+            ITurnManager.turnCounter++;
 
             foreach (var p in this.PlayerOrder)
             {
-                p.Handle(new NewTurn(turnCounter));
+                p.Handle(new NewTurnEvent(ITurnManager.turnCounter, p));
             }
 
-            this.CurrentPlayer = this.PlayerOrder.First();
+            this.currentPlayer = this.PlayerOrder.First();
         }
     }
 }

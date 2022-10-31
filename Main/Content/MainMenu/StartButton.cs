@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Main.Content.MainMenu
 {
-    internal sealed class StartButton : Button
+    internal sealed class StartButton : TexturedButton
     {
         private static Texture StartButtonTexture = new Texture("Assets/Utils/Button_StartGame.png");
 

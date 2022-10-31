@@ -18,7 +18,7 @@ namespace Main.Content.Game.Panels
 
         private RectangleShape Shape { get; init; }
 
-        public BottomBarPanel(IGameState gameState) : base(gameState)
+        public BottomBarPanel(IGameState gameState, ITurnManager turnManager) : base(gameState, turnManager)
         {
             this.Rectangle = new FloatRect(Position, Size);
             this.View = new BottomBarView(this.Rectangle);

@@ -15,8 +15,8 @@ namespace Main.Content.MainMenu
     {
         private readonly IGameState _gameState;
 
-        private Button StartButton { get; init; }
-        private Button ExitButton { get; init; }
+        private TexturedButton StartButton { get; init; }
+        private TexturedButton ExitButton { get; init; }
 
         public MainMenuContent(IGameState gameState)
         {
@@ -35,7 +35,6 @@ namespace Main.Content.MainMenu
 
         public void Handle(MouseEvent e)
         {
-
             if (e.Type == MouseEventType.ButtonPressed
                 && e.Button == Mouse.Button.Left)
             {

@@ -10,6 +10,11 @@ namespace Main.Content.Game
 {
     public class Player : IEventHandler<NewTurnEvent>
     {
+        private static int _id;
+        public int ID { get; init; }
+
+        public Player() => (ID) = (++_id);
+
         public void Handle(NewTurnEvent e)
         {
             

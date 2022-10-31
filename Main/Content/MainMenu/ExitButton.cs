@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Main.Content.MainMenu
 {
-    internal sealed class ExitButton : Button
+    internal sealed class ExitButton : TexturedButton
     {
         private static Texture ExitButtonTexture = new Texture("Assets/Utils/Button_ExitGame.png");
 
