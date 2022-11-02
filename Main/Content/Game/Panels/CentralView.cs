@@ -15,14 +15,38 @@ namespace Main.Content.Game.Panels
         private readonly GameCamera _camera;
 
         public static readonly float GameViewBorderTolerance = 32.0f;
+        public readonly (int columns, int rows) _gridDimensions;
 
-        public CentralView(GameCamera camera, FloatRect viewRect) : base(viewRect)
-            => (_camera) = (camera);
+        public CentralView(GameCamera camera, FloatRect viewRect, GridSize gridSize) : base(viewRect)
+            => (_camera, _gridDimensions) = (camera, Grid.GetGridDimensions(gridSize));
 
-        private bool CanMoveLeft() => this._camera.MoveX + GameViewBorderTolerance - GameCamera.MoveSpeed >= 0.0f;
-        private bool CanMoveTop() => this._camera.MoveY + GameViewBorderTolerance - GameCamera.MoveSpeed >= 0.0f;
-        private bool CanMoveRight() => this._camera.MoveX - GameViewBorderTolerance + GameCamera.MoveSpeed <= 0.0f + _viewRectangle.Width; 
-        private bool CanMoveBottom() => this._camera.MoveY - GameViewBorderTolerance + GameCamera.MoveSpeed <= 0.0f + _viewRectangle.Height;
+        private bool CanMoveLeft()
+        {
+            float cameraXLeft = this._viewRectangle.Left + this._camera.MoveX - GameCamera.MoveSpeed;
+            float borderXLeft = -GameViewBorderTolerance;
+            return cameraXLeft >= borderXLeft;
+        }
+
+        private bool CanMoveRight()
+        {
+            float cameraXRight = this._viewRectangle.Left + this._viewRectangle.Width + this._camera.MoveX + GameCamera.MoveSpeed;
+            float borderXRight = this._gridDimensions.columns * Cell._CellSizeX + GameViewBorderTolerance;
+            return cameraXRight <= borderXRight;
+        }
+
+        private bool CanMoveTop()
+        {
+            float cameraYTop = this._viewRectangle.Top + this._camera.MoveY - GameCamera.MoveSpeed;
+            float borderYTop = -GameViewBorderTolerance;
+            return cameraYTop >= borderYTop;
+        }
+
+        private bool CanMoveBottom()
+        {
+            float cameraYBottom = this._viewRectangle.Top + this._viewRectangle.Height + this._camera.MoveY + GameCamera.MoveSpeed;
+            float borderYBottom = this._gridDimensions.rows * Cell._CellSizeY + GameViewBorderTolerance;
+            return cameraYBottom <= borderYBottom;
+        }
     
         public override void Update()
         {
@@ -31,39 +55,37 @@ namespace Main.Content.Game.Panels
 
             switch (this._camera.MoveDirection)
             {
-                case Utils.Camera.Direction.Unknown:
+                case Direction.Unknown:
                     break;
-                case Utils.Camera.Direction.TopLeft:
+                case Direction.TopLeft:
                     this.UpdateMoveView(this.CanMoveLeft(), new Vector2f(-GameCamera.MoveSpeed, 0.0f));
                     this.UpdateMoveView(this.CanMoveTop(), new Vector2f(0.0f, -GameCamera.MoveSpeed));
                     break;
-                case Utils.Camera.Direction.TopRight:
+                case Direction.TopRight:
                     this.UpdateMoveView(this.CanMoveRight(), new Vector2f(+GameCamera.MoveSpeed, 0.0f));
                     this.UpdateMoveView(this.CanMoveTop(), new Vector2f(0.0f, -GameCamera.MoveSpeed));
                     break;
-                case Utils.Camera.Direction.BottomRight:
+                case Direction.BottomRight:
                     this.UpdateMoveView(this.CanMoveRight(), new Vector2f(+GameCamera.MoveSpeed, 0.0f));
                     this.UpdateMoveView(this.CanMoveBottom(), new Vector2f(0.0f, +GameCamera.MoveSpeed));
                     break;
-                case Utils.Camera.Direction.BottomLeft:
+                case Direction.BottomLeft:
                     this.UpdateMoveView(this.CanMoveLeft(), new Vector2f(-GameCamera.MoveSpeed, 0.0f));
                     this.UpdateMoveView(this.CanMoveBottom(), new Vector2f(0.0f, +GameCamera.MoveSpeed));
                     break;
-                case Utils.Camera.Direction.Left:
+                case Direction.Left:
                     this.UpdateMoveView(this.CanMoveLeft(), new Vector2f(-GameCamera.MoveSpeed, 0.0f));
                     break;
-                case Utils.Camera.Direction.Top:
+                case Direction.Top:
                     this.UpdateMoveView(this.CanMoveTop(), new Vector2f(0.0f, -GameCamera.MoveSpeed));
                     break;
-                case Utils.Camera.Direction.Right:
+                case Direction.Right:
                     this.UpdateMoveView(this.CanMoveRight(), new Vector2f(+GameCamera.MoveSpeed, 0.0f));
                     break;
-                case Utils.Camera.Direction.Bottom:
+                case Direction.Bottom:
                     this.UpdateMoveView(this.CanMoveBottom(), new Vector2f(0.0f, +GameCamera.MoveSpeed));
                     break;
             }
-
-            // scroll
         }
 
         private void UpdateMoveView(bool updateCondition, Vector2f updateVector)

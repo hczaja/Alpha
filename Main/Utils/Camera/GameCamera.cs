@@ -1,4 +1,5 @@
-﻿using Main.Utils.Events;
+﻿using Main.Content.Game;
+using Main.Utils.Events;
 using SFML.System;
 using SFML.Window;
 using System;
@@ -13,17 +14,19 @@ namespace Main.Utils.Camera
     {
         public Direction MoveDirection { get; private set; }
         public static readonly float MoveSpeed = 2.0f;
-        public static readonly float ViewBandwith = 64.0f;
+        public static readonly float ViewBandwith = 48.0f;
 
         public float MoveX { get; private set; }
         public float MoveY { get; private set; }
         
         public bool CanMove { get; private set; }
 
-        private float workspaceWidth;
-        private float workspaceHeight;
+        private readonly Vector2f _workspacePosition;
+        private readonly Vector2f _workspaceSize;
 
-        public GameCamera(float width, float height) => (workspaceWidth, workspaceHeight) = (width, height);
+        private readonly (int w, int h) _gridDimensions;
+
+        public GameCamera(Vector2f position, Vector2f size) => (_workspacePosition, _workspaceSize) = (position, size);
 
         public void Move(Vector2f vector)
         {
@@ -42,10 +45,15 @@ namespace Main.Utils.Camera
                 return;
             }
 
-            bool moveTop = 0.0f <= e.Y && e.Y < 0.0f + ViewBandwith;
-            bool moveBottom = workspaceHeight - ViewBandwith <= e.Y && e.Y < workspaceHeight;
-            bool moveLeft = 0.0f <= e.X && e.X < 0.0f + ViewBandwith;
-            bool moveRight = workspaceWidth - ViewBandwith <= e.X && e.X < workspaceWidth;
+            float topEdge = _workspacePosition.Y;
+            float bottomEdge =_workspacePosition.Y + _workspaceSize.Y;
+            float leftEdge =_workspacePosition.X;
+            float rightEdge =_workspacePosition.X + _workspaceSize.X;
+
+            bool moveTop = topEdge <= e.Y && e.Y < topEdge + ViewBandwith;
+            bool moveBottom = bottomEdge - ViewBandwith < e.Y && e.Y <= bottomEdge;
+            bool moveLeft = leftEdge <= e.X && e.X < leftEdge + ViewBandwith;
+            bool moveRight = rightEdge - ViewBandwith < e.X && e.X < rightEdge;
 
             if (!moveTop && !moveBottom && !moveLeft && !moveRight)
             {

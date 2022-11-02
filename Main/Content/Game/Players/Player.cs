@@ -1,4 +1,5 @@
-﻿using Main.Content.Game.Turns;
+﻿using Main.Content.Game.Factions;
+using Main.Content.Game.Turns;
 using Main.Utils.Events;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,9 @@ namespace Main.Content.Game
         private static int _id;
         public int ID { get; init; }
 
-        public Player() => (ID) = (++_id);
+        public Faction Faction { get; init; }
+
+        public Player() => (ID, Faction) = (++_id, new Faction(FactionType.Undeads));
 
         public void Handle(NewTurnEvent e)
         {

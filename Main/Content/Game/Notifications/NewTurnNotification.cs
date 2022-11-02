@@ -19,6 +19,7 @@ namespace Main.Content.Game.Notifications
         private static readonly Vector2f _position = new Vector2f(GameSettings.WindowWidth / 2f - 0.5f * _size.X, GameSettings.WindowHeight / 2f - 0.5f * _size.Y);
 
         private readonly Text _content;
+        private readonly Text _playerDescription;
         private readonly NewTurnNotificationOKButton _button;
 
         private readonly INotificationService _notificationService;
@@ -46,6 +47,11 @@ namespace Main.Content.Game.Notifications
             this._content.FillColor = Color.White;
             this._content.Style = Text.Styles.Bold;
 
+            this._playerDescription = new Text($"{this._playerInfo.Faction.Type}", GameSettings.Font, _contentFontSize);
+            this._playerDescription.Position = this._title.Position + new Vector2f(this._content.GetLocalBounds().Width + _fontSpacing, _titleFontSize + _fontSpacing);
+            this._playerDescription.FillColor = this._playerInfo.Faction.GetFactionColor();
+            this._playerDescription.Style = Text.Styles.Bold;
+
             this._button = new NewTurnNotificationOKButton();
         }
 
@@ -53,6 +59,7 @@ namespace Main.Content.Game.Notifications
         {
             base.Draw(drawer);
             drawer.Draw(this._content);
+            drawer.Draw(this._playerDescription);
             this._button.Draw(drawer);
         }
 
