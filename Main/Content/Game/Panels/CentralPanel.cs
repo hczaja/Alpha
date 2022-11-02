@@ -14,17 +14,21 @@ namespace Main.Content.Game.Panels
 {
     internal class CentralPanel : GamePanel
     {
-        public static readonly Vector2f Position = new Vector2f(0f, 0f);
-        public static readonly Vector2f Size = new Vector2f(0.8f * GameSettings.WindowWidth, 0.8f * GameSettings.WindowHeight);
+        public static readonly Vector2f Position = new Vector2f(0f, 0.05f * GameSettings.WindowHeight);
+        public static readonly Vector2f Size = new Vector2f(0.8f * GameSettings.WindowWidth, 0.75f * GameSettings.WindowHeight);
 
         private Grid Grid { get; init; }
+        private readonly GameCamera _camera;
 
-        public CentralPanel(GameCamera camera, IGameState gameState, ITurnManager turnManager) : base(gameState, turnManager)
+        public CentralPanel(IGameState gameState, ITurnManager turnManager) : base(gameState, turnManager)
         {
             this.Rectangle = new FloatRect(Position, Size);
-            this.View = new CentralView(camera, this.Rectangle);
 
-            this.Grid = new Grid(GridSize.Medium, camera);
+            var gridSize = GridSize.Medium;
+            this._camera = new GameCamera(Position, Size);
+
+            this.View = new CentralView(this._camera, this.Rectangle, gridSize);
+            this.Grid = new Grid(gridSize, this._camera);
         }
 
         public override void Draw(RenderTarget drawer)
@@ -35,7 +39,11 @@ namespace Main.Content.Game.Panels
 
         public override void Handle(MouseEvent e)
         {
-            this.Grid.Handle(e);
+            if (MouseEvent.IsMouseEventRaisedIn(this.Rectangle, e))
+            {
+                this._camera.Handle(e);
+                this.Grid.Handle(e);
+            }
         }
 
         public override void Handle(KeyboardEvent e) { }

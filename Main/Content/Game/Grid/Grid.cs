@@ -1,6 +1,4 @@
-﻿using Main.Content.Game.GameObjects.Buildings;
-using Main.Content.Game.GameObjects.Resources;
-using Main.Content.Game.Terrains;
+﻿using Main.Content.Game.Terrains;
 using Main.Utils.Camera;
 using Main.Utils.Events;
 using Main.Utils.Graphic;
@@ -28,16 +26,18 @@ namespace Main.Content.Game
         private Cell[,] Cells { get; init; }
         private Cell CurrentCell = null;
 
-        public Grid(GridSize size, GameCamera camera)
-        {
-            this._gameCamera = camera;
-
-            (this._width, this._height) = size switch
+        public static (int, int) GetGridDimensions(GridSize size) => size switch
             {
                 GridSize.Small => (16, 16),
                 GridSize.Medium => (24, 24),
                 GridSize.Large => (32, 32)
             };
+
+        public Grid(GridSize size, GameCamera camera)
+        {
+            this._gameCamera = camera;
+
+            (this._width, this._height) = GetGridDimensions(size);
 
             this.Cells = new Cell[_width, _height];
             this.InitializeCells();

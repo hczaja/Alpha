@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game.Factions
 {
-    internal enum FactionType
+    public enum FactionType
     {
         Undeads,
     }

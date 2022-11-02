@@ -18,11 +18,10 @@ namespace Main.Content.Game
     {
         private readonly IGameState _gameState;
         
-        private readonly GameCamera _camera;
-
         private readonly CentralPanel _centralPanel;
         private readonly RightBarPanel _rightBarPanel;
         private readonly BottomBarPanel _bottomBarPanel;
+        private readonly TopBarPanel _topBarPanel;
         private readonly NotificationPanel _notificationPanel;
 
         private readonly ITurnManager _turnManager;
@@ -36,12 +35,12 @@ namespace Main.Content.Game
             players[0] = new Player();
             players[1] = new Player();
 
-            this._camera = new GameCamera(CentralPanel.Size.X, CentralPanel.Size.Y);
             this._turnManager = new TurnManager(players);
 
-            this._centralPanel = new CentralPanel(this._camera, this._gameState, this._turnManager);
+            this._centralPanel = new CentralPanel(this._gameState, this._turnManager);
             this._rightBarPanel = new RightBarPanel(this._gameState, this._turnManager);
             this._bottomBarPanel = new BottomBarPanel(this._gameState, this._turnManager);
+            this._topBarPanel = new TopBarPanel(this._gameState, this._turnManager);
 
             this._notificationService = new NotificationService(players);
             this._notificationPanel = new NotificationPanel(this._gameState, this._turnManager, this._notificationService);
@@ -52,6 +51,7 @@ namespace Main.Content.Game
             this._centralPanel.Draw(drawer);
             this._rightBarPanel.Draw(drawer);
             this._bottomBarPanel.Draw(drawer);
+            this._topBarPanel.Draw(drawer);
             this._notificationPanel.Draw(drawer);
         }
 
@@ -64,10 +64,10 @@ namespace Main.Content.Game
                 return;
             }
 
-            this._camera.Handle(e);
             this._centralPanel.Handle(e);
             this._rightBarPanel.Handle(e);
             this._bottomBarPanel.Handle(e);
+            this._topBarPanel.Handle(e);
         }
 
         public void Handle(KeyboardEvent e) 
@@ -86,6 +86,7 @@ namespace Main.Content.Game
             this._centralPanel.Handle(e);
             this._rightBarPanel.Handle(e);
             this._bottomBarPanel.Handle(e);
+            this._topBarPanel.Handle(e);
         }
 
         public void Update() 
@@ -94,6 +95,7 @@ namespace Main.Content.Game
             this._rightBarPanel.Update();
             this._bottomBarPanel.Update();
             this._notificationPanel.Update();
+            this._topBarPanel.Update();
         }
     }
 }

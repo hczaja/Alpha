@@ -11,23 +11,23 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game.Panels
 {
-    internal class BottomBarPanel : GamePanel
+    internal class TopBarPanel : GamePanel
     {
-        public static readonly Vector2f Position = new Vector2f(0.0f, 0.8f * GameSettings.WindowHeight);
-        public static readonly Vector2f Size = new Vector2f(GameSettings.WindowWidth, 0.2f * GameSettings.WindowHeight);
+        public static readonly Vector2f Position = new Vector2f(0f, 0f);
+        public static readonly Vector2f Size = new Vector2f(GameSettings.WindowWidth, 0.05f * GameSettings.WindowHeight);
 
         private RectangleShape Shape { get; init; }
 
-        public BottomBarPanel(IGameState gameState, ITurnManager turnManager) : base(gameState, turnManager)
+        public TopBarPanel(IGameState gameState, ITurnManager turnManager) : base(gameState, turnManager)
         {
             this.Rectangle = new FloatRect(Position, Size);
-            this.View = new BottomBarView(this.Rectangle);
+            this.View = new RightBarView(this.Rectangle);
 
             this.Shape = new RectangleShape(Size);
             this.Shape.Position = Position;
             this.Shape.FillColor = Color.Black;
             this.Shape.OutlineColor = Color.Red;
-            this.Shape.OutlineThickness = 2.0f;
+            this.Shape.OutlineThickness = 1.0f;
         }
 
         public override void Draw(RenderTarget drawer)

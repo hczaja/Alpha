@@ -13,8 +13,8 @@ namespace Main.Content.Game.Panels
 {
     internal class RightBarPanel : GamePanel
     {
-        public static readonly Vector2f Position = new Vector2f(GameSettings.WindowWidth * 0.8f, 0f);
-        public static readonly Vector2f Size = new Vector2f(0.2f * GameSettings.WindowWidth, 0.8f * GameSettings.WindowHeight);
+        public static readonly Vector2f Position = new Vector2f(0.8f * GameSettings.WindowWidth, 0.05f * GameSettings.WindowHeight);
+        public static readonly Vector2f Size = new Vector2f(0.2f * GameSettings.WindowWidth, 0.75f * GameSettings.WindowHeight);
 
         private RectangleShape Shape { get; init; }
 
@@ -25,7 +25,7 @@ namespace Main.Content.Game.Panels
 
             this.Shape = new RectangleShape(Size);
             this.Shape.Position = Position;
-            this.Shape.FillColor = Color.White;
+            this.Shape.FillColor = Color.Black;
             this.Shape.OutlineColor = Color.Red;
             this.Shape.OutlineThickness = 2.0f;
         }
