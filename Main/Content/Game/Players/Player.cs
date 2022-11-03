@@ -16,11 +16,11 @@ namespace Main.Content.Game
 
         public Faction Faction { get; init; }
 
-        public Player() => (ID, Faction) = (++_id, new Faction(FactionType.Undeads));
+        public Player(FactionType factionType) => (ID, Faction) = (++_id, new Faction(factionType));
 
         public void Handle(NewTurnEvent e)
-        {
-            
+        { 
+            // refresh actions for all units
         }
     }
 }

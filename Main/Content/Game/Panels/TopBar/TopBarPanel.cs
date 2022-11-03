@@ -1,8 +1,10 @@
 ﻿using Main.Content.Game.Turns;
 using Main.Utils;
 using Main.Utils.Events;
+using Main.Utils.Graphic;
 using SFML.Graphics;
 using SFML.System;
+using SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +20,9 @@ namespace Main.Content.Game.Panels
 
         private RectangleShape Shape { get; init; }
 
-        public TopBarPanel(IGameState gameState, ITurnManager turnManager) : base(gameState, turnManager)
+        private TexturedButton NextTurnButton { get; init; }
+
+        public TopBarPanel(IGameContent gameContent, ITurnManager turnManager) : base(gameContent, turnManager)
         {
             this.Rectangle = new FloatRect(Position, Size);
             this.View = new RightBarView(this.Rectangle);
@@ -28,15 +32,29 @@ namespace Main.Content.Game.Panels
             this.Shape.FillColor = Color.Black;
             this.Shape.OutlineColor = Color.Red;
             this.Shape.OutlineThickness = 1.0f;
+
+            this.NextTurnButton = new NextTurnButton(this.Shape);
         }
 
         public override void Draw(RenderTarget drawer)
         {
             drawer.SetView(this.View);
             drawer.Draw(this.Shape);
+
+            this.NextTurnButton.Draw(drawer);
         }
 
-        public override void Handle(MouseEvent e) { }
+        public override void Handle(MouseEvent e) 
+        {
+            if (e.Type == MouseEventType.ButtonPressed
+                    && e.Button == Mouse.Button.Left)
+            {
+                if (MouseEvent.IsMouseEventRaisedIn(this.NextTurnButton.Rectangle.GetGlobalBounds(), e)) 
+                {
+                    this._gameContent.ProcessNextTurn();
+                }
+            }
+        }
 
         public override void Handle(KeyboardEvent e) { }
 

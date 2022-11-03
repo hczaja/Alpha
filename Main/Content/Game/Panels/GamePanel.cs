@@ -20,10 +20,10 @@ namespace Main.Content.Game.Panels
         public FloatRect Rectangle { get; init; }
         public GamePanelView View { get; init; }
 
-        protected readonly IGameState _gameState;
-        protected readonly ITurnManager _turnMangaer;
+        protected readonly IGameContent _gameContent;
+        protected readonly ITurnManager _turnManager;
 
-        public GamePanel(IGameState gameState, ITurnManager turnManager) => (_gameState, _turnMangaer) = (gameState, turnManager);
+        public GamePanel(IGameContent gameContent, ITurnManager turnManager) => (_gameContent, _turnManager) = (gameContent, turnManager);
 
         public abstract void Draw(RenderTarget drawer);
 

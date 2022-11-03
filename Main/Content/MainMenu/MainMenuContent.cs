@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Main.Content.MainMenu
 {
-    internal class MainMenuContent : IWindowContent
+    public class MainMenuContent : IWindowContent
     {
         private readonly IGameState _gameState;
 
