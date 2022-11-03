@@ -17,7 +17,6 @@ namespace Main.Content.Game.Panels
         IEventHandler<KeyboardEvent>,
         IEventHandler<NewTurnEvent>
     {
-        public FloatRect Rectangle { get; init; }
         public GamePanelView View { get; init; }
 
         protected readonly IGameContent _gameContent;

@@ -24,8 +24,8 @@ namespace Main.Content.Game.Panels
 
         public NotificationPanel(IGameContent gameContent, ITurnManager turnManager, INotificationService notificationService) : base(gameContent, turnManager)
         {
-            this.Rectangle = new FloatRect(Position, Size);
-            this.View = new NotificationView(this.Rectangle);
+            var rectangle = new FloatRect(Position, Size);
+            this.View = new NotificationView(rectangle);
 
             this.Background = new RectangleShape(Size);
             this.Background.Position = Position;

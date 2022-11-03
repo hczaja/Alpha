@@ -1,6 +1,7 @@
 ﻿using Main.Content.Game.Factions;
 using Main.Content.Game.Notifications;
 using Main.Content.Game.Panels;
+using Main.Content.Game.Resources;
 using Main.Content.Game.Turns;
 using Main.Utils;
 using Main.Utils.Camera;
@@ -38,8 +39,9 @@ namespace Main.Content.Game
             _gameState = gameState;
 
             var players = new Player[2];
-            players[0] = new Player(FactionType.Undeads);
-            players[1] = new Player(FactionType.Dwarves);
+            var startingIncome = new Income() { Gold = 500 };
+            players[0] = new Player(FactionType.Undeads, startingIncome);
+            players[1] = new Player(FactionType.Dwarves, startingIncome);
 
             this._turnManager = new TurnManager(players);
 
@@ -55,7 +57,9 @@ namespace Main.Content.Game
         public void ProcessNextTurn()
         {                        
             var nextPlayer = this._turnManager.GetNextPlayer();
+
             this._notificationService.EnqueueNotification(nextPlayer.ID, new NewTurnNotification(this._notificationService, nextPlayer));
+            this._topBarPanel.Handle(new NewTurnEvent(ITurnManager.turnCounter, nextPlayer));
         }
 
         public void Draw(RenderTarget drawer) 

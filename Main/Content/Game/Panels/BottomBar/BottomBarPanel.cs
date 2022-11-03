@@ -20,8 +20,8 @@ namespace Main.Content.Game.Panels
 
         public BottomBarPanel(IGameContent gameContent, ITurnManager turnManager) : base(gameContent, turnManager)
         {
-            this.Rectangle = new FloatRect(Position, Size);
-            this.View = new BottomBarView(this.Rectangle);
+            var rectangle = new FloatRect(Position, Size);
+            this.View = new BottomBarView(rectangle);
 
             this.Shape = new RectangleShape(Size);
             this.Shape.Position = Position;
