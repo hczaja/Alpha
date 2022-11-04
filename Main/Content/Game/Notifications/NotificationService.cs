@@ -35,7 +35,11 @@ namespace Main.Content.Game.Notifications
                 {
                     notifications.Value.Enqueue(notification);
                 }
-            }    
+            }
+            else
+            {
+                this._notifications[playerId].Enqueue(notification);
+            }
         }
 
         public bool TryGetNotification(int playerId, out Notification? result)

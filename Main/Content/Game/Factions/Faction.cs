@@ -14,6 +14,7 @@ namespace Main.Content.Game.Factions
         public Color GetFactionColor() => this.Type switch
         {
             FactionType.Undeads => new Color(124, 102, 169),
+            FactionType.Dwarves => new Color(103, 185, 191),
             _ => Color.White
         };
 

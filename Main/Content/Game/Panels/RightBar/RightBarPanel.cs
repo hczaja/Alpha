@@ -11,17 +11,17 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game.Panels
 {
-    internal class BottomBarPanel : GamePanel
+    internal class RightBarPanel : GamePanel
     {
-        public static readonly Vector2f Position = new Vector2f(0.0f, 0.8f * GameSettings.WindowHeight);
-        public static readonly Vector2f Size = new Vector2f(GameSettings.WindowWidth, 0.2f * GameSettings.WindowHeight);
+        public static readonly Vector2f Position = new Vector2f(0.8f * GameSettings.WindowWidth, 0.05f * GameSettings.WindowHeight);
+        public static readonly Vector2f Size = new Vector2f(0.2f * GameSettings.WindowWidth, 0.75f * GameSettings.WindowHeight);
 
         private RectangleShape Shape { get; init; }
 
-        public BottomBarPanel(IGameState gameState, ITurnManager turnManager) : base(gameState, turnManager)
+        public RightBarPanel(IGameContent gameContent, ITurnManager turnManager) : base(gameContent, turnManager)
         {
-            this.Rectangle = new FloatRect(Position, Size);
-            this.View = new BottomBarView(this.Rectangle);
+            var rectangle = new FloatRect(Position, Size);
+            this.View = new RightBarView(rectangle);
 
             this.Shape = new RectangleShape(Size);
             this.Shape.Position = Position;

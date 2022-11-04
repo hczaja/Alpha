@@ -1,4 +1,5 @@
 ﻿using Main.Content.Game.Terrains;
+using Main.Content.Game.Turns;
 using Main.Utils.Camera;
 using Main.Utils.Events;
 using Main.Utils.Graphic;
@@ -17,11 +18,12 @@ namespace Main.Content.Game
         Small, Medium, Large
     }
 
-    internal class Grid : IDrawable, IEventHandler<MouseEvent>
+    internal class Grid : IDrawable, IEventHandler<MouseEvent>, IEventHandler<NewTurnEvent>
     {
         public readonly int _width;
         public readonly int _height;
         private readonly GameCamera _gameCamera;
+        private readonly ITurnManager _turnManager;
 
         private Cell[,] Cells { get; init; }
         private Cell CurrentCell = null;
@@ -33,16 +35,15 @@ namespace Main.Content.Game
                 GridSize.Large => (32, 32)
             };
 
-        public Grid(GridSize size, GameCamera camera)
+        public Grid(GridSize size, GameCamera camera, ITurnManager turnManager)
         {
             this._gameCamera = camera;
+            this._turnManager = turnManager;
 
             (this._width, this._height) = GetGridDimensions(size);
 
             this.Cells = new Cell[_width, _height];
             this.InitializeCells();
-
-            //this.Cells[5, 5].AddBuilding(new Tower(this.Cells[5, 5].Rectangle.Position));
         }
 
         public void Draw(RenderTarget drawer)
@@ -63,6 +64,17 @@ namespace Main.Content.Game
             }
         }
 
+        public void Handle(NewTurnEvent e)
+        {
+            foreach (var cell in this.Cells)
+            {
+                cell.Handle(e);
+            }
+
+            this.CurrentCell?.Unselect();
+            this.CurrentCell = null;
+        }
+
         public void Handle(MouseEvent e)
         {
             if (e.Type == MouseEventType.ButtonPressed && e.Button == Mouse.Button.Left)
@@ -73,6 +85,13 @@ namespace Main.Content.Game
                 int i = (int)(x / Cell._CellSizeX);
                 int j = (int)(y / Cell._CellSizeY);
 
+                if (x < 0 || y < 0)
+                {
+                    this.CurrentCell?.Unselect();
+                    this.CurrentCell = null;
+                    return;
+                }
+
                 try
                 {
                     var cell = this.Cells[i, j];
@@ -81,6 +100,10 @@ namespace Main.Content.Game
 
                     this.CurrentCell = cell;
                     this.CurrentCell.Select();
+
+                    //tmp solution
+                    var currentPlayer = this._turnManager.GetCurrentPlayer();
+                    this.CurrentCell.DiscoverFor(currentPlayer.ID);
                 }
                 catch (IndexOutOfRangeException)
                 {
@@ -92,13 +115,14 @@ namespace Main.Content.Game
 
         private void InitializeCells()
         {
+            var currentPlayer = this._turnManager.GetCurrentPlayer();
             for (int i = 0; i < _width; i++)
             {
                 for (int j = 0; j < _height; j++)
                 {
                     // temporary solution
                     var randomType = Terrain.GetAllTerrainTypes()[Random.Shared.Next(0, 3)];
-                    this.Cells[i, j] = new Cell(i, j, new Terrain(randomType));
+                    this.Cells[i, j] = new Cell(i, j, currentPlayer, new Terrain(randomType));
                 }
             }
 

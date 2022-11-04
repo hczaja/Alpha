@@ -20,15 +20,14 @@ namespace Main.Content.Game.Panels
         private Grid Grid { get; init; }
         private readonly GameCamera _camera;
 
-        public CentralPanel(IGameState gameState, ITurnManager turnManager) : base(gameState, turnManager)
+        public CentralPanel(IGameContent gameContent, ITurnManager turnManager) : base(gameContent, turnManager)
         {
-            this.Rectangle = new FloatRect(Position, Size);
-
-            var gridSize = GridSize.Medium;
+            var gridSize = GridSize.Large;
             this._camera = new GameCamera(Position, Size);
 
-            this.View = new CentralView(this._camera, this.Rectangle, gridSize);
-            this.Grid = new Grid(gridSize, this._camera);
+            var rectangle = new FloatRect(Position, Size);
+            this.View = new CentralView(this._camera, rectangle, gridSize);
+            this.Grid = new Grid(gridSize, this._camera, this._turnManager);
         }
 
         public override void Draw(RenderTarget drawer)
@@ -39,7 +38,8 @@ namespace Main.Content.Game.Panels
 
         public override void Handle(MouseEvent e)
         {
-            if (MouseEvent.IsMouseEventRaisedIn(this.Rectangle, e))
+            var rectangle = new FloatRect(Position, Size);
+            if (MouseEvent.IsMouseEventRaisedIn(rectangle, e))
             {
                 this._camera.Handle(e);
                 this.Grid.Handle(e);
@@ -48,7 +48,10 @@ namespace Main.Content.Game.Panels
 
         public override void Handle(KeyboardEvent e) { }
 
-        public override void Handle(NewTurnEvent e) { }
+        public override void Handle(NewTurnEvent e) 
+        {
+            this.Grid.Handle(e);
+        }
 
         public override void Update()
         {

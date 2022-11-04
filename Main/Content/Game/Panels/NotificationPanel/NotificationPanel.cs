@@ -22,10 +22,10 @@ namespace Main.Content.Game.Panels
         private readonly INotificationService _notificationService;
         private Notification? currentNotification;
 
-        public NotificationPanel(IGameState gameState, ITurnManager turnManager, INotificationService notificationService) : base(gameState, turnManager)
+        public NotificationPanel(IGameContent gameContent, ITurnManager turnManager, INotificationService notificationService) : base(gameContent, turnManager)
         {
-            this.Rectangle = new FloatRect(Position, Size);
-            this.View = new NotificationView(this.Rectangle);
+            var rectangle = new FloatRect(Position, Size);
+            this.View = new NotificationView(rectangle);
 
             this.Background = new RectangleShape(Size);
             this.Background.Position = Position;
@@ -57,7 +57,7 @@ namespace Main.Content.Game.Panels
 
         public override void Update() 
         { 
-            int currentPlayerId = this._turnMangaer.GetCurrentPlayer().ID;
+            int currentPlayerId = this._turnManager.GetCurrentPlayer().ID;
             this._notificationService.TryGetNotification(currentPlayerId, out var notification);
             
             if (this.currentNotification != notification)

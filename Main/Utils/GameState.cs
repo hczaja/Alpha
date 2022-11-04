@@ -1,5 +1,6 @@
 ﻿using Main.Content;
 using Main.Content.Game;
+using Main.Content.Lobby;
 using Main.Content.MainMenu;
 using Main.Utils.Events;
 using Main.Utils.Graphic;
@@ -63,6 +64,9 @@ namespace Main.Utils
             {
                 case WindowContentEventType.MainMenu:
                     this.ActualContent = new MainMenuContent(this);
+                    break;
+                case WindowContentEventType.GameLobby:
+                    this.ActualContent = new GameLobbyContent(this);
                     break;
                 case WindowContentEventType.Game:
                     this.ActualContent = new GameContent(this);

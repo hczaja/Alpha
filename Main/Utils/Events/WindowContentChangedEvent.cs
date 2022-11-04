@@ -8,7 +8,7 @@ namespace Main.Utils.Events
 {
     public enum WindowContentEventType
     {
-        Unknown, Exit, MainMenu, GamePreparation, Game
+        Unknown, Exit, MainMenu, GameLobby, Game
     }
 
     public record WindowContentChangedEvent

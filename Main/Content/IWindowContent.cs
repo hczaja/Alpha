@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Main.Content
 {
-    internal interface IWindowContent :
+    public interface IWindowContent :
         IDrawable,
         IEventHandler<MouseEvent>,
         IEventHandler<KeyboardEvent>

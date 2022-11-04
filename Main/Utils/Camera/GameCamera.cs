@@ -13,7 +13,7 @@ namespace Main.Utils.Camera
     internal class GameCamera : IEventHandler<MouseEvent>
     {
         public Direction MoveDirection { get; private set; }
-        public static readonly float MoveSpeed = 2.0f;
+        public static readonly float MoveSpeed = 4.0f;
         public static readonly float ViewBandwith = 48.0f;
 
         public float MoveX { get; private set; }

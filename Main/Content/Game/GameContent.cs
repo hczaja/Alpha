@@ -1,5 +1,7 @@
-﻿using Main.Content.Game.Notifications;
+﻿using Main.Content.Game.Factions;
+using Main.Content.Game.Notifications;
 using Main.Content.Game.Panels;
+using Main.Content.Game.Resources;
 using Main.Content.Game.Turns;
 using Main.Utils;
 using Main.Utils.Camera;
@@ -14,7 +16,12 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game
 {
-    internal class GameContent : IWindowContent
+    public interface IGameContent : IWindowContent
+    {
+        void ProcessNextTurn();
+    }
+
+    internal class GameContent : IGameContent
     {
         private readonly IGameState _gameState;
         
@@ -32,18 +39,33 @@ namespace Main.Content.Game
             _gameState = gameState;
 
             var players = new Player[2];
-            players[0] = new Player();
-            players[1] = new Player();
+            var startingIncome = new Income() { Gold = 500 };
+            players[0] = new Player(FactionType.Undeads, startingIncome);
+            players[1] = new Player(FactionType.Dwarves, startingIncome);
 
             this._turnManager = new TurnManager(players);
 
-            this._centralPanel = new CentralPanel(this._gameState, this._turnManager);
-            this._rightBarPanel = new RightBarPanel(this._gameState, this._turnManager);
-            this._bottomBarPanel = new BottomBarPanel(this._gameState, this._turnManager);
-            this._topBarPanel = new TopBarPanel(this._gameState, this._turnManager);
+            this._centralPanel = new CentralPanel(this, this._turnManager);
+            this._rightBarPanel = new RightBarPanel(this, this._turnManager);
+            this._bottomBarPanel = new BottomBarPanel(this, this._turnManager);
+            this._topBarPanel = new TopBarPanel(this, this._turnManager);
 
             this._notificationService = new NotificationService(players);
-            this._notificationPanel = new NotificationPanel(this._gameState, this._turnManager, this._notificationService);
+            this._notificationPanel = new NotificationPanel(this, this._turnManager, this._notificationService);
+        }
+
+        public void ProcessNextTurn()
+        {                        
+            var nextPlayer = this._turnManager.GetNextPlayer();
+
+            this._notificationService.EnqueueNotification(nextPlayer.ID, new NewTurnNotification(this._notificationService, nextPlayer));
+
+            var newTurnEvent = new NewTurnEvent(ITurnManager.turnCounter, nextPlayer);
+
+            this._centralPanel.Handle(newTurnEvent);
+            this._rightBarPanel.Handle(newTurnEvent);
+            this._bottomBarPanel.Handle(newTurnEvent);
+            this._topBarPanel.Handle(newTurnEvent);
         }
 
         public void Draw(RenderTarget drawer) 
@@ -75,12 +97,6 @@ namespace Main.Content.Game
             if (e.Type == KeyboardEventType.KeyPressed && e.Key == Keyboard.Key.Escape)
             {
                 this._gameState.Handle(new WindowContentChangedEvent(WindowContentEventType.MainMenu));
-            }
-            
-            if (e.Type == KeyboardEventType.KeyPressed && e.Key == Keyboard.Key.Enter)
-            {
-                var currentPlayer = this._turnManager.GetCurrentPlayer();
-                this._notificationService.EnqueueNotification(0, new NewTurnNotification(this._notificationService, currentPlayer));
             }
 
             this._centralPanel.Handle(e);
