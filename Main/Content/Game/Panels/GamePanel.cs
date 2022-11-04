@@ -22,7 +22,8 @@ namespace Main.Content.Game.Panels
         protected readonly IGameContent _gameContent;
         protected readonly ITurnManager _turnManager;
 
-        public GamePanel(IGameContent gameContent, ITurnManager turnManager) => (_gameContent, _turnManager) = (gameContent, turnManager);
+        public GamePanel(IGameContent gameContent, ITurnManager turnManager) => 
+            (_gameContent, _turnManager) = (gameContent, turnManager);
 
         public abstract void Draw(RenderTarget drawer);
 

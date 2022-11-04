@@ -22,7 +22,7 @@ namespace Main.Content.Game.Panels
 
         public CentralPanel(IGameContent gameContent, ITurnManager turnManager) : base(gameContent, turnManager)
         {
-            var gridSize = GridSize.Medium;
+            var gridSize = GridSize.Large;
             this._camera = new GameCamera(Position, Size);
 
             var rectangle = new FloatRect(Position, Size);

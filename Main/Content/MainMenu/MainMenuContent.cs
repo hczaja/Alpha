@@ -15,22 +15,22 @@ namespace Main.Content.MainMenu
     {
         private readonly IGameState _gameState;
 
-        private TexturedButton StartButton { get; init; }
-        private TexturedButton ExitButton { get; init; }
+        private readonly TexturedButton _startButton;
+        private readonly TexturedButton _exitButton;
 
         public MainMenuContent(IGameState gameState)
         {
             _gameState = gameState;
             _gameState.RestartView();
 
-            this.StartButton = new StartButton();
-            this.ExitButton = new ExitButton();
+            this._startButton = new StartButton();
+            this._exitButton = new ExitButton();
         }
 
         public void Draw(RenderTarget drawer)
         {
-            this.StartButton.Draw(drawer);
-            this.ExitButton.Draw(drawer);
+            this._startButton.Draw(drawer);
+            this._exitButton.Draw(drawer);
         }
 
         public void Handle(MouseEvent e)
@@ -38,12 +38,12 @@ namespace Main.Content.MainMenu
             if (e.Type == MouseEventType.ButtonPressed
                 && e.Button == Mouse.Button.Left)
             {
-                if (MouseEvent.IsMouseEventRaisedIn(this.StartButton.Rectangle.GetGlobalBounds(), e))
+                if (MouseEvent.IsMouseEventRaisedIn(this._startButton.Rectangle.GetGlobalBounds(), e))
                 {
                     this._gameState.Handle(
-                        new WindowContentChangedEvent(WindowContentEventType.Game));
+                        new WindowContentChangedEvent(WindowContentEventType.GameLobby));
                 }
-                else if (MouseEvent.IsMouseEventRaisedIn(this.ExitButton.Rectangle.GetGlobalBounds(), e))
+                else if (MouseEvent.IsMouseEventRaisedIn(this._exitButton.Rectangle.GetGlobalBounds(), e))
                 {
                     this._gameState.Handle(
                         new WindowContentChangedEvent(WindowContentEventType.Exit));
