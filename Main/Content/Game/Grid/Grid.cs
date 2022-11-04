@@ -85,6 +85,13 @@ namespace Main.Content.Game
                 int i = (int)(x / Cell._CellSizeX);
                 int j = (int)(y / Cell._CellSizeY);
 
+                if (x < 0 || y < 0)
+                {
+                    this.CurrentCell?.Unselect();
+                    this.CurrentCell = null;
+                    return;
+                }
+
                 try
                 {
                     var cell = this.Cells[i, j];
