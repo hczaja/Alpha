@@ -27,7 +27,7 @@ namespace Main.Content.Game.Panels
 
             var rectangle = new FloatRect(Position, Size);
             this.View = new CentralView(this._camera, rectangle, gridSize);
-            this.Grid = new Grid(gridSize, this._camera);
+            this.Grid = new Grid(gridSize, this._camera, this._turnManager);
         }
 
         public override void Draw(RenderTarget drawer)
@@ -48,7 +48,10 @@ namespace Main.Content.Game.Panels
 
         public override void Handle(KeyboardEvent e) { }
 
-        public override void Handle(NewTurnEvent e) { }
+        public override void Handle(NewTurnEvent e) 
+        {
+            this.Grid.Handle(e);
+        }
 
         public override void Update()
         {

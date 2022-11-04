@@ -15,6 +15,8 @@ namespace Main.Content.Game
         private static int _id;
         public int ID { get; init; }
 
+        public static int GetMaxID() => _id;
+
         public Faction Faction { get; init; }
         public Supplies Supplies { get; init; }
 

@@ -59,7 +59,13 @@ namespace Main.Content.Game
             var nextPlayer = this._turnManager.GetNextPlayer();
 
             this._notificationService.EnqueueNotification(nextPlayer.ID, new NewTurnNotification(this._notificationService, nextPlayer));
-            this._topBarPanel.Handle(new NewTurnEvent(ITurnManager.turnCounter, nextPlayer));
+
+            var newTurnEvent = new NewTurnEvent(ITurnManager.turnCounter, nextPlayer);
+
+            this._centralPanel.Handle(newTurnEvent);
+            this._rightBarPanel.Handle(newTurnEvent);
+            this._bottomBarPanel.Handle(newTurnEvent);
+            this._topBarPanel.Handle(newTurnEvent);
         }
 
         public void Draw(RenderTarget drawer) 

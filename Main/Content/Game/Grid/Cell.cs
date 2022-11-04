@@ -3,6 +3,7 @@ using Main.Content.Game.GameObjects.Resources;
 using Main.Content.Game.GameObjects.Units;
 using Main.Content.Game.Terrains;
 using Main.Utils.Camera;
+using Main.Utils.Events;
 using Main.Utils.Graphic;
 using SFML.Graphics;
 using SFML.System;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game
 {
-    internal class Cell : IDrawable
+    internal class Cell : IDrawable, IEventHandler<NewTurnEvent>
     {
         public static readonly float _CellSizeX = 32;
         public static readonly float _CellSizeY = 32;
@@ -30,15 +31,20 @@ namespace Main.Content.Game
 
         public Dictionary<Direction, Cell?> Surrounding { get; init; }
 
-        public Cell(int i, int j, Terrain terrain)
+        private Player _currentPlayer;
+        private FogOfWar _fogOfWar;
+
+        public Cell(int i, int j, Player startingPlayer, Terrain terrain)
         {
             this.Rectangle = new RectangleShape();
             this.Terrain = terrain;
 
+            this._currentPlayer = startingPlayer;
+            this._fogOfWar = new FogOfWar();
+
             this.Rectangle.Size = new Vector2f(_CellSizeX, _CellSizeY);
             this.Rectangle.Position = new Vector2f(i * _CellSizeX, j * _CellSizeY);
-            this.Rectangle.FillColor = this.Terrain.GetColor();
-            this.Rectangle.OutlineColor = Color.White;
+            this.Rectangle.OutlineColor = Color.Transparent;
             this.Rectangle.OutlineThickness = 1.0f;
 
             this.Surrounding = new Dictionary<Direction, Cell?>();
@@ -53,9 +59,26 @@ namespace Main.Content.Game
         public void AddBuilding(Building b) => this.Building = b;
         public void RemoveBuilding() => this.Building = null;
 
+        public void DiscoverFor(int playerId) => this._fogOfWar.DiscoverFor(playerId);
+        public void HideFor(int playerId) => this._fogOfWar.HideFor(playerId);
+
+        public void Handle(NewTurnEvent e)
+        {
+            this._currentPlayer = e.PlayerInfo;
+        }
+
         public void Draw(RenderTarget drawer)
         {
-            this.Rectangle.OutlineColor = Color.White;
+            this.Rectangle.FillColor = this.Terrain.GetColor();
+
+            if (!this._fogOfWar.IsVisibleFor(this._currentPlayer.ID))
+            {
+                this.Rectangle.FillColor = this._fogOfWar.GetFogColor();
+                drawer.Draw(this.Rectangle);
+                return;
+            }
+
+            this.Rectangle.OutlineColor = Color.Transparent;
 
             if (this.Selected)
             {
@@ -80,7 +103,11 @@ namespace Main.Content.Game
                 $" - {this.Resource?.ToString()}");
         }
 
-        public void Unselect() => this.Selected = false;
+        public void Unselect()
+        {
+            this.Rectangle.OutlineColor = Color.Transparent;
+            this.Selected = false;
+        }
 
         public bool IsOccupied()
         {
