@@ -24,8 +24,6 @@ namespace Main.Utils.Camera
         private readonly Vector2f _workspacePosition;
         private readonly Vector2f _workspaceSize;
 
-        private readonly (int w, int h) _gridDimensions;
-
         public GameCamera(Vector2f position, Vector2f size) => (_workspacePosition, _workspaceSize) = (position, size);
 
         public void Move(Vector2f vector)
@@ -38,37 +36,39 @@ namespace Main.Utils.Camera
         {
             if (e.Type == MouseEventType.ButtonPressed && e.Button == Mouse.Button.Middle) this.CanMove = true;
             else if (e.Type == MouseEventType.ButtonReleased && e.Button == Mouse.Button.Middle) this.CanMove = false;
-
-            if (!this.CanMove)
+            else if (e.Type == MouseEventType.MouseMoved)
             {
-                this.MoveDirection = Direction.Unknown;
-                return;
+                if (!this.CanMove)
+                {
+                    this.MoveDirection = Direction.Unknown;
+                    return;
+                }
+
+                float topEdge = _workspacePosition.Y;
+                float bottomEdge = _workspacePosition.Y + _workspaceSize.Y;
+                float leftEdge = _workspacePosition.X;
+                float rightEdge = _workspacePosition.X + _workspaceSize.X;
+
+                bool moveTop = topEdge <= e.Y && e.Y < topEdge + ViewBandwith;
+                bool moveBottom = bottomEdge - ViewBandwith < e.Y && e.Y <= bottomEdge;
+                bool moveLeft = leftEdge <= e.X && e.X < leftEdge + ViewBandwith;
+                bool moveRight = rightEdge - ViewBandwith < e.X && e.X < rightEdge;
+
+                if (!moveTop && !moveBottom && !moveLeft && !moveRight)
+                {
+                    this.MoveDirection = Direction.Unknown;
+                    return;
+                }
+
+                if (moveTop && moveLeft) this.MoveDirection = Direction.TopLeft;
+                else if (moveTop && moveRight) this.MoveDirection = Direction.TopRight;
+                else if (moveBottom && moveLeft) this.MoveDirection = Direction.BottomLeft;
+                else if (moveBottom && moveRight) this.MoveDirection = Direction.BottomRight;
+                else if (moveLeft) this.MoveDirection = Direction.Left;
+                else if (moveRight) this.MoveDirection = Direction.Right;
+                else if (moveTop) this.MoveDirection = Direction.Top;
+                else if (moveBottom) this.MoveDirection = Direction.Bottom;
             }
-
-            float topEdge = _workspacePosition.Y;
-            float bottomEdge =_workspacePosition.Y + _workspaceSize.Y;
-            float leftEdge =_workspacePosition.X;
-            float rightEdge =_workspacePosition.X + _workspaceSize.X;
-
-            bool moveTop = topEdge <= e.Y && e.Y < topEdge + ViewBandwith;
-            bool moveBottom = bottomEdge - ViewBandwith < e.Y && e.Y <= bottomEdge;
-            bool moveLeft = leftEdge <= e.X && e.X < leftEdge + ViewBandwith;
-            bool moveRight = rightEdge - ViewBandwith < e.X && e.X < rightEdge;
-
-            if (!moveTop && !moveBottom && !moveLeft && !moveRight)
-            {
-                this.MoveDirection = Direction.Unknown;
-                return;
-            }
-
-            if (moveTop && moveLeft) this.MoveDirection = Direction.TopLeft;
-            else if (moveTop && moveRight) this.MoveDirection = Direction.TopRight;
-            else if (moveBottom && moveLeft) this.MoveDirection = Direction.BottomLeft;
-            else if (moveBottom && moveRight) this.MoveDirection = Direction.BottomRight;
-            else if (moveLeft) this.MoveDirection = Direction.Left;
-            else if (moveRight) this.MoveDirection = Direction.Right;
-            else if (moveTop) this.MoveDirection = Direction.Top;
-            else if (moveBottom) this.MoveDirection = Direction.Bottom;
         }
     }
 }

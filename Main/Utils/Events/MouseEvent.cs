@@ -10,7 +10,7 @@ namespace Main.Utils.Events
 {
     public enum MouseEventType
     {
-        Unknown, ButtonPressed, ButtonReleased
+        Unknown, MouseMoved, ButtonPressed, ButtonReleased
     }
 
     public record MouseEvent

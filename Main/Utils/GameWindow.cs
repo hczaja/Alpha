@@ -29,8 +29,15 @@ namespace Main.Utils
             this._window.KeyReleased += _window_KeyReleased;
             this._window.MouseButtonPressed += _window_MouseButtonPressed;
             this._window.MouseButtonReleased += _window_MouseButtonReleased;
+            this._window.MouseMoved += _window_MouseMoved;
 
             this._gameState = new GameState(this);
+        }
+
+        private void _window_MouseMoved(object? sender, MouseMoveEventArgs e)
+        {
+            Console.WriteLine($"{DateTime.Now} - {nameof(_window_MouseMoved)}");
+            this._gameState.Handle(new MouseEvent(MouseEventType.MouseMoved, e.X, e.Y, Mouse.Button.Left));
         }
 
         private void _window_Closed(object? sender, EventArgs e)
