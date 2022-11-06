@@ -1,4 +1,5 @@
 ﻿using Main.Content.Common.MapManager;
+using Main.Content.Lobby;
 using Main.Utils.Events;
 using Main.Utils.Graphic;
 using SFML.Graphics;
@@ -16,8 +17,12 @@ namespace Main.Content.GameLobby.Panels.TopRight
         private MapListEntry[] _entries { get; init; }
         private MapListEntry? _currentEntry = null;
 
-        public MapList()
+        private readonly IGameLobbyContent _gameLobbyContent;
+
+        public MapList(IGameLobbyContent gameLobbyContent)
         {
+            _gameLobbyContent = gameLobbyContent;
+
             var mapRegistry = MapManager.RegistryInstance;
             var maps = mapRegistry.Maps;
 
@@ -30,6 +35,8 @@ namespace Main.Content.GameLobby.Panels.TopRight
 
             this._currentEntry = this._entries.First();
             this._currentEntry.Select();
+
+            _gameLobbyContent.AddMapInfoToResult(this._currentEntry.MapInfo);
         }
 
         public void Draw(RenderTarget drawer)
@@ -59,6 +66,8 @@ namespace Main.Content.GameLobby.Panels.TopRight
 
                         this._currentEntry = entry;
                         this._currentEntry.Select();
+
+                        _gameLobbyContent.AddMapInfoToResult(this._currentEntry.MapInfo);
                     }
                 }
             }

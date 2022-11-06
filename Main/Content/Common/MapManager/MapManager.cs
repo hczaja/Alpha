@@ -15,21 +15,24 @@ namespace Main.Content.Common.MapManager
 
         private static MapRegistry Deserialize()
         {
-            const string path = "Content/Common/MapManager/MapRegistry.xml";
-
-            var content = File.ReadAllText(path);
-
             var result = new MapRegistry();
             var serializer = new XmlSerializer(typeof(MapRegistry));
-                
-            using (var reader = new StringReader(content))
+
+            var directory = new DirectoryInfo("Content/Common/MapManager/Maps");
+            foreach (var file in directory.EnumerateFiles())
             {
-                try
+                var content = File.ReadAllText($"Content/Common/MapManager/Maps/{file.Name}");
+                
+                using (var reader = new StringReader(content))
                 {
-                    result = serializer.Deserialize(reader) as MapRegistry;
+                    try
+                    {
+                        var registry = serializer.Deserialize(reader) as MapRegistry;
+                        result.Maps.AddRange(registry.Maps);
+                    }
+                    catch (Exception)
+                    { }
                 }
-                catch (Exception)
-                { }
             }
 
             return result;

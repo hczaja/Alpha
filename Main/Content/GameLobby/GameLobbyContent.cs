@@ -1,4 +1,5 @@
-﻿using Main.Content.GameLobby.Panels;
+﻿using Main.Content.Common.MapManager;
+using Main.Content.GameLobby.Panels;
 using Main.Utils;
 using Main.Utils.Events;
 using Main.Utils.Graphic;
@@ -14,7 +15,8 @@ namespace Main.Content.Lobby
 {
     public interface IGameLobbyContent : IWindowContent
     {
-
+        public void AddMapInfoToResult(MapInfo mapInfo);
+        public MapInfo GetMapInfo();
     }
 
     public class GameLobbyContent : IGameLobbyContent
@@ -28,13 +30,17 @@ namespace Main.Content.Lobby
         private TextButton _startButton { get; init; }
         private TextButton _backButton { get; init; }
 
+        private GameLobbyResult gameLobbyResult;
+
         public GameLobbyContent(IGameState gameState)
         {
             _gameState = gameState;
             _gameState.RestartView();
 
-            this._topLeftPanel = new TopLeftPanel(this);
+            this.gameLobbyResult = new GameLobbyResult();
+
             this._topRightPanel = new TopRightPanel(this);
+            this._topLeftPanel = new TopLeftPanel(this);
             this._bottomLeftPanel = new BottomLeftPanel(this);
 
             this._backButton = new BackButton();
@@ -84,5 +90,8 @@ namespace Main.Content.Lobby
         }
 
         public void Update() { }
+
+        public void AddMapInfoToResult(MapInfo mapInfo) => this.gameLobbyResult.MapInfo = mapInfo;
+        public MapInfo GetMapInfo() => this.gameLobbyResult.MapInfo;
     }
 }

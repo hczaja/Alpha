@@ -36,7 +36,7 @@ namespace Main.Content.GameLobby.Panels
             this.Shape.OutlineColor = Color.Red;
             this.Shape.OutlineThickness = 2.0f;
 
-            this._mapList = new MapList();
+            this._mapList = new MapList(gameContent);
         }
 
         public override void Draw(RenderTarget drawer)

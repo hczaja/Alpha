@@ -20,9 +20,9 @@
     <PackageReference Include="SFML.Net" Version="2.5.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Content\Common\MapManager\MapRegistry.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  <ItemGroup Label="Maps">
+    <None Include="**\Maps\*.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

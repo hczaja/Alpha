@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game
 {
-    internal enum GridSize
+    public enum GridSize
     {
         Small, Medium, Large
     }

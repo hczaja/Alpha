@@ -26,7 +26,7 @@ namespace Main.Content.GameLobby.Panels.TopRight
         private Text _nameCellText;
         private RectangleShape _nameCell;
 
-        private static readonly Vector2f SizeCellSize = new Vector2f(0.10f * TopRightPanel.Size.X, MapListEntry.Size.Y);
+        private static readonly Vector2f SizeCellSize = new Vector2f(0.15f * TopRightPanel.Size.X, MapListEntry.Size.Y);
         private Text _sizeCellText;
         private RectangleShape _sizeCell;
 
@@ -55,7 +55,7 @@ namespace Main.Content.GameLobby.Panels.TopRight
 
             this.InitializeCellText(ref this._indexCellText!, this.Shape.Position, positionOnList.ToString());
             this.InitializeCellText(ref this._nameCellText!, this._indexCell.Position + new Vector2f(this._indexCell.Size.X, 0.0f), mapInfo.Name!);
-            this.InitializeCellText(ref this._sizeCellText!, this._nameCell.Position + new Vector2f(this._nameCell.Size.X, 0.0f), mapInfo.Size!);
+            this.InitializeCellText(ref this._sizeCellText!, this._nameCell.Position + new Vector2f(this._nameCell.Size.X, 0.0f), mapInfo.GridSize.ToString()!);
             this.InitializeCellText(ref this._playersCellText!, this._sizeCell.Position + new Vector2f(this._sizeCell.Size.X, 0.0f), mapInfo.Players.ToString());
         }
 

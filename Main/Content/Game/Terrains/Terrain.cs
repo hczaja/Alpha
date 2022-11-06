@@ -15,7 +15,7 @@ namespace Main.Content.Game.Terrains
         public Terrain(TerrainType type) => (Name, Type) = (type.ToString(), type);
 
         // replace colors with textures
-        private static Dictionary<TerrainType, Color> _terrainToColor =
+        public static Dictionary<TerrainType, Color> TerrainToColor =
             new Dictionary<TerrainType, Color>()
             {
                 { TerrainType.Unknown, Color.Black },
@@ -26,6 +26,6 @@ namespace Main.Content.Game.Terrains
 
         public static TerrainType[] GetAllTerrainTypes() => new TerrainType[] { TerrainType.Water, TerrainType.Dirt, TerrainType.Grass };
 
-        public Color GetColor() => _terrainToColor[this.Type];
+        public Color GetColor() => TerrainToColor[this.Type];
     }
 }
