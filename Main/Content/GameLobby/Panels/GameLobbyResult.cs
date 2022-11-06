@@ -10,10 +10,12 @@ namespace Main.Content.GameLobby.Panels
     public class GameLobbyResult
     {
         public Map MapInfo { get; set; }
+        public PlayerInfo PlayerInfo { get; set; }
 
         public GameLobbyResult()
         {
             this.MapInfo = new Map();
+            this.PlayerInfo = new PlayerInfo("","","");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Main.Content.Common.MapManager;
+using Main.Content.Game;
 using Main.Content.Game.Factions;
 using Main.Utils;
 using Main.Utils.Events;
@@ -32,10 +33,13 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
         private Text _factionCellText;
         private RectangleShape _factionCell;
 
+        public PlayerInfo PlayerInfo { get; private init; }
         private bool _selected;
 
         public PlayersListEntry(int positionOnList, PlayerInfo playerInfo)
         {
+            this.PlayerInfo = playerInfo;
+
             this.Shape = new RectangleShape(Size);
             this.Shape.Position = BottomLeftPanel.Position + new Vector2f(0f, positionOnList * Size.Y);
 
@@ -80,7 +84,7 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
 
             this._nameCellText.DisplayedString = this._selected
                 ? "Player"
-                : "<Empty";
+                : "<Empty>";
 
             drawer.Draw(this.Shape);
 

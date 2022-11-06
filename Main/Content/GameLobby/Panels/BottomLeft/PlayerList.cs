@@ -1,4 +1,5 @@
 ﻿using Main.Content.Common.MapManager;
+using Main.Content.Game;
 using Main.Content.Game.Factions;
 using Main.Content.Lobby;
 using Main.Utils.Events;
@@ -21,7 +22,6 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
         private PlayersListEntry[] _entries;
         private PlayersListEntry? _currentEntry = null;
 
-
         private readonly IGameLobbyContent _gameLobbyContent;
 
         public PlayersList(IGameLobbyContent gameLobbyContent)
@@ -34,8 +34,6 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
             this._entries = new PlayersListEntry[playersAmount];
             this._entries[0] = this.GetHeader();
             this.FillPlayerList(playersAmount);
-
-            _gameLobbyContent.Handle(new GameLobbyResultPlayersInfoChanged());
         }
 
         private void FillPlayerList(int players)
@@ -71,7 +69,7 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
                         this._currentEntry = entry;
                         this._currentEntry.Select();
 
-                        _gameLobbyContent.Handle(new GameLobbyResultPlayersInfoChanged());
+                        _gameLobbyContent.Handle(new GameLobbyResultPlayersInfoChanged(this._currentEntry.PlayerInfo));
                     }
                 }
             }
@@ -90,7 +88,7 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
             this._currentEntry = this._entries.ElementAt(1);
             this._currentEntry.Select();
 
-            _gameLobbyContent.Handle(new GameLobbyResultPlayersInfoChanged());
+            _gameLobbyContent.Handle(new GameLobbyResultPlayersInfoChanged(this._currentEntry.PlayerInfo));
         }
     }
 }

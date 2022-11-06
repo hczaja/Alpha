@@ -99,7 +99,7 @@ namespace Main.Content.Lobby
         
         public void Handle(GameLobbyResultPlayersInfoChanged e) 
         {
-
+            this.gameLobbyResult.PlayerInfo = e.PlayerInfo;
         }
 
         public void Update() { }
