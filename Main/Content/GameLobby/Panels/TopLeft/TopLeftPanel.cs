@@ -24,7 +24,6 @@ namespace Main.Content.GameLobby.Panels
         private RectangleShape Shape { get; init; }
 
         private MapPreview _mapPreview;
-        private MapInfo _mapInfo;
 
         public TopLeftPanel(IGameLobbyContent gameContent) : base(gameContent)
         {
@@ -38,8 +37,7 @@ namespace Main.Content.GameLobby.Panels
             this.Shape.OutlineColor = Color.Red;
             this.Shape.OutlineThickness = 2.0f;
 
-            this._mapInfo = this._gameContent.GetMapInfo();
-            this._mapPreview = new MapPreview(this._mapInfo);
+            this._mapPreview = new MapPreview(new MapInfo());
         }
 
         public override void Draw(RenderTarget drawer)
@@ -51,5 +49,10 @@ namespace Main.Content.GameLobby.Panels
         }
 
         public override void Handle(MouseEvent e) { }
+
+        public override void Handle(GameLobbyResultChanged e)
+        {
+            this._mapPreview = new MapPreview(e.MapInfo);
+        }
     }
 }

@@ -3,9 +3,9 @@
   <MapInfo Name="Ashes of War" GridSize="Small" Players="3">
 
     <!--
-        D W W W  W W W W  W W W W  W W W W
-        D W W W  W W W W  W W W W  W W W W
-        D W W W  W W W W  W W W W  W W W W
+        D D D G  W W W W  W W W W  W W W W
+        D D D G  W W W W  W W W W  W W W W
+        D D D G  W W W W  W W W W  W W W W
         W W W W  W W W W  W W W W  W W W W
         
         W W W W  W W W W  W W W W  W W W W
@@ -42,9 +42,9 @@
       <MapField Column="0" Row="14" TerrainType="Water"/>
       <MapField Column="0" Row="15" TerrainType="Water"/>
 
-      <MapField Column="1" Row="0" TerrainType="Water"/>
-      <MapField Column="1" Row="1" TerrainType="Water"/>
-      <MapField Column="1" Row="2" TerrainType="Water"/>
+      <MapField Column="1" Row="0" TerrainType="Dirt"/>
+      <MapField Column="1" Row="1" TerrainType="Dirt"/>
+      <MapField Column="1" Row="2" TerrainType="Dirt"/>
       <MapField Column="1" Row="3" TerrainType="Water"/>
       <MapField Column="1" Row="4" TerrainType="Water"/>
       <MapField Column="1" Row="5" TerrainType="Water"/>
@@ -59,9 +59,9 @@
       <MapField Column="1" Row="14" TerrainType="Water"/>
       <MapField Column="1" Row="15" TerrainType="Water"/>
 
-      <MapField Column="2" Row="0" TerrainType="Water"/>
-      <MapField Column="2" Row="1" TerrainType="Water"/>
-      <MapField Column="2" Row="2" TerrainType="Water"/>
+      <MapField Column="2" Row="0" TerrainType="Dirt"/>
+      <MapField Column="2" Row="1" TerrainType="Dirt"/>
+      <MapField Column="2" Row="2" TerrainType="Dirt"/>
       <MapField Column="2" Row="3" TerrainType="Water"/>
       <MapField Column="2" Row="4" TerrainType="Water"/>
       <MapField Column="2" Row="5" TerrainType="Water"/>
@@ -76,9 +76,9 @@
       <MapField Column="2" Row="14" TerrainType="Water"/>
       <MapField Column="2" Row="15" TerrainType="Water"/>
 
-      <MapField Column="3" Row="0" TerrainType="Water"/>
-      <MapField Column="3" Row="1" TerrainType="Water"/>
-      <MapField Column="3" Row="2" TerrainType="Water"/>
+      <MapField Column="3" Row="0" TerrainType="Grass"/>
+      <MapField Column="3" Row="1" TerrainType="Grass"/>
+      <MapField Column="3" Row="2" TerrainType="Grass"/>
       <MapField Column="3" Row="3" TerrainType="Water"/>
       <MapField Column="3" Row="4" TerrainType="Water"/>
       <MapField Column="3" Row="5" TerrainType="Water"/>

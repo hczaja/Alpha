@@ -36,7 +36,7 @@ namespace Main.Content.GameLobby.Panels.TopRight
             this._currentEntry = this._entries.First();
             this._currentEntry.Select();
 
-            _gameLobbyContent.AddMapInfoToResult(this._currentEntry.MapInfo);
+            _gameLobbyContent.Handle(new GameLobbyResultChanged(this._currentEntry.MapInfo));
         }
 
         public void Draw(RenderTarget drawer)
@@ -67,7 +67,7 @@ namespace Main.Content.GameLobby.Panels.TopRight
                         this._currentEntry = entry;
                         this._currentEntry.Select();
 
-                        _gameLobbyContent.AddMapInfoToResult(this._currentEntry.MapInfo);
+                        _gameLobbyContent.Handle(new GameLobbyResultChanged(this._currentEntry.MapInfo));
                     }
                 }
             }

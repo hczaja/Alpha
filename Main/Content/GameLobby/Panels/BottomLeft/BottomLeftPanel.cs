@@ -38,5 +38,7 @@ namespace Main.Content.GameLobby.Panels
         }
 
         public override void Handle(MouseEvent e) { }
+
+        public override void Handle(GameLobbyResultChanged e) { }
     }
 }

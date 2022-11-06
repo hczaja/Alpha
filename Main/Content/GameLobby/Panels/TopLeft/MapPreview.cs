@@ -32,8 +32,8 @@ namespace Main.Content.GameLobby.Panels.TopLeft
                         TopLeftPanel.Position.X + i * cellSize.X,
                         TopLeftPanel.Position.Y + j * cellSize.Y);
 
-                    var mapField = map.MapData.Fields.First(f => f.Column == i && f.Row == j);
-                    this._gridPreview[i, j].FillColor = Terrain.TerrainToColor[mapField.TerrainType];
+                    var mapField = map.MapData.Fields.FirstOrDefault(f => f.Column == i && f.Row == j);
+                    if (mapField is not null) this._gridPreview[i, j].FillColor = Terrain.TerrainToColor[mapField.TerrainType];
                 }
             }
         }
