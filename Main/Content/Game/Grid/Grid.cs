@@ -25,8 +25,8 @@ namespace Main.Content.Game
         private readonly GameCamera _gameCamera;
         private readonly ITurnManager _turnManager;
 
-        private Cell[,] Cells { get; init; }
-        private Cell CurrentCell = null;
+        private Cell[,] _cells { get; init; }
+        private Cell? _currentCell = null;
 
         public static (int, int) GetGridDimensions(GridSize size) => size switch
             {
@@ -42,15 +42,15 @@ namespace Main.Content.Game
 
             (this._width, this._height) = GetGridDimensions(size);
 
-            this.Cells = new Cell[_width, _height];
+            this._cells = new Cell[_width, _height];
             this.InitializeCells();
         }
 
         public void Draw(RenderTarget drawer)
         {
-            foreach (var cell in this.Cells)
+            foreach (var cell in this._cells)
             {
-                if (cell == this.CurrentCell)
+                if (cell == this._currentCell)
                 {
                     continue;
                 }
@@ -58,21 +58,18 @@ namespace Main.Content.Game
                 cell.Draw(drawer);
             }
 
-            if (this.CurrentCell is not null)
-            {
-                this.CurrentCell.Draw(drawer);
-            }
+            this._currentCell?.Draw(drawer);
         }
 
         public void Handle(NewTurnEvent e)
         {
-            foreach (var cell in this.Cells)
+            foreach (var cell in this._cells)
             {
                 cell.Handle(e);
             }
 
-            this.CurrentCell?.Unselect();
-            this.CurrentCell = null;
+            this._currentCell?.Unselect();
+            this._currentCell = null;
         }
 
         public void Handle(MouseEvent e)
@@ -87,28 +84,28 @@ namespace Main.Content.Game
 
                 if (x < 0 || y < 0)
                 {
-                    this.CurrentCell?.Unselect();
-                    this.CurrentCell = null;
+                    this._currentCell?.Unselect();
+                    this._currentCell = null;
                     return;
                 }
 
                 try
                 {
-                    var cell = this.Cells[i, j];
+                    var cell = this._cells[i, j];
 
-                    this.CurrentCell?.Unselect();
+                    this._currentCell?.Unselect();
 
-                    this.CurrentCell = cell;
-                    this.CurrentCell.Select();
+                    this._currentCell = cell;
+                    this._currentCell.Select();
 
                     //tmp solution
                     var currentPlayer = this._turnManager.GetCurrentPlayer();
-                    this.CurrentCell.DiscoverFor(currentPlayer.ID);
+                    this._currentCell.DiscoverFor(currentPlayer.ID);
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    this.CurrentCell?.Unselect();
-                    this.CurrentCell = null;
+                    this._currentCell?.Unselect();
+                    this._currentCell = null;
                 }
             }
         }
@@ -122,7 +119,7 @@ namespace Main.Content.Game
                 {
                     // temporary solution
                     var randomType = Terrain.GetAllTerrainTypes()[Random.Shared.Next(0, 3)];
-                    this.Cells[i, j] = new Cell(i, j, currentPlayer, new Terrain(randomType));
+                    this._cells[i, j] = new Cell(i, j, currentPlayer, new Terrain(randomType));
                 }
             }
 
@@ -131,36 +128,36 @@ namespace Main.Content.Game
                 for (int j = 0; j < _height; j++)
                 {
                     (int _i, int _j) bottomRight = (i + 1, j + 1);
-                    if (bottomRight._i < _width && bottomRight._j < _height) this.Cells[i, j].Surrounding.Add(Direction.BottomRight, this.Cells[bottomRight._i, bottomRight._j]);
-                    else this.Cells[i, j].Surrounding.Add(Direction.BottomRight, null);
+                    if (bottomRight._i < _width && bottomRight._j < _height) this._cells[i, j].Surrounding.Add(Direction.BottomRight, this._cells[bottomRight._i, bottomRight._j]);
+                    else this._cells[i, j].Surrounding.Add(Direction.BottomRight, null);
 
                     (int _i, int _j) bottom = (i, j + 1);
-                    if (bottom._j < _height) this.Cells[i, j].Surrounding.Add(Direction.Bottom, this.Cells[bottom._i, bottom._j]);
-                    else this.Cells[i, j].Surrounding.Add(Direction.Bottom, null);
+                    if (bottom._j < _height) this._cells[i, j].Surrounding.Add(Direction.Bottom, this._cells[bottom._i, bottom._j]);
+                    else this._cells[i, j].Surrounding.Add(Direction.Bottom, null);
 
                     (int _i, int _j) bottomLeft = (i - 1, j + 1);
-                    if (bottomLeft._i >= 0 && bottomLeft._j < _height) this.Cells[i, j].Surrounding.Add(Direction.BottomLeft, this.Cells[bottomLeft._i, bottomLeft._j]);
-                    else this.Cells[i, j].Surrounding.Add(Direction.BottomLeft, null);
+                    if (bottomLeft._i >= 0 && bottomLeft._j < _height) this._cells[i, j].Surrounding.Add(Direction.BottomLeft, this._cells[bottomLeft._i, bottomLeft._j]);
+                    else this._cells[i, j].Surrounding.Add(Direction.BottomLeft, null);
 
                     (int _i, int _j) left = (i - 1, j);
-                    if (left._i >= 0) this.Cells[i, j].Surrounding.Add(Direction.Left, this.Cells[left._i, left._j]);
-                    else this.Cells[i, j].Surrounding.Add(Direction.Left, null);
+                    if (left._i >= 0) this._cells[i, j].Surrounding.Add(Direction.Left, this._cells[left._i, left._j]);
+                    else this._cells[i, j].Surrounding.Add(Direction.Left, null);
 
                     (int _i, int _j) topleft = (i - 1, j - 1);
-                    if (topleft._i >= 0 && topleft._j >= 0) this.Cells[i, j].Surrounding.Add(Direction.TopLeft, this.Cells[topleft._i, topleft._j]);
-                    else this.Cells[i, j].Surrounding.Add(Direction.TopLeft, null);
+                    if (topleft._i >= 0 && topleft._j >= 0) this._cells[i, j].Surrounding.Add(Direction.TopLeft, this._cells[topleft._i, topleft._j]);
+                    else this._cells[i, j].Surrounding.Add(Direction.TopLeft, null);
 
                     (int _i, int _j) top = (i, j - 1);
-                    if (top._j >= 0) this.Cells[i, j].Surrounding.Add(Direction.Top, this.Cells[top._i, top._j]);
-                    else this.Cells[i, j].Surrounding.Add(Direction.Top, null);
+                    if (top._j >= 0) this._cells[i, j].Surrounding.Add(Direction.Top, this._cells[top._i, top._j]);
+                    else this._cells[i, j].Surrounding.Add(Direction.Top, null);
 
                     (int _i, int _j) topRight = (i + 1, j - 1);
-                    if (topRight._i < _width && topRight._j >= 0) this.Cells[i, j].Surrounding.Add(Direction.TopRight, this.Cells[topRight._i, topRight._j]);
-                    else this.Cells[i, j].Surrounding.Add(Direction.TopRight, null);
+                    if (topRight._i < _width && topRight._j >= 0) this._cells[i, j].Surrounding.Add(Direction.TopRight, this._cells[topRight._i, topRight._j]);
+                    else this._cells[i, j].Surrounding.Add(Direction.TopRight, null);
 
                     (int _i, int _j) right = (i + 1, j);
-                    if (right._i < _width) this.Cells[i, j].Surrounding.Add(Direction.Right, this.Cells[right._i, right._j]);
-                    else this.Cells[i, j].Surrounding.Add(Direction.Right, null);
+                    if (right._i < _width) this._cells[i, j].Surrounding.Add(Direction.Right, this._cells[right._i, right._j]);
+                    else this._cells[i, j].Surrounding.Add(Direction.Right, null);
                 }
             }
         }

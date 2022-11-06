@@ -36,7 +36,7 @@ namespace Main.Utils
 
         private void _window_MouseMoved(object? sender, MouseMoveEventArgs e)
         {
-            Console.WriteLine($"{DateTime.Now} - {nameof(_window_MouseMoved)}");
+            //Console.WriteLine($"{DateTime.Now} - {nameof(_window_MouseMoved)}");
             this._gameState.Handle(new MouseEvent(MouseEventType.MouseMoved, e.X, e.Y, Mouse.Button.Left));
         }
 
