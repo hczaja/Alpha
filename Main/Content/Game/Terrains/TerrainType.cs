@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game.Terrains
 {
-    internal enum TerrainType
+    public enum TerrainType
     {
         Unknown, Water, Dirt, Grass
     }

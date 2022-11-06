@@ -1,4 +1,5 @@
-﻿using Main.Content.GameLobby.Panels;
+﻿using Main.Content.Common.MapManager;
+using Main.Content.GameLobby.Panels;
 using Main.Utils;
 using Main.Utils.Events;
 using Main.Utils.Graphic;
@@ -12,9 +13,11 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Lobby
 {
-    public interface IGameLobbyContent : IWindowContent
+    public interface IGameLobbyContent : IWindowContent, 
+        IEventHandler<GameLobbyResultMapInfoChanged>,
+        IEventHandler<GameLobbyResultPlayersInfoChanged>
     {
-
+        public Map GetMapInfo();
     }
 
     public class GameLobbyContent : IGameLobbyContent
@@ -28,14 +31,18 @@ namespace Main.Content.Lobby
         private TextButton _startButton { get; init; }
         private TextButton _backButton { get; init; }
 
+        private GameLobbyResult gameLobbyResult;
+
         public GameLobbyContent(IGameState gameState)
         {
             _gameState = gameState;
             _gameState.RestartView();
 
+            this.gameLobbyResult = new GameLobbyResult();
+
             this._topLeftPanel = new TopLeftPanel(this);
-            this._topRightPanel = new TopRightPanel(this);
             this._bottomLeftPanel = new BottomLeftPanel(this);
+            this._topRightPanel = new TopRightPanel(this);
 
             this._backButton = new BackButton();
             this._startButton = new StartButton();
@@ -83,6 +90,20 @@ namespace Main.Content.Lobby
             }
         }
 
+        public void Handle(GameLobbyResultMapInfoChanged e) 
+        {
+            this.gameLobbyResult.MapInfo = e.MapInfo;
+            this._topLeftPanel.Handle(e);
+            this._bottomLeftPanel.Handle(e);
+        }
+        
+        public void Handle(GameLobbyResultPlayersInfoChanged e) 
+        {
+            this.gameLobbyResult.PlayerInfo = e.PlayerInfo;
+        }
+
         public void Update() { }
+
+        public Map GetMapInfo() => this.gameLobbyResult.MapInfo;
     }
 }

@@ -23,7 +23,7 @@ namespace Main.Content.Game
         public RectangleShape Rectangle { get; init; }
         public Terrain Terrain { get; init; }
 
-        public bool Selected { get; private set; }
+        private bool _selected;
 
         public Unit? Unit { get; private set; }
         public Resource? Resource { get; private set; }
@@ -80,7 +80,7 @@ namespace Main.Content.Game
 
             this.Rectangle.OutlineColor = Color.Transparent;
 
-            if (this.Selected)
+            if (this._selected)
             {
                 this.Rectangle.OutlineColor = Color.Red;
             }
@@ -94,7 +94,7 @@ namespace Main.Content.Game
 
         public void Select()
         {
-            this.Selected = true;
+            this._selected = true;
             Console.WriteLine($"Selected Cell " +
                 $"[{this.Rectangle.Position.X / _CellSizeX},{this.Rectangle.Position.Y / _CellSizeY}]" +
                 $" - {this.Terrain.Name}" +
@@ -106,7 +106,7 @@ namespace Main.Content.Game
         public void Unselect()
         {
             this.Rectangle.OutlineColor = Color.Transparent;
-            this.Selected = false;
+            this._selected = false;
         }
 
         public bool IsOccupied()

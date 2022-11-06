@@ -8,6 +8,6 @@ namespace Main.Content.Game.Factions
 {
     public enum FactionType
     {
-        Undeads, Dwarves
+        Undeads, Humans, Dwarves
     }
 }
