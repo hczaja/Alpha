@@ -37,7 +37,7 @@ namespace Main.Content.GameLobby.Panels
             this.Shape.OutlineColor = Color.Red;
             this.Shape.OutlineThickness = 2.0f;
 
-            this._mapPreview = new MapPreview(new MapInfo());
+            this._mapPreview = new MapPreview(new Map());
         }
 
         public override void Draw(RenderTarget drawer)
@@ -50,7 +50,9 @@ namespace Main.Content.GameLobby.Panels
 
         public override void Handle(MouseEvent e) { }
 
-        public override void Handle(GameLobbyResultChanged e)
+        public override void Handle(GameLobbyResultPlayersInfoChanged e) { }
+
+        public override void Handle(GameLobbyResultMapInfoChanged e)
         {
             this._mapPreview = new MapPreview(e.MapInfo);
         }

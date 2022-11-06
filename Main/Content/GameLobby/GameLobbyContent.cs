@@ -13,9 +13,11 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Lobby
 {
-    public interface IGameLobbyContent : IWindowContent, IEventHandler<GameLobbyResultChanged>
+    public interface IGameLobbyContent : IWindowContent, 
+        IEventHandler<GameLobbyResultMapInfoChanged>,
+        IEventHandler<GameLobbyResultPlayersInfoChanged>
     {
-        public MapInfo GetMapInfo();
+        public Map GetMapInfo();
     }
 
     public class GameLobbyContent : IGameLobbyContent
@@ -39,8 +41,8 @@ namespace Main.Content.Lobby
             this.gameLobbyResult = new GameLobbyResult();
 
             this._topLeftPanel = new TopLeftPanel(this);
-            this._topRightPanel = new TopRightPanel(this);
             this._bottomLeftPanel = new BottomLeftPanel(this);
+            this._topRightPanel = new TopRightPanel(this);
 
             this._backButton = new BackButton();
             this._startButton = new StartButton();
@@ -88,15 +90,20 @@ namespace Main.Content.Lobby
             }
         }
 
-        public void Handle(GameLobbyResultChanged e) 
+        public void Handle(GameLobbyResultMapInfoChanged e) 
         {
             this.gameLobbyResult.MapInfo = e.MapInfo;
-
             this._topLeftPanel.Handle(e);
+            this._bottomLeftPanel.Handle(e);
+        }
+        
+        public void Handle(GameLobbyResultPlayersInfoChanged e) 
+        {
+
         }
 
         public void Update() { }
 
-        public MapInfo GetMapInfo() => this.gameLobbyResult.MapInfo;
+        public Map GetMapInfo() => this.gameLobbyResult.MapInfo;
     }
 }

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <MapRegistry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <MapInfo Name="Onrush" GridSize="Small" Players="2">
+  <Map Name="Onrush" GridSize="Small" Players="2">
 
     <!--
         W W W W  W W W W  W W W W  W W W W
@@ -299,5 +299,5 @@
       <MapField Column="15" Row="14" TerrainType="Water"/>
       <MapField Column="15" Row="15" TerrainType="Water"/>
     </MapData>
-  </MapInfo>
+  </Map>
 </MapRegistry>

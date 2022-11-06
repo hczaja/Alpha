@@ -30,16 +30,16 @@ namespace Main.Content.GameLobby.Panels.TopRight
         private Text _sizeCellText;
         private RectangleShape _sizeCell;
 
-        private static readonly Vector2f PlayerCellSize = new Vector2f(0.10f * TopRightPanel.Size.X, MapListEntry.Size.Y);
+        private static readonly Vector2f PlayerCellSize = new Vector2f(0.15f * TopRightPanel.Size.X, MapListEntry.Size.Y);
         private Text _playersCellText;
         private RectangleShape _playersCell;
 
-        public MapInfo MapInfo { get; private init; }
+        public Map Map { get; private init; }
         private bool _selected;
 
-        public MapListEntry(int positionOnList, MapInfo mapInfo)
+        public MapListEntry(int positionOnList, Map map, MapInfo mapInfo)
         {
-            this.MapInfo = mapInfo;
+            this.Map = map;
 
             this.Shape = new RectangleShape(Size);
             this.Shape.Position = TopRightPanel.Position + new Vector2f(0f, positionOnList * Size.Y);
@@ -53,9 +53,9 @@ namespace Main.Content.GameLobby.Panels.TopRight
             this.InitializeCellShape(ref this._sizeCell!, MapListEntry.SizeCellSize, this._nameCell.Position + new Vector2f(this._nameCell.Size.X, 0.0f));
             this.InitializeCellShape(ref this._playersCell!, MapListEntry.PlayerCellSize, this._sizeCell.Position + new Vector2f(this._sizeCell.Size.X, 0.0f));
 
-            this.InitializeCellText(ref this._indexCellText!, this.Shape.Position, positionOnList.ToString());
+            this.InitializeCellText(ref this._indexCellText!, this.Shape.Position, mapInfo.Index);
             this.InitializeCellText(ref this._nameCellText!, this._indexCell.Position + new Vector2f(this._indexCell.Size.X, 0.0f), mapInfo.Name!);
-            this.InitializeCellText(ref this._sizeCellText!, this._nameCell.Position + new Vector2f(this._nameCell.Size.X, 0.0f), mapInfo.GridSize.ToString()!);
+            this.InitializeCellText(ref this._sizeCellText!, this._nameCell.Position + new Vector2f(this._nameCell.Size.X, 0.0f), mapInfo.Size.ToString()!);
             this.InitializeCellText(ref this._playersCellText!, this._sizeCell.Position + new Vector2f(this._sizeCell.Size.X, 0.0f), mapInfo.Players.ToString());
         }
 

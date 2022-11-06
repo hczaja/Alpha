@@ -12,16 +12,16 @@ namespace Main.Content.Common.MapManager
     [XmlRoot]
     public class MapRegistry
     {
-        [XmlElement("MapInfo")]
-        public List<MapInfo>? Maps { get; set; }
+        [XmlElement("Map")]
+        public List<Map>? Maps { get; set; }
 
         public MapRegistry()
         {
-            this.Maps = new List<MapInfo>();
+            this.Maps = new List<Map>();
         }
     }
 
-    public class MapInfo
+    public class Map
     {
         [XmlAttribute]
         public string? Name { get; set; }
@@ -35,7 +35,7 @@ namespace Main.Content.Common.MapManager
         [XmlElement]
         public MapData? MapData { get; set; }
 
-        public MapInfo()
+        public Map()
         {
             this.MapData = new MapData();
         }

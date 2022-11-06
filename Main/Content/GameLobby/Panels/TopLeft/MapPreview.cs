@@ -16,7 +16,7 @@ namespace Main.Content.GameLobby.Panels.TopLeft
     {
         private readonly RectangleShape[,] _gridPreview;
 
-        public MapPreview(MapInfo map)
+        public MapPreview(Map map)
         {
             (int w, int h) sizes = Grid.GetGridDimensions(map.GridSize);
             this._gridPreview = new RectangleShape[sizes.w, sizes.h];

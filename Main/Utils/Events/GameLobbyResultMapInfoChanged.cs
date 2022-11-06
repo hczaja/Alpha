@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Main.Utils.Events
 {
-    public class GameLobbyResultChanged
+    public class GameLobbyResultMapInfoChanged
     {
-        public MapInfo MapInfo { get; private init; }
+        public Map MapInfo { get; private init; }
 
-        public GameLobbyResultChanged(MapInfo mapInfo)
+        public GameLobbyResultMapInfoChanged(Map mapInfo)
             => (MapInfo) = (mapInfo);
     }
 }

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Main.Content.Game.Factions
+namespace Main.Utils.Events
 {
-    public enum FactionType
+    public class GameLobbyResultPlayersInfoChanged
     {
-        Undeads, Humans, Dwarves
     }
 }

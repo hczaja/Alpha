@@ -52,6 +52,8 @@ namespace Main.Content.GameLobby.Panels
             this._mapList.Handle(e);
         }
         
-        public override void Handle(GameLobbyResultChanged e) { }
+        public override void Handle(GameLobbyResultMapInfoChanged e) { }
+
+        public override void Handle(GameLobbyResultPlayersInfoChanged e) { }
     }
 }

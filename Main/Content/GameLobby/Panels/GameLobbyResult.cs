@@ -9,6 +9,11 @@ namespace Main.Content.GameLobby.Panels
 {
     public class GameLobbyResult
     {
-        public MapInfo MapInfo { get; set; }
+        public Map MapInfo { get; set; }
+
+        public GameLobbyResult()
+        {
+            this.MapInfo = new Map();
+        }
     }
 }

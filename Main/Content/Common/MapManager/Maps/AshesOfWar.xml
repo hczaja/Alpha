@@ -1,27 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <MapRegistry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <MapInfo Name="Ashes of War" GridSize="Small" Players="3">
+  <Map Name="Ashes of War" GridSize="Small" Players="3">
 
-    <!--
-        D D D G  W W W W  W W W W  W W W W
-        D D D G  W W W W  W W W W  W W W W
-        D D D G  W W W W  W W W W  W W W W
-        W W W W  W W W W  W W W W  W W W W
-        
-        W W W W  W W W W  W W W W  W W W W
-        W W W W  W W W W  W W W W  W W W W
-        W W W W  W W W W  W W W W  W W W W
-        W W W W  W W W W  W W W W  W W W W
-        
-        W W W W  W W W W  W W W W  W W W W
-        W W W W  W W W W  W W W W  W W W W
-        W W W W  W W W W  W W W W  W W W W
-        W W W W  W W W W  W W W W  W W W W
-        
-        W W W W  W W W W  W W W W  W W W W
-        W W W W  W W W W  W W W W  W W W W
-        W W W W  W W W W  W W W W  W W W W
-        W W W W  W W W W  W W W W  W W W W
+    <!--   0  1  2  3   4  5  6  7   8  9  10 11  12 13 14 15
+       0   D  D  D  G   W  W  W  W   W  W  W  W   W  W  W  W
+       1   D  D  D  G   W  W  W  W   W  W  W  W   W  W  W  W
+       2   D  D  D  G   W  W  W  W   W  W  W  W   W  W  W  W
+       3   W  W  W  W   W  W  W  W   W  W  W  W   W  W  W  W
+                                  
+       4   W  W  W  W   W  W  W  W   W  W  W  W   W  W  W  W
+       5   W  W  W  W   W  W  W  W   W  W  W  W   W  W  W  W
+       6   W  W  W  W   W  W  W  W   W  W  W  W   W  W  W  W
+       7   W  W  W  W   W  W  W  W   W  W  W  W   W  W  W  W
+                                  
+       8   W  W  W  W   W  W  W  W   W  W  W  W   W  W  W  W
+       9   W  W  W  W   W  W  W  W   W  W  W  W   W  W  W  W
+      10   W  W  W  W   W  W  W  W   W  W  W  W   W  W  W  W
+      11   W  W  W  W   W  W  W  W   W  W  W  W   W  W  W  W
+                                  
+      12   W  W  W  W   W  W  W  W   W  W  W  W   W  W  W  W
+      13   W  W  W  W   W  W  W  W   W  W  W  W   W  W  W  W
+      14   W  W  W  W   W  W  W  W   W  W  W  W   W  W  W  W
+      15   W  W  W  W   W  W  W  W   W  W  W  W   W  W  W  W
     -->
     
     <MapData>
@@ -299,5 +299,5 @@
       <MapField Column="15" Row="14" TerrainType="Water"/>
       <MapField Column="15" Row="15" TerrainType="Water"/>
     </MapData>
-  </MapInfo>
+  </Map>
 </MapRegistry>

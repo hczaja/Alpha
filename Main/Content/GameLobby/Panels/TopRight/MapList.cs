@@ -26,18 +26,22 @@ namespace Main.Content.GameLobby.Panels.TopRight
             var mapRegistry = MapManager.RegistryInstance;
             var maps = mapRegistry.Maps;
 
-            this._entries = new MapListEntry[maps.Count];
+            this._entries = new MapListEntry[maps.Count + 1];
+            this._entries[0] = this.GetHeader();
 
             for (int index = 0; index < maps.Count; index++)
             {
-                this._entries[index] = new MapListEntry(index, maps[index]);
+                var map = maps[index];
+                this._entries[index + 1] = new MapListEntry(index + 1, map, new MapInfo((index + 1).ToString(), map.Name, map.GridSize.ToString(), map.Players.ToString()));
             }
 
-            this._currentEntry = this._entries.First();
+            this._currentEntry = this._entries.ElementAt(1);
             this._currentEntry.Select();
 
-            _gameLobbyContent.Handle(new GameLobbyResultChanged(this._currentEntry.MapInfo));
+            _gameLobbyContent.Handle(new GameLobbyResultMapInfoChanged(this._currentEntry.Map));
         }
+
+        private MapListEntry GetHeader() => new MapListEntry(0, null!, new MapInfo("#", "Name", "Size", "Players"));
 
         public void Draw(RenderTarget drawer)
         {
@@ -58,7 +62,7 @@ namespace Main.Content.GameLobby.Panels.TopRight
         {
             if (e.Type == MouseEventType.ButtonPressed && e.Button == Mouse.Button.Left)
             {
-                foreach (var entry in this._entries)
+                foreach (var entry in this._entries.Skip(1))
                 {
                     if (MouseEvent.IsMouseEventRaisedIn(entry.Shape.GetGlobalBounds(), e))
                     {
@@ -67,7 +71,7 @@ namespace Main.Content.GameLobby.Panels.TopRight
                         this._currentEntry = entry;
                         this._currentEntry.Select();
 
-                        _gameLobbyContent.Handle(new GameLobbyResultChanged(this._currentEntry.MapInfo));
+                        _gameLobbyContent.Handle(new GameLobbyResultMapInfoChanged(this._currentEntry.Map));
                     }
                 }
             }
