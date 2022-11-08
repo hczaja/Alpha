@@ -96,5 +96,7 @@ namespace Main.Content.Game.Panels
                 this.Move(updateVector);
             }
         }
+
+        public void ResetView() => this.UpdateMoveView(true, new Vector2f(-this._camera.MoveX, -this._camera.MoveY));
     }
 }

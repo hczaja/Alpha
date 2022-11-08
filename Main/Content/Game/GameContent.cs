@@ -48,14 +48,16 @@ namespace Main.Content.Game
             this._gameLobbyData = gameLobbyData;
 
             var playerManager = gameLobbyData.PlayerManager;
-            int playersAmont = playerManager.Players.Length;
+            var nonEmptyPlayers = playerManager.Players.Where(p => p.Type != PlayerType.Empty.ToString()).ToList();
+
+            int playersAmont = nonEmptyPlayers.Count;
 
             var players = new Player[playersAmont];
             var startingIncome = new Income() { Gold = 500 };
 
             for (int index = 0; index < playersAmont; index++)
             {
-                var faction = Enum.Parse<FactionType>(playerManager.Players[index].Faction);
+                var faction = Enum.Parse<FactionType>(nonEmptyPlayers[index].Faction);
                 players[index] = new Player(faction, startingIncome);
             }
 

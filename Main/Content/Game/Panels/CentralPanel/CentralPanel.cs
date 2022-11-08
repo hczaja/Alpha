@@ -52,6 +52,7 @@ namespace Main.Content.Game.Panels
 
         public override void Handle(NewTurnEvent e) 
         {
+            (this.View as CentralView)!.ResetView();
             this.Grid.Handle(e);
         }
 
