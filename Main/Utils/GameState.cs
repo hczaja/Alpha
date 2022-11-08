@@ -69,7 +69,7 @@ namespace Main.Utils
                     this.ActualContent = new GameLobbyContent(this);
                     break;
                 case WindowContentEventType.Game:
-                    this.ActualContent = new GameContent(this);
+                    this.ActualContent = new GameContent(this, (this.ActualContent as GameLobbyContent).GetGameLobbyData());
                     break;
                 case WindowContentEventType.Exit:
                     this._windowHandler.TryClose();

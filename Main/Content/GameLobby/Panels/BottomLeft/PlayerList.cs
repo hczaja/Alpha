@@ -1,5 +1,4 @@
-﻿using Main.Content.Common.MapManager;
-using Main.Content.Game;
+﻿using Main.Content.Common;
 using Main.Content.Game.Factions;
 using Main.Content.Lobby;
 using Main.Utils.Events;
@@ -20,33 +19,33 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
         IEventHandler<GameLobbyResultMapInfoChanged>
     {
         private PlayersListEntry[] _entries;
-        private PlayersListEntry? _currentEntry = null;
 
         private readonly IGameLobbyContent _gameLobbyContent;
+        private readonly IPlayerManager _playerManager;
 
-        public PlayersList(IGameLobbyContent gameLobbyContent)
+        public PlayersList(IGameLobbyContent gameLobbyContent, IPlayerManager playerManager)
         {
             this._gameLobbyContent = gameLobbyContent;
+            this._playerManager = playerManager;
 
-            var map = gameLobbyContent.GetMapInfo();
-            int playersAmount = map.Players + 1;
+            var map = this._gameLobbyContent.GetMapInfo();
+            int playersAmount = map.Players;
 
-            this._entries = new PlayersListEntry[playersAmount];
+            this._entries = new PlayersListEntry[playersAmount + 1];
             this._entries[0] = this.GetHeader();
+
             this.FillPlayerList(playersAmount);
         }
 
         private void FillPlayerList(int players)
         {
-            var allFactions = Faction.GetAllFactionTypes();
-            for (int index = 1; index < players; index++)
+            for (int index = 0; index < players; index++)
             {
-                var info = new PlayerInfo(index.ToString(), "<Empty>", allFactions[index - 1].ToString());
-                this._entries[index] = new PlayersListEntry(index, info);
+                this._entries[index + 1] = new PlayersListEntry(index + 1, this._playerManager.Players[index], this._playerManager);
             }
         }
 
-        private PlayersListEntry GetHeader() => new PlayersListEntry(0, new PlayerInfo("#", "Name", "Faction"));
+        private PlayersListEntry GetHeader() => new PlayersListEntry(0, new PlayerInfo("#", "Name", "Type", "Faction", "Team"), this._playerManager);
 
         public void Draw(RenderTarget drawer)
         {
@@ -58,37 +57,23 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
 
         public void Handle(MouseEvent e)
         {
-            if (e.Type == MouseEventType.ButtonPressed && e.Button == Mouse.Button.Left)
+            if (e.Type == MouseEventType.ButtonPressed)
             {
                 foreach (var entry in this._entries.Skip(1))
                 {
-                    if (MouseEvent.IsMouseEventRaisedIn(entry.Shape.GetGlobalBounds(), e))
-                    {
-                        this._currentEntry?.Unselect();
-
-                        this._currentEntry = entry;
-                        this._currentEntry.Select();
-
-                        _gameLobbyContent.Handle(new GameLobbyResultPlayersInfoChanged(this._currentEntry.PlayerInfo));
-                    }
+                    entry.Handle(e);
                 }
             }
         }
 
         public void Handle(GameLobbyResultMapInfoChanged e)
         {
-            int playersAmount = e.MapInfo.Players + 1;
+            int playersAmount = e.MapInfo.Players;
 
-            this._entries = new PlayersListEntry[playersAmount];
+            this._entries = new PlayersListEntry[playersAmount + 1];
             this._entries[0] = this.GetHeader();
+
             this.FillPlayerList(playersAmount);
-
-            this._currentEntry?.Unselect();
-
-            this._currentEntry = this._entries.ElementAt(1);
-            this._currentEntry.Select();
-
-            _gameLobbyContent.Handle(new GameLobbyResultPlayersInfoChanged(this._currentEntry.PlayerInfo));
         }
     }
 }

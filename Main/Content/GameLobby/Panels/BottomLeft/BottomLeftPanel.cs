@@ -1,4 +1,5 @@
-﻿using Main.Content.GameLobby.Panels.BottomLeft;
+﻿using Main.Content.Common;
+using Main.Content.GameLobby.Panels.BottomLeft;
 using Main.Content.Lobby;
 using Main.Utils;
 using Main.Utils.Events;
@@ -21,9 +22,10 @@ namespace Main.Content.GameLobby.Panels
 
         private RectangleShape Shape { get; init; }
 
+        public IPlayerManager PlayerManager { get; private set; }
         private PlayersList _playersList;
 
-        public BottomLeftPanel(IGameLobbyContent gameContent) : base(gameContent)
+        public BottomLeftPanel(IGameLobbyContent gameContent, IPlayerManager playerManager) : base(gameContent)
         {
             var rectangle = new FloatRect(Position, Size);
             this.View = new BottomLeftView(rectangle);
@@ -35,7 +37,8 @@ namespace Main.Content.GameLobby.Panels
             this.Shape.OutlineColor = Color.Red;
             this.Shape.OutlineThickness = 2.0f;
 
-            this._playersList = new PlayersList(gameContent);
+            this.PlayerManager = playerManager;
+            this._playersList = new PlayersList(gameContent, PlayerManager);
         }
 
         public override void Draw(RenderTarget drawer)
@@ -53,6 +56,7 @@ namespace Main.Content.GameLobby.Panels
 
         public override void Handle(GameLobbyResultMapInfoChanged e) 
         {
+            this.PlayerManager.Handle(e);
             this._playersList.Handle(e);
         }
 

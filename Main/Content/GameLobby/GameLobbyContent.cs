@@ -1,4 +1,6 @@
-﻿using Main.Content.Common.MapManager;
+﻿using Main.Content.Common;
+using Main.Content.Common.MapManager;
+using Main.Content.GameLobby.Notifications;
 using Main.Content.GameLobby.Panels;
 using Main.Utils;
 using Main.Utils.Events;
@@ -14,9 +16,9 @@ using System.Threading.Tasks;
 namespace Main.Content.Lobby
 {
     public interface IGameLobbyContent : IWindowContent, 
-        IEventHandler<GameLobbyResultMapInfoChanged>,
-        IEventHandler<GameLobbyResultPlayersInfoChanged>
+        IEventHandler<GameLobbyResultMapInfoChanged>
     {
+        public GameLobbyData GetGameLobbyData();
         public Map GetMapInfo();
     }
 
@@ -27,22 +29,30 @@ namespace Main.Content.Lobby
         private readonly TopLeftPanel _topLeftPanel;
         private readonly TopRightPanel _topRightPanel;
         private readonly BottomLeftPanel _bottomLeftPanel;
+        private readonly GameLobbyNotificationPanel _notificationPanel;
 
-        private TextButton _startButton { get; init; }
-        private TextButton _backButton { get; init; }
+        private readonly TextButton _startButton;
+        private readonly TextButton _backButton;
 
-        private GameLobbyResult gameLobbyResult;
+        private GameLobbyData _gameLobbyData;
+        private readonly IPlayerManager _playerManager;
+
+        private readonly INotificationService _notificationService;
 
         public GameLobbyContent(IGameState gameState)
         {
-            _gameState = gameState;
-            _gameState.RestartView();
+            this._gameState = gameState;
+            this._gameState.RestartView();
 
-            this.gameLobbyResult = new GameLobbyResult();
+            this._playerManager = new PlayerManager(0);
+            this._gameLobbyData = new GameLobbyData(this._playerManager);
 
             this._topLeftPanel = new TopLeftPanel(this);
-            this._bottomLeftPanel = new BottomLeftPanel(this);
+            this._bottomLeftPanel = new BottomLeftPanel(this, this._playerManager);
             this._topRightPanel = new TopRightPanel(this);
+
+            this._notificationService = new GameLobbyNotificationService();
+            this._notificationPanel = new GameLobbyNotificationPanel(this, this._notificationService);
 
             this._backButton = new BackButton();
             this._startButton = new StartButton();
@@ -56,17 +66,47 @@ namespace Main.Content.Lobby
 
             this._backButton.Draw(drawer);
             this._startButton.Draw(drawer);
+
+            this._notificationPanel.Draw(drawer);
         }
 
         public void Handle(MouseEvent e) 
         {
+            if (this._notificationService.HasNotificationsFor(-1))
+            {
+                this._notificationPanel.Handle(e);
+                return;
+            }
+
             if (e.Type == MouseEventType.ButtonPressed 
                 && e.Button == Mouse.Button.Left)
             {
                 if (MouseEvent.IsMouseEventRaisedIn(this._startButton.Rectangle.GetGlobalBounds(), e))
                 {
+                    if (!this._playerManager.IsAtLeastOneHumanPlayer())
+                    {
+                        this._notificationService.EnqueueNotification(-1, 
+                            new ProblemWithStartGameNotification(this._notificationService, "At least one player must be human!"));
+                        return;
+                    }
+
+                    if (!this._playerManager.AreAtLeastTwoDifferentTeams())
+                    {
+                        this._notificationService.EnqueueNotification(-1,
+                            new ProblemWithStartGameNotification(this._notificationService, "There must be at least two different teams!"));
+                        return;
+                    }
+
+                    if (!this._playerManager.AreUniqueFactions())
+                    {
+                        this._notificationService.EnqueueNotification(-1,
+                            new ProblemWithStartGameNotification(this._notificationService, "There must be every faction unique!"));
+                        return;
+                    }
+
                     this._gameState.Handle(
                         new WindowContentChangedEvent(WindowContentEventType.Game));
+                    
                 }
                 else if (MouseEvent.IsMouseEventRaisedIn(this._backButton.Rectangle.GetGlobalBounds(), e))
                 {
@@ -92,18 +132,17 @@ namespace Main.Content.Lobby
 
         public void Handle(GameLobbyResultMapInfoChanged e) 
         {
-            this.gameLobbyResult.MapInfo = e.MapInfo;
+            this._gameLobbyData.MapInfo = e.MapInfo;
             this._topLeftPanel.Handle(e);
             this._bottomLeftPanel.Handle(e);
         }
-        
-        public void Handle(GameLobbyResultPlayersInfoChanged e) 
+
+        public void Update() 
         {
-            this.gameLobbyResult.PlayerInfo = e.PlayerInfo;
+            this._notificationPanel.Update();
         }
 
-        public void Update() { }
-
-        public Map GetMapInfo() => this.gameLobbyResult.MapInfo;
+        public Map GetMapInfo() => this._gameLobbyData.MapInfo;
+        public GameLobbyData GetGameLobbyData() => this._gameLobbyData;
     }
 }

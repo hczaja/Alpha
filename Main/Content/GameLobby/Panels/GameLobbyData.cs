@@ -1,4 +1,5 @@
-﻿using Main.Content.Common.MapManager;
+﻿using Main.Content.Common;
+using Main.Content.Common.MapManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace Main.Content.GameLobby.Panels
 {
-    public class GameLobbyResult
+    public class GameLobbyData
     {
         public Map MapInfo { get; set; }
-        public PlayerInfo PlayerInfo { get; set; }
+        public IPlayerManager PlayerManager { get; set; }
 
-        public GameLobbyResult()
+        public GameLobbyData(IPlayerManager playerManager)
         {
             this.MapInfo = new Map();
-            this.PlayerInfo = new PlayerInfo("","","");
+            this.PlayerManager = playerManager;
         }
     }
 }

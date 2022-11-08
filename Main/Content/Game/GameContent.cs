@@ -1,8 +1,11 @@
-﻿using Main.Content.Game.Factions;
+﻿using Main.Content.Common;
+using Main.Content.Common.MapManager;
+using Main.Content.Game.Factions;
 using Main.Content.Game.Notifications;
 using Main.Content.Game.Panels;
 using Main.Content.Game.Resources;
 using Main.Content.Game.Turns;
+using Main.Content.GameLobby.Panels;
 using Main.Utils;
 using Main.Utils.Camera;
 using Main.Utils.Events;
@@ -19,6 +22,7 @@ namespace Main.Content.Game
     public interface IGameContent : IWindowContent
     {
         void ProcessNextTurn();
+        Map GetMapInfo();
     }
 
     internal class GameContent : IGameContent
@@ -34,14 +38,28 @@ namespace Main.Content.Game
         private readonly ITurnManager _turnManager;
         private readonly INotificationService _notificationService;
 
-        public GameContent(IGameState gameState)
-        {
-            _gameState = gameState;
+        private readonly GameLobbyData _gameLobbyData;
 
-            var players = new Player[2];
+        public GameContent(IGameState gameState, GameLobbyData gameLobbyData)
+        {
+            this._gameState = gameState;
+            this._gameState.RestartView();
+
+            this._gameLobbyData = gameLobbyData;
+
+            var playerManager = gameLobbyData.PlayerManager;
+            var nonEmptyPlayers = playerManager.Players.Where(p => p.Type != PlayerType.Empty.ToString()).ToList();
+
+            int playersAmont = nonEmptyPlayers.Count;
+
+            var players = new Player[playersAmont];
             var startingIncome = new Income() { Gold = 500 };
-            players[0] = new Player(FactionType.Undeads, startingIncome);
-            players[1] = new Player(FactionType.Dwarves, startingIncome);
+
+            for (int index = 0; index < playersAmont; index++)
+            {
+                var faction = Enum.Parse<FactionType>(nonEmptyPlayers[index].Faction);
+                players[index] = new Player(faction, startingIncome);
+            }
 
             this._turnManager = new TurnManager(players);
 
@@ -52,6 +70,8 @@ namespace Main.Content.Game
 
             this._notificationService = new NotificationService(players);
             this._notificationPanel = new NotificationPanel(this, this._turnManager, this._notificationService);
+
+            this._notificationService.EnqueueNotification(players[0].ID, new NewTurnNotification(this._notificationService, players[0]));
         }
 
         public void ProcessNextTurn()
@@ -113,5 +133,7 @@ namespace Main.Content.Game
             this._notificationPanel.Update();
             this._topBarPanel.Update();
         }
+
+        public Map GetMapInfo() => this._gameLobbyData.MapInfo;
     }
 }

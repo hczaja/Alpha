@@ -1,11 +1,11 @@
-﻿using Main.Content.Common.MapManager;
-using Main.Content.Game;
+﻿using Main.Content.Common;
 using Main.Content.Game.Factions;
 using Main.Utils;
 using Main.Utils.Events;
 using Main.Utils.Graphic;
 using SFML.Graphics;
 using SFML.System;
+using SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,16 +29,25 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
         private Text _nameCellText;
         private RectangleShape _nameCell;
 
+        private static readonly Vector2f TypeCellSize = new Vector2f(0.10f * BottomLeftPanel.Size.X, PlayersListEntry.Size.Y);
+        private Text _typeCellText;
+        private RectangleShape _typeCell;
+
         private static readonly Vector2f FactionCellSize = new Vector2f(0.25f * BottomLeftPanel.Size.X, PlayersListEntry.Size.Y);
         private Text _factionCellText;
         private RectangleShape _factionCell;
 
-        public PlayerInfo PlayerInfo { get; private init; }
-        private bool _selected;
+        private static readonly Vector2f TeamCellSize = new Vector2f(0.10f * BottomLeftPanel.Size.X, PlayersListEntry.Size.Y);
+        private Text _teamCellText;
+        private RectangleShape _teamCell;
 
-        public PlayersListEntry(int positionOnList, PlayerInfo playerInfo)
+        public PlayerInfo PlayerInfo { get; private init; }
+        private readonly IPlayerManager _playerManager;
+
+        public PlayersListEntry(int positionOnList, PlayerInfo playerInfo, IPlayerManager manager)
         {
             this.PlayerInfo = playerInfo;
+            this._playerManager = manager;
 
             this.Shape = new RectangleShape(Size);
             this.Shape.Position = BottomLeftPanel.Position + new Vector2f(0f, positionOnList * Size.Y);
@@ -49,15 +58,19 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
 
             this.InitializeCellShape(ref this._indexCell!, PlayersListEntry.IndexCellSize, this.Shape.Position);
             this.InitializeCellShape(ref this._nameCell!, PlayersListEntry.NameCellSize, this._indexCell.Position + new Vector2f(this._indexCell.Size.X, 0.0f));
-            this.InitializeCellShape(ref this._factionCell!, PlayersListEntry.FactionCellSize, this._nameCell.Position + new Vector2f(this._nameCell.Size.X, 0.0f));
+            this.InitializeCellShape(ref this._typeCell!, PlayersListEntry.TypeCellSize, this._nameCell.Position + new Vector2f(this._nameCell.Size.X, 0.0f));
+            this.InitializeCellShape(ref this._factionCell!, PlayersListEntry.FactionCellSize, this._typeCell.Position + new Vector2f(this._typeCell.Size.X, 0.0f));
+            this.InitializeCellShape(ref this._teamCell!, PlayersListEntry.TeamCellSize, this._factionCell.Position + new Vector2f(this._factionCell.Size.X, 0.0f));
 
             var factionColor = playerInfo.Faction == "Faction"
                 ? Color.White
-                : Faction.FactionToColor(Enum.Parse<FactionType>(playerInfo.Faction));
+                : FactionTypeExtensions.FactionToColor(Enum.Parse<FactionType>(playerInfo.Faction));
 
             this.InitializeCellText(ref this._indexCellText!, this.Shape.Position, playerInfo.Index, Color.White);
             this.InitializeCellText(ref this._nameCellText!, this._indexCell.Position + new Vector2f(this._indexCell.Size.X, 0.0f), playerInfo.Name, Color.White);
-            this.InitializeCellText(ref this._factionCellText!, this._nameCell.Position + new Vector2f(this._nameCell.Size.X, 0.0f), playerInfo.Faction, factionColor);
+            this.InitializeCellText(ref this._typeCellText!, this._nameCell.Position + new Vector2f(this._nameCell.Size.X, 0.0f), playerInfo.Type, Color.White);
+            this.InitializeCellText(ref this._factionCellText!, this._typeCellText.Position + new Vector2f(this._typeCell.Size.X, 0.0f), playerInfo.Faction, factionColor);
+            this.InitializeCellText(ref this._teamCellText!, this._factionCellText.Position + new Vector2f(this._factionCell.Size.X, 0.0f), playerInfo.Team, Color.White);
         }
 
         private void InitializeCellText(ref Text cellText, Vector2f position, string content, Color color)
@@ -76,40 +89,62 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
             cell.OutlineColor = Color.Red;
         }
 
+        private bool IsEmpty() => this._typeCellText.DisplayedString == PlayerType.Empty.ToString();
+
         public void Draw(RenderTarget drawer)
         {
-            this.Shape.FillColor = this._selected
-                ? new Color(66, 61, 60)
-                : Color.Black;
-
-            this._nameCellText.DisplayedString = this._selected
-                ? "Player"
-                : "<Empty>";
-
             drawer.Draw(this.Shape);
 
             drawer.Draw(this._indexCell);
-            drawer.Draw(this._indexCellText);
+            if (!this.IsEmpty()) drawer.Draw(this._indexCellText);
             drawer.Draw(this._nameCell);
-            drawer.Draw(this._nameCellText);
+            if (!this.IsEmpty()) drawer.Draw(this._nameCellText);
+            drawer.Draw(this._typeCell);
+            drawer.Draw(this._typeCellText);
             drawer.Draw(this._factionCell);
-            drawer.Draw(this._factionCellText);
+            if (!this.IsEmpty()) drawer.Draw(this._factionCellText);
+            drawer.Draw(this._teamCell);
+            if (!this.IsEmpty()) drawer.Draw(this._teamCellText);
         }
 
         public void Handle(MouseEvent e)
         {
+            if (e.Type == MouseEventType.ButtonPressed && e.Button == Mouse.Button.Right)
+            {
+                if (MouseEvent.IsMouseEventRaisedIn(this._typeCell.GetGlobalBounds(), e)) 
+                {
+                    string type_asString = this._typeCellText.DisplayedString;
+                    var type = Enum.Parse<PlayerType>(type_asString);
 
-        }
+                    var nextType = PlayerTypeExtensions.GetNextPlayerType(type);
 
-        public void Select()
-        {
-            this._selected = true;
-        }
+                    this.PlayerInfo.Type = nextType.ToString();
+                    this._typeCellText.DisplayedString = this.PlayerInfo.Type;
+                }
+                else if (!this.IsEmpty() && MouseEvent.IsMouseEventRaisedIn(this._factionCell.GetGlobalBounds(), e))
+                {
+                    string type_asString = this._factionCellText.DisplayedString;
+                    var type = Enum.Parse<FactionType>(type_asString);
 
-        public void Unselect()
-        {
-            this._selected = false;
+                    var nextType = FactionTypeExtensions.GetNextFactionType(type);
+
+                    this.PlayerInfo.Faction = nextType.ToString();
+                    this._factionCellText.DisplayedString = this.PlayerInfo.Faction;
+                    this._factionCellText.FillColor = FactionTypeExtensions.FactionToColor(Enum.Parse<FactionType>(this.PlayerInfo.Faction));
+                }
+                else if (!this.IsEmpty() && MouseEvent.IsMouseEventRaisedIn(this._teamCell.GetGlobalBounds(), e))
+                {
+                    int amountOfPlayers = this._playerManager.Players.Length;
+
+                    int teamNumber = int.Parse(this.PlayerInfo.Team);
+                    int nextTeamNumber = teamNumber + 1;
+
+                    if (nextTeamNumber > amountOfPlayers) nextTeamNumber = 1;
+
+                    this.PlayerInfo.Team = nextTeamNumber.ToString();
+                    this._teamCellText.DisplayedString = nextTeamNumber.ToString();
+                }
+            }
         }
     }
-
 }
