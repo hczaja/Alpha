@@ -12,27 +12,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Main.Content.Game.Notifications
+namespace Main.Content.GameLobby.Notifications
 {
-    public class NewTurnNotification : Notification
+    public class ProblemWithStartGameNotification : Notification
     {
-        private static readonly Vector2f _size = new Vector2f(0.2f * GameSettings.WindowWidth, 0.2f * GameSettings.WindowHeight);
+        private static readonly Vector2f _size = new Vector2f(0.5f * GameSettings.WindowWidth, 0.2f * GameSettings.WindowHeight);
         private static readonly Vector2f _position = new Vector2f(GameSettings.WindowWidth / 2f - 0.5f * _size.X, GameSettings.WindowHeight / 2f - 0.5f * _size.Y);
 
         private readonly Text _content;
-        private readonly Text _playerDescription;
-        private readonly NewTurnNotificationOKButton _button;
+        private readonly ProblemWithStartGameNotificationOKButton _button;
 
         private readonly INotificationService _notificationService;
-        private readonly Player _playerInfo;
 
-        public NewTurnNotification(INotificationService service, Player info) : base(
+        public ProblemWithStartGameNotification(INotificationService service, string content) : base(
             new RectangleShape(_size),
-            new Text($"New Turn!", GameSettings.Font, _titleFontSize),
-            drawBackground: true)
+            new Text($"Problem!", GameSettings.Font, _titleFontSize),
+            drawBackground: false)
         {
             this._notificationService = service;
-            this._playerInfo = info;
 
             this._background.Position = _position;
             this._background.FillColor = Color.Black;
@@ -43,24 +40,18 @@ namespace Main.Content.Game.Notifications
             this._title.FillColor = Color.White;
             this._title.Style = Text.Styles.Bold;
 
-            this._content = new Text($"Day {ITurnManager.turnCounter}.", GameSettings.Font, _contentFontSize);
+            this._content = new Text($"{content}", GameSettings.Font, _contentFontSize);
             this._content.Position = this._title.Position + new Vector2f(0.0f, _titleFontSize + _fontSpacing);
             this._content.FillColor = Color.White;
             this._content.Style = Text.Styles.Bold;
 
-            this._playerDescription = new Text($"{this._playerInfo.Faction.Type}", GameSettings.Font, _contentFontSize);
-            this._playerDescription.Position = this._title.Position + new Vector2f(this._content.GetLocalBounds().Width + _fontSpacing, _titleFontSize + _fontSpacing);
-            this._playerDescription.FillColor = this._playerInfo.Faction.GetFactionColor();
-            this._playerDescription.Style = Text.Styles.Bold;
-
-            this._button = new NewTurnNotificationOKButton();
+            this._button = new ProblemWithStartGameNotificationOKButton();
         }
 
         public override void Draw(RenderTarget drawer)
         {
             base.Draw(drawer);
             drawer.Draw(this._content);
-            drawer.Draw(this._playerDescription);
             this._button.Draw(drawer);
         }
 
@@ -71,17 +62,17 @@ namespace Main.Content.Game.Notifications
             {
                 if (MouseEvent.IsMouseEventRaisedIn(this._button.Rectangle.GetGlobalBounds(), e))
                 {
-                    this._notificationService.DequeueNotification(this._playerInfo.ID);
+                    this._notificationService.DequeueNotification(-1);
                 }
             }
         }
 
-        private sealed class NewTurnNotificationOKButton : TextButton
+        private sealed class ProblemWithStartGameNotificationOKButton : TextButton
         {
-            private static Vector2f _size = NewTurnNotification._size - new Vector2f(0f, 0.15f * GameSettings.WindowHeight);
-            private static Vector2f _position = NewTurnNotification._position + new Vector2f(0.0f, 0.15f * GameSettings.WindowHeight);
+            private static Vector2f _size = ProblemWithStartGameNotification._size - new Vector2f(0f, 0.15f * GameSettings.WindowHeight);
+            private static Vector2f _position = ProblemWithStartGameNotification._position + new Vector2f(0.0f, 0.15f * GameSettings.WindowHeight);
 
-            public NewTurnNotificationOKButton()
+            public ProblemWithStartGameNotificationOKButton()
                 : base("OK", _size, _position, "OK")
                 { }
         }

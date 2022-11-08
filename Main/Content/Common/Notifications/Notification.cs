@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Main.Content.Game.Notifications
+namespace Main.Content.Common
 {
     public abstract class Notification : IDrawable, IEventHandler<MouseEvent>
     {

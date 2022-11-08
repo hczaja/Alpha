@@ -1,4 +1,4 @@
-﻿using Main.Content.Common.MapManager;
+﻿using Main.Content.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

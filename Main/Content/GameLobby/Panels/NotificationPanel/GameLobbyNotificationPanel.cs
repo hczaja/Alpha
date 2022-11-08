@@ -1,5 +1,6 @@
 ﻿using Main.Content.Common;
 using Main.Content.Game.Turns;
+using Main.Content.Lobby;
 using Main.Utils;
 using Main.Utils.Events;
 using SFML.Graphics;
@@ -10,9 +11,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Main.Content.Game.Panels
+namespace Main.Content.GameLobby.Panels
 {
-    internal class NotificationPanel : GamePanel
+    internal class GameLobbyNotificationPanel : GameLobbyPanel
     {
         public static readonly Vector2f Position = new Vector2f(0f, 0f);
         public static readonly Vector2f Size = new Vector2f(GameSettings.WindowWidth, GameSettings.WindowHeight);
@@ -22,10 +23,10 @@ namespace Main.Content.Game.Panels
         private readonly INotificationService _notificationService;
         private Notification? currentNotification;
 
-        public NotificationPanel(IGameContent gameContent, ITurnManager turnManager, INotificationService notificationService) : base(gameContent, turnManager)
+        public GameLobbyNotificationPanel(IGameLobbyContent gameContent, INotificationService notificationService) : base(gameContent)
         {
             var rectangle = new FloatRect(Position, Size);
-            this.View = new NotificationView(rectangle);
+            this.View = new GameLobbyNotificationView(rectangle);
 
             this.Background = new RectangleShape(Size);
             this.Background.Position = Position;
@@ -51,19 +52,18 @@ namespace Main.Content.Game.Panels
             this.currentNotification?.Handle(e);
         }
 
-        public override void Handle(KeyboardEvent e) { }
-
-        public override void Handle(NewTurnEvent e) { }
-
-        public override void Update() 
+        public void Update() 
         { 
-            int currentPlayerId = this._turnManager.GetCurrentPlayer().ID;
-            this._notificationService.TryGetNotification(currentPlayerId, out var notification);
+            this._notificationService.TryGetNotification(-1, out var notification);
             
             if (this.currentNotification != notification)
             {
                 this.currentNotification = notification;
             }
         }
+
+        public override void Handle(GameLobbyResultMapInfoChanged e) { }
+
+        public override void Handle(GameLobbyResultPlayersInfoChanged e) { }
     }
 }

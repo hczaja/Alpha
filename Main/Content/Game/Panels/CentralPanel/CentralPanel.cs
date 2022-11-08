@@ -22,12 +22,14 @@ namespace Main.Content.Game.Panels
 
         public CentralPanel(IGameContent gameContent, ITurnManager turnManager) : base(gameContent, turnManager)
         {
-            var gridSize = GridSize.Large;
+            var map = gameContent.GetMapInfo();
+
+            var gridSize = map.GridSize;
             this._camera = new GameCamera(Position, Size);
 
             var rectangle = new FloatRect(Position, Size);
             this.View = new CentralView(this._camera, rectangle, gridSize);
-            this.Grid = new Grid(gridSize, this._camera, this._turnManager);
+            this.Grid = new Grid(map, this._camera, this._turnManager);
         }
 
         public override void Draw(RenderTarget drawer)

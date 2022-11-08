@@ -1,4 +1,5 @@
-﻿using Main.Content.Game.Terrains;
+﻿using Main.Content.Common.MapManager;
+using Main.Content.Game.Terrains;
 using Main.Content.Game.Turns;
 using Main.Utils.Camera;
 using Main.Utils.Events;
@@ -35,15 +36,15 @@ namespace Main.Content.Game
                 GridSize.Large => (32, 32)
             };
 
-        public Grid(GridSize size, GameCamera camera, ITurnManager turnManager)
+        public Grid(Map map, GameCamera camera, ITurnManager turnManager)
         {
             this._gameCamera = camera;
             this._turnManager = turnManager;
 
-            (this._width, this._height) = GetGridDimensions(size);
+            (this._width, this._height) = GetGridDimensions(map.GridSize);
 
             this._cells = new Cell[_width, _height];
-            this.InitializeCells();
+            this.InitializeCells(map);
         }
 
         public void Draw(RenderTarget drawer)
@@ -110,7 +111,7 @@ namespace Main.Content.Game
             }
         }
 
-        private void InitializeCells()
+        private void InitializeCells(Map map)
         {
             var currentPlayer = this._turnManager.GetCurrentPlayer();
             for (int i = 0; i < _width; i++)
@@ -118,8 +119,8 @@ namespace Main.Content.Game
                 for (int j = 0; j < _height; j++)
                 {
                     // temporary solution
-                    var randomType = Terrain.GetAllTerrainTypes()[Random.Shared.Next(0, 3)];
-                    this._cells[i, j] = new Cell(i, j, currentPlayer, new Terrain(randomType));
+                    var field = map.MapData.Fields.FirstOrDefault(f => f.Column == i && f.Row == j);
+                    this._cells[i, j] = new Cell(i, j, currentPlayer, new Terrain(field.TerrainType));
                 }
             }
 
