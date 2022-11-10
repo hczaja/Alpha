@@ -68,5 +68,8 @@ namespace Main.Content.Common.MapManager
 
         [XmlAttribute]
         public TerrainType TerrainType { get; set; }
+
+        [XmlAttribute]
+        public string? StartingPointFor { get; set; }
     }
 }

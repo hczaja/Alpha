@@ -59,7 +59,5 @@ namespace Main.Content.GameLobby.Panels
             this.PlayerManager.Handle(e);
             this._playersList.Handle(e);
         }
-
-        public override void Handle(GameLobbyResultPlayersInfoChanged e) { }
     }
 }

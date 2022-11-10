@@ -16,7 +16,8 @@ using System.Threading.Tasks;
 namespace Main.Content.Lobby
 {
     public interface IGameLobbyContent : IWindowContent, 
-        IEventHandler<GameLobbyResultMapInfoChanged>
+        IEventHandler<GameLobbyResultMapInfoChanged>,
+        IEventHandler<GameLobbyResultPlayersChanged>
     {
         public GameLobbyData GetGameLobbyData();
         public Map GetMapInfo();
@@ -47,7 +48,7 @@ namespace Main.Content.Lobby
             this._playerManager = new PlayerManager(0);
             this._gameLobbyData = new GameLobbyData(this._playerManager);
 
-            this._topLeftPanel = new TopLeftPanel(this);
+            this._topLeftPanel = new TopLeftPanel(this, this._playerManager);
             this._bottomLeftPanel = new BottomLeftPanel(this, this._playerManager);
             this._topRightPanel = new TopRightPanel(this);
 
@@ -133,8 +134,13 @@ namespace Main.Content.Lobby
         public void Handle(GameLobbyResultMapInfoChanged e) 
         {
             this._gameLobbyData.MapInfo = e.MapInfo;
-            this._topLeftPanel.Handle(e);
             this._bottomLeftPanel.Handle(e);
+            this._topLeftPanel.Handle(e);
+        }
+        
+        public void Handle(GameLobbyResultPlayersChanged e) 
+        {
+            this._topLeftPanel.Handle(e);
         }
 
         public void Update() 

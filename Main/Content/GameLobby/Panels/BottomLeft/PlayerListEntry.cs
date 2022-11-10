@@ -1,5 +1,6 @@
 ﻿using Main.Content.Common;
 using Main.Content.Game.Factions;
+using Main.Content.Lobby;
 using Main.Utils;
 using Main.Utils.Events;
 using Main.Utils.Graphic;
@@ -43,11 +44,13 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
 
         public PlayerInfo PlayerInfo { get; private init; }
         private readonly IPlayerManager _playerManager;
+        private readonly IGameLobbyContent _gameLobbyContent;
 
-        public PlayersListEntry(int positionOnList, PlayerInfo playerInfo, IPlayerManager manager)
+        public PlayersListEntry(int positionOnList, PlayerInfo playerInfo, IPlayerManager manager, IGameLobbyContent gameLobbyContent)
         {
             this.PlayerInfo = playerInfo;
             this._playerManager = manager;
+            this._gameLobbyContent = gameLobbyContent;
 
             this.Shape = new RectangleShape(Size);
             this.Shape.Position = BottomLeftPanel.Position + new Vector2f(0f, positionOnList * Size.Y);
@@ -120,6 +123,8 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
 
                     this.PlayerInfo.Type = nextType.ToString();
                     this._typeCellText.DisplayedString = this.PlayerInfo.Type;
+
+                    this._gameLobbyContent.Handle(new GameLobbyResultPlayersChanged(this._playerManager));
                 }
                 else if (!this.IsEmpty() && MouseEvent.IsMouseEventRaisedIn(this._factionCell.GetGlobalBounds(), e))
                 {
@@ -131,6 +136,8 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
                     this.PlayerInfo.Faction = nextType.ToString();
                     this._factionCellText.DisplayedString = this.PlayerInfo.Faction;
                     this._factionCellText.FillColor = FactionTypeExtensions.FactionToColor(Enum.Parse<FactionType>(this.PlayerInfo.Faction));
+
+                    this._gameLobbyContent.Handle(new GameLobbyResultPlayersChanged(this._playerManager));
                 }
                 else if (!this.IsEmpty() && MouseEvent.IsMouseEventRaisedIn(this._teamCell.GetGlobalBounds(), e))
                 {
