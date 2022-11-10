@@ -13,7 +13,7 @@ namespace Main.Content.Game.Panels
     {
         protected readonly FloatRect _viewRectangle;
 
-        public abstract void Update();
+        public abstract void Update(int playerIndex);
 
         public GamePanelView(FloatRect viewRect) 
             : base(new FloatRect(

@@ -13,8 +13,7 @@ namespace Main.Content.GameLobby.Panels
     public abstract class GameLobbyPanel :
         IDrawable,
         IEventHandler<MouseEvent>,
-        IEventHandler<GameLobbyResultMapInfoChanged>,
-        IEventHandler<GameLobbyResultPlayersInfoChanged>
+        IEventHandler<GameLobbyResultMapInfoChanged>
     {
         public GameLobbyView View { get; init; }
 
@@ -27,6 +26,5 @@ namespace Main.Content.GameLobby.Panels
         public abstract void Draw(RenderTarget drawer);
         public abstract void Handle(MouseEvent e);
         public abstract void Handle(GameLobbyResultMapInfoChanged e);
-        public abstract void Handle(GameLobbyResultPlayersInfoChanged e);
     }
 }

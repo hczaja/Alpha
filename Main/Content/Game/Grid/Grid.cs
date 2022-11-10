@@ -1,4 +1,5 @@
 ﻿using Main.Content.Common.MapManager;
+using Main.Content.Game.GameObjects.Buildings;
 using Main.Content.Game.Terrains;
 using Main.Content.Game.Turns;
 using Main.Utils.Camera;
@@ -44,7 +45,10 @@ namespace Main.Content.Game
             (this._width, this._height) = GetGridDimensions(map.GridSize);
 
             this._cells = new Cell[_width, _height];
+
             this.InitializeCells(map);
+            this.InitializeSurroundings();
+            this.InitializeStartingPositions(map);
         }
 
         public void Draw(RenderTarget drawer)
@@ -77,8 +81,10 @@ namespace Main.Content.Game
         {
             if (e.Type == MouseEventType.ButtonPressed && e.Button == Mouse.Button.Left)
             {
-                float x = e.X + this._gameCamera.MoveX;
-                float y = e.Y + this._gameCamera.MoveY;
+                var currentPlayerId = this._turnManager.GetCurrentPlayer().ID;
+
+                float x = e.X + this._gameCamera.MoveX[currentPlayerId];
+                float y = e.Y + this._gameCamera.MoveY[currentPlayerId];
 
                 int i = (int)(x / Cell._CellSizeX);
                 int j = (int)(y / Cell._CellSizeY);
@@ -98,10 +104,6 @@ namespace Main.Content.Game
 
                     this._currentCell = cell;
                     this._currentCell.Select();
-
-                    //tmp solution
-                    var currentPlayer = this._turnManager.GetCurrentPlayer();
-                    this._currentCell.DiscoverFor(currentPlayer.ID);
                 }
                 catch (IndexOutOfRangeException)
                 {
@@ -111,19 +113,8 @@ namespace Main.Content.Game
             }
         }
 
-        private void InitializeCells(Map map)
+        private void InitializeSurroundings()
         {
-            var currentPlayer = this._turnManager.GetCurrentPlayer();
-            for (int i = 0; i < _width; i++)
-            {
-                for (int j = 0; j < _height; j++)
-                {
-                    // temporary solution
-                    var field = map.MapData.Fields.FirstOrDefault(f => f.Column == i && f.Row == j);
-                    this._cells[i, j] = new Cell(i, j, currentPlayer, new Terrain(field.TerrainType));
-                }
-            }
-
             for (int i = 0; i < _width; i++)
             {
                 for (int j = 0; j < _height; j++)
@@ -160,6 +151,39 @@ namespace Main.Content.Game
                     if (right._i < _width) this._cells[i, j].Surrounding.Add(Direction.Right, this._cells[right._i, right._j]);
                     else this._cells[i, j].Surrounding.Add(Direction.Right, null);
                 }
+            }
+        }
+
+        private void InitializeCells(Map map)
+        {
+            var currentPlayer = this._turnManager.GetCurrentPlayer();
+            for (int i = 0; i < _width; i++)
+            {
+                for (int j = 0; j < _height; j++)
+                {
+                    // temporary solution
+                    var field = map.MapData.Fields.FirstOrDefault(f => f.Column == i && f.Row == j);
+                    this._cells[i, j] = new Cell(i, j, currentPlayer, new Terrain(field.TerrainType));
+                }
+            }
+        }
+
+        private void InitializeStartingPositions(Map map)
+        {
+            var players = this._turnManager.GetAllPlayers();
+            foreach (var player in players)
+            {
+                int playerID = player.ID;
+                var startingField = map.MapData.Fields.FirstOrDefault(f => f.StartingPointFor == playerID.ToString());
+
+                var playerStartingCell = this._cells[startingField.Column, startingField.Row];
+                playerStartingCell.DiscoverFor(playerID);
+                foreach (var surroundingCell in playerStartingCell.Surrounding.Where(c => c.Value is not null))
+                {
+                    surroundingCell.Value.DiscoverFor(playerID);
+                }
+
+                playerStartingCell.AddBuilding(new Castle(playerStartingCell.Rectangle.Position));
             }
         }
     }

@@ -14,7 +14,7 @@ namespace Main.Content.Game
         public FogOfWar()
         {
             this.Visibility = new Dictionary<int, bool>();
-            for (int id = 1; id <= Player.GetMaxID(); id++)
+            for (int id = 0; id <= Player.GetMaxID(); id++)
             {
                 this.Visibility[id] = false;
             }

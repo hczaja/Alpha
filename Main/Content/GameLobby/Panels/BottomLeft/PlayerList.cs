@@ -41,11 +41,11 @@ namespace Main.Content.GameLobby.Panels.BottomLeft
         {
             for (int index = 0; index < players; index++)
             {
-                this._entries[index + 1] = new PlayersListEntry(index + 1, this._playerManager.Players[index], this._playerManager);
+                this._entries[index + 1] = new PlayersListEntry(index + 1, this._playerManager.Players[index], this._playerManager, this._gameLobbyContent);
             }
         }
 
-        private PlayersListEntry GetHeader() => new PlayersListEntry(0, new PlayerInfo("#", "Name", "Type", "Faction", "Team"), this._playerManager);
+        private PlayersListEntry GetHeader() => new PlayersListEntry(0, new PlayerInfo("#", "Name", "Type", "Faction", "Team"), this._playerManager, this._gameLobbyContent);
 
         public void Draw(RenderTarget drawer)
         {

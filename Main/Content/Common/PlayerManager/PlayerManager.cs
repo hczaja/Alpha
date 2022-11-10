@@ -1,4 +1,5 @@
-﻿using Main.Utils.Events;
+﻿using Main.Content.Game.Factions;
+using Main.Utils.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace Main.Content.Common
             this.Players = new PlayerInfo[amount];
             for (int index = 0; index < amount; index++)
             {
-                this.Players[index] = new PlayerInfo(index.ToString(), "", "Empty", "Undeads", (index + 1).ToString());
+                this.Players[index] = new PlayerInfo(index.ToString(), string.Empty, PlayerType.Empty.ToString(), FactionType.Undeads.ToString(), (index + 1).ToString());
             }
         }
 
@@ -37,7 +38,7 @@ namespace Main.Content.Common
 
             for (int index = 0; index < amountOfPlayers; index++)
             {
-                this.Players[index] = new PlayerInfo(index.ToString(), "", "Empty", "Undeads", (index + 1).ToString());
+                this.Players[index] = new PlayerInfo(index.ToString(), string.Empty, PlayerType.Empty.ToString(), FactionType.Undeads.ToString(), (index + 1).ToString());
             }
         }
     }

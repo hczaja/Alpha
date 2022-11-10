@@ -30,7 +30,7 @@ namespace Main.Content.Game.Notifications
 
         public void EnqueueNotification(int playerId, Notification notification)
         {
-            if (playerId == 0)
+            if (playerId == -1)
             {
                 foreach (var notifications in _notifications)
                 {

@@ -25,9 +25,9 @@
     -->
     
     <MapData>
-      <MapField Column="0" Row="0" TerrainType="Dirt"/>
+      <MapField Column="0" Row="0" TerrainType="Dirt" StartingPointFor="0"/>
       <MapField Column="0" Row="1" TerrainType="Dirt"/>
-      <MapField Column="0" Row="2" TerrainType="Dirt"/>
+      <MapField Column="0" Row="2" TerrainType="Dirt" StartingPointFor="2"/>
       <MapField Column="0" Row="3" TerrainType="Water"/>
       <MapField Column="0" Row="4" TerrainType="Water"/>
       <MapField Column="0" Row="5" TerrainType="Water"/>
@@ -76,7 +76,7 @@
       <MapField Column="2" Row="14" TerrainType="Water"/>
       <MapField Column="2" Row="15" TerrainType="Water"/>
 
-      <MapField Column="3" Row="0" TerrainType="Grass"/>
+      <MapField Column="3" Row="0" TerrainType="Grass" StartingPointFor="1"/>
       <MapField Column="3" Row="1" TerrainType="Grass"/>
       <MapField Column="3" Row="2" TerrainType="Grass"/>
       <MapField Column="3" Row="3" TerrainType="Water"/>

@@ -1,4 +1,5 @@
-﻿using Main.Content.Common.MapManager;
+﻿using Main.Content.Common;
+using Main.Content.Common.MapManager;
 using Main.Content.Game;
 using Main.Content.Game.Terrains;
 using Main.Content.GameLobby.Panels.TopLeft;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Main.Content.GameLobby.Panels
 {
-    public class TopLeftPanel : GameLobbyPanel
+    public class TopLeftPanel : GameLobbyPanel, IEventHandler<GameLobbyResultPlayersChanged>
     {
         public static readonly Vector2f Position = new Vector2f(Gap, Gap);
         public static readonly Vector2f Size = new Vector2f(0.4f * GameSettings.WindowWidth, 0.4f * GameSettings.WindowWidth);
@@ -24,9 +25,12 @@ namespace Main.Content.GameLobby.Panels
         private RectangleShape Shape { get; init; }
 
         private MapPreview _mapPreview;
+        private IPlayerManager _playerManager;
 
-        public TopLeftPanel(IGameLobbyContent gameContent) : base(gameContent)
+        public TopLeftPanel(IGameLobbyContent gameContent, IPlayerManager playerManager) : base(gameContent)
         {
+            this._playerManager = playerManager;
+
             var rectangle = new FloatRect(Position, Size);
             this.View = new TopLeftView(rectangle);
 
@@ -37,7 +41,7 @@ namespace Main.Content.GameLobby.Panels
             this.Shape.OutlineColor = Color.Red;
             this.Shape.OutlineThickness = 2.0f;
 
-            this._mapPreview = new MapPreview(new Map());
+            this._mapPreview = new MapPreview(new Map(), playerManager);
         }
 
         public override void Draw(RenderTarget drawer)
@@ -50,11 +54,14 @@ namespace Main.Content.GameLobby.Panels
 
         public override void Handle(MouseEvent e) { }
 
-        public override void Handle(GameLobbyResultPlayersInfoChanged e) { }
-
         public override void Handle(GameLobbyResultMapInfoChanged e)
         {
-            this._mapPreview = new MapPreview(e.MapInfo);
+            this._mapPreview = new MapPreview(e.MapInfo, this._playerManager);
+        }
+
+        public void Handle(GameLobbyResultPlayersChanged e)
+        {
+            this._mapPreview.Handle(e);
         }
     }
 }

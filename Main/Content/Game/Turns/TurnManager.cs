@@ -20,6 +20,8 @@ namespace Main.Content.Game.Turns
 
         public Player GetCurrentPlayer() => this.currentPlayer;
 
+        public Player[] GetAllPlayers() => this.PlayerOrder;
+
         public Player GetNextPlayer()
         {
             int index = Array.IndexOf(this.PlayerOrder, this.currentPlayer);
@@ -33,6 +35,17 @@ namespace Main.Content.Game.Turns
             }
 
             return this.currentPlayer;
+        }
+
+        public Player GetPreviousPlayer()
+        {
+            int index = Array.IndexOf(this.PlayerOrder, this.currentPlayer);
+            if (index == 0)
+            {
+                return this.PlayerOrder[this.PlayerOrder.Length - 1];
+            }
+
+            return this.PlayerOrder[index - 1];
         }
 
         private void ProcessNewTurn()

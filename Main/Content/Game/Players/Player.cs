@@ -12,15 +12,22 @@ namespace Main.Content.Game
 {
     public class Player : IEventHandler<NewTurnEvent>
     {
-        private static int _id;
+        private static int _maxId;
         public int ID { get; init; }
 
-        public static int GetMaxID() => _id;
+        public static int GetMaxID() => _maxId;
 
         public Faction Faction { get; init; }
         public Supplies Supplies { get; init; }
 
-        public Player(FactionType factionType, Income startingIncome) => (ID, Faction, Supplies) = (++_id, new Faction(factionType), new Supplies(startingIncome));
+        public Player(int id, FactionType factionType, Income startingIncome)
+        {
+            this.ID = id;
+            _maxId = Math.Max(_maxId, this.ID);
+
+            this.Faction = new Faction(factionType);
+            this.Supplies = new Supplies(startingIncome);
+        }
 
         public Income CalculateIncome() => new Income() { Gold = 100 };
 

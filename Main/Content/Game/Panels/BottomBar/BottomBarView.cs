@@ -11,6 +11,6 @@ namespace Main.Content.Game.Panels
     {
         public BottomBarView(FloatRect viewRect) : base(viewRect) { }
 
-        public override void Update() { }
+        public override void Update(int playerIndex) { }
     }
 }
