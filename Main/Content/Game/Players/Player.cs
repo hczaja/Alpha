@@ -20,7 +20,7 @@ namespace Main.Content.Game
         public Faction Faction { get; init; }
         public Supplies Supplies { get; init; }
 
-        public Player(FactionType factionType, Income startingIncome) => (ID, Faction, Supplies) = (++_id, new Faction(factionType), new Supplies(startingIncome));
+        public Player(FactionType factionType, Income startingIncome) => (ID, Faction, Supplies) = (_id++, new Faction(factionType), new Supplies(startingIncome));
 
         public Income CalculateIncome() => new Income() { Gold = 100 };
 

@@ -20,35 +20,35 @@ namespace Main.Content.Game.Panels
         public CentralView(GameCamera camera, FloatRect viewRect, GridSize gridSize) : base(viewRect)
             => (_camera, _gridDimensions) = (camera, Grid.GetGridDimensions(gridSize));
 
-        private bool CanMoveLeft()
+        private bool CanMoveLeft(int playerId)
         {
-            float cameraXLeft = this._viewRectangle.Left + this._camera.MoveX - GameCamera.MoveSpeed;
+            float cameraXLeft = this._viewRectangle.Left + this._camera.MoveX[playerId] - GameCamera.MoveSpeed;
             float borderXLeft = -GameViewBorderTolerance;
             return cameraXLeft >= borderXLeft;
         }
 
-        private bool CanMoveRight()
+        private bool CanMoveRight(int playerId)
         {
-            float cameraXRight = this._viewRectangle.Left + this._viewRectangle.Width + this._camera.MoveX + GameCamera.MoveSpeed;
+            float cameraXRight = this._viewRectangle.Left + this._viewRectangle.Width + this._camera.MoveX[playerId] + GameCamera.MoveSpeed;
             float borderXRight = this._gridDimensions.columns * Cell._CellSizeX + GameViewBorderTolerance;
             return cameraXRight <= borderXRight;
         }
 
-        private bool CanMoveTop()
+        private bool CanMoveTop(int playerId)
         {
-            float cameraYTop = this._viewRectangle.Top + this._camera.MoveY - GameCamera.MoveSpeed;
+            float cameraYTop = this._viewRectangle.Top + this._camera.MoveY[playerId] - GameCamera.MoveSpeed;
             float borderYTop = -GameViewBorderTolerance;
             return cameraYTop >= borderYTop;
         }
 
-        private bool CanMoveBottom()
+        private bool CanMoveBottom(int playerId)
         {
-            float cameraYBottom = this._viewRectangle.Top + this._viewRectangle.Height + this._camera.MoveY + GameCamera.MoveSpeed;
+            float cameraYBottom = this._viewRectangle.Top + this._viewRectangle.Height + this._camera.MoveY[playerId] + GameCamera.MoveSpeed;
             float borderYBottom = this._gridDimensions.rows * Cell._CellSizeY + GameViewBorderTolerance;
             return cameraYBottom <= borderYBottom;
         }
-    
-        public override void Update()
+
+        public override void Update(int playerId)
         {
             if (!this._camera.CanMove)
                 return;
@@ -58,45 +58,49 @@ namespace Main.Content.Game.Panels
                 case Direction.Unknown:
                     break;
                 case Direction.TopLeft:
-                    this.UpdateMoveView(this.CanMoveLeft(), new Vector2f(-GameCamera.MoveSpeed, 0.0f));
-                    this.UpdateMoveView(this.CanMoveTop(), new Vector2f(0.0f, -GameCamera.MoveSpeed));
+                    this.UpdateMoveView(playerId, this.CanMoveLeft(playerId), new Vector2f(-GameCamera.MoveSpeed, 0.0f));
+                    this.UpdateMoveView(playerId, this.CanMoveTop(playerId), new Vector2f(0.0f, -GameCamera.MoveSpeed));
                     break;
                 case Direction.TopRight:
-                    this.UpdateMoveView(this.CanMoveRight(), new Vector2f(+GameCamera.MoveSpeed, 0.0f));
-                    this.UpdateMoveView(this.CanMoveTop(), new Vector2f(0.0f, -GameCamera.MoveSpeed));
+                    this.UpdateMoveView(playerId, this.CanMoveRight(playerId), new Vector2f(+GameCamera.MoveSpeed, 0.0f));
+                    this.UpdateMoveView(playerId, this.CanMoveTop(playerId), new Vector2f(0.0f, -GameCamera.MoveSpeed));
                     break;
                 case Direction.BottomRight:
-                    this.UpdateMoveView(this.CanMoveRight(), new Vector2f(+GameCamera.MoveSpeed, 0.0f));
-                    this.UpdateMoveView(this.CanMoveBottom(), new Vector2f(0.0f, +GameCamera.MoveSpeed));
+                    this.UpdateMoveView(playerId, this.CanMoveRight(playerId), new Vector2f(+GameCamera.MoveSpeed, 0.0f));
+                    this.UpdateMoveView(playerId, this.CanMoveBottom(playerId), new Vector2f(0.0f, +GameCamera.MoveSpeed));
                     break;
                 case Direction.BottomLeft:
-                    this.UpdateMoveView(this.CanMoveLeft(), new Vector2f(-GameCamera.MoveSpeed, 0.0f));
-                    this.UpdateMoveView(this.CanMoveBottom(), new Vector2f(0.0f, +GameCamera.MoveSpeed));
+                    this.UpdateMoveView(playerId, this.CanMoveLeft(playerId), new Vector2f(-GameCamera.MoveSpeed, 0.0f));
+                    this.UpdateMoveView(playerId, this.CanMoveBottom(playerId), new Vector2f(0.0f, +GameCamera.MoveSpeed));
                     break;
                 case Direction.Left:
-                    this.UpdateMoveView(this.CanMoveLeft(), new Vector2f(-GameCamera.MoveSpeed, 0.0f));
+                    this.UpdateMoveView(playerId, this.CanMoveLeft(playerId), new Vector2f(-GameCamera.MoveSpeed, 0.0f));
                     break;
                 case Direction.Top:
-                    this.UpdateMoveView(this.CanMoveTop(), new Vector2f(0.0f, -GameCamera.MoveSpeed));
+                    this.UpdateMoveView(playerId, this.CanMoveTop(playerId), new Vector2f(0.0f, -GameCamera.MoveSpeed));
                     break;
                 case Direction.Right:
-                    this.UpdateMoveView(this.CanMoveRight(), new Vector2f(+GameCamera.MoveSpeed, 0.0f));
+                    this.UpdateMoveView(playerId, this.CanMoveRight(playerId), new Vector2f(+GameCamera.MoveSpeed, 0.0f));
                     break;
                 case Direction.Bottom:
-                    this.UpdateMoveView(this.CanMoveBottom(), new Vector2f(0.0f, +GameCamera.MoveSpeed));
+                    this.UpdateMoveView(playerId, this.CanMoveBottom(playerId), new Vector2f(0.0f, +GameCamera.MoveSpeed));
                     break;
             }
         }
 
-        private void UpdateMoveView(bool updateCondition, Vector2f updateVector)
+        private void UpdateMoveView(int playerId, bool updateCondition, Vector2f updateVector)
         {
             if (updateCondition)
             {
-                this._camera.Move(updateVector);
+                this._camera.Move(updateVector, playerId);
                 this.Move(updateVector);
             }
         }
 
-        public void ResetView() => this.UpdateMoveView(true, new Vector2f(-this._camera.MoveX, -this._camera.MoveY));
+        public void ResetView(int playerId, int previousPlayerId)
+        {
+            this.Move(new Vector2f(-this._camera.MoveX[previousPlayerId], -this._camera.MoveY[previousPlayerId]));
+            this.Move(new Vector2f(this._camera.MoveX[playerId], this._camera.MoveY[playerId]));
+        }
     }
 }

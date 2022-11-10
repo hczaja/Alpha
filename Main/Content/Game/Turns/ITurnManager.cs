@@ -12,5 +12,7 @@ namespace Main.Content.Game.Turns
 
         Player GetNextPlayer();
         Player GetCurrentPlayer();
+        Player GetPreviousPlayer();
+        Player[] GetAllPlayers();
     }
 }

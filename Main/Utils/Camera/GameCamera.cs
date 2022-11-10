@@ -1,4 +1,5 @@
 ﻿using Main.Content.Game;
+using Main.Content.Game.Turns;
 using Main.Utils.Events;
 using SFML.System;
 using SFML.Window;
@@ -16,20 +17,34 @@ namespace Main.Utils.Camera
         public static readonly float MoveSpeed = 4.0f;
         public static readonly float ViewBandwith = 48.0f;
 
-        public float MoveX { get; private set; }
-        public float MoveY { get; private set; }
-        
+        public Dictionary<int, float> MoveX { get; private set; }
+        public Dictionary<int, float> MoveY { get; private set; }
+
         public bool CanMove { get; private set; }
 
         private readonly Vector2f _workspacePosition;
         private readonly Vector2f _workspaceSize;
 
-        public GameCamera(Vector2f position, Vector2f size) => (_workspacePosition, _workspaceSize) = (position, size);
-
-        public void Move(Vector2f vector)
+        public GameCamera(Vector2f position, Vector2f size, ITurnManager turnManager)
         {
-            this.MoveX += vector.X;
-            this.MoveY += vector.Y;
+            this._workspacePosition = position;
+            this._workspaceSize = size;
+
+            this.MoveX = new Dictionary<int, float>();
+            this.MoveY = new Dictionary<int, float>();
+
+            var playersIds = turnManager.GetAllPlayers().Select(p => p.ID);
+            foreach (int id in playersIds)
+            {
+                this.MoveX[id] = 0f;
+                this.MoveY[id] = 0f;
+            }
+        }
+
+        public void Move(Vector2f vector, int playerId)
+        {
+            this.MoveX[playerId] += vector.X;
+            this.MoveY[playerId] += vector.Y;
         }
 
         public void Handle(MouseEvent e)

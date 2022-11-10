@@ -25,7 +25,7 @@ namespace Main.Content.Game.Panels
             var map = gameContent.GetMapInfo();
 
             var gridSize = map.GridSize;
-            this._camera = new GameCamera(Position, Size);
+            this._camera = new GameCamera(Position, Size, turnManager);
 
             var rectangle = new FloatRect(Position, Size);
             this.View = new CentralView(this._camera, rectangle, gridSize);
@@ -52,13 +52,17 @@ namespace Main.Content.Game.Panels
 
         public override void Handle(NewTurnEvent e) 
         {
-            (this.View as CentralView)!.ResetView();
+            int playerId = e.PlayerInfo.ID;
+            int previousPlayerId = this._turnManager.GetPreviousPlayer().ID;
+
+            (this.View as CentralView)!.ResetView(playerId, previousPlayerId);
             this.Grid.Handle(e);
         }
 
         public override void Update()
         {
-            this.View.Update();
+            var currentPlayerId = this._turnManager.GetCurrentPlayer().ID;
+            this.View.Update(currentPlayerId);
         }
     }
 }
