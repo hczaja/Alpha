@@ -58,7 +58,7 @@ namespace Main.Content.Game
             for (int index = 0; index < playersAmont; index++)
             {
                 var faction = Enum.Parse<FactionType>(nonEmptyPlayers[index].Faction);
-                players[index] = new Player(faction, startingIncome);
+                players[index] = new Player(int.Parse(nonEmptyPlayers[index].Index), faction, startingIncome);
             }
 
             this._turnManager = new TurnManager(players);

@@ -1,4 +1,5 @@
 ﻿using Main.Content.Common.MapManager;
+using Main.Content.Game.GameObjects.Buildings;
 using Main.Content.Game.Terrains;
 using Main.Content.Game.Turns;
 using Main.Utils.Camera;
@@ -181,6 +182,8 @@ namespace Main.Content.Game
                 {
                     surroundingCell.Value.DiscoverFor(playerID);
                 }
+
+                playerStartingCell.AddBuilding(new Castle(playerStartingCell.Rectangle.Position));
             }
         }
     }
