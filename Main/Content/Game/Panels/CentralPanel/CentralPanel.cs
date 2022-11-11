@@ -29,8 +29,10 @@ namespace Main.Content.Game.Panels
 
             var rectangle = new FloatRect(Position, Size);
             this.View = new CentralView(this._camera, rectangle, gridSize);
-            this.Grid = new Grid(map, this._camera, this._turnManager);
+            this.Grid = new Grid(map, this._camera, this._turnManager, this._gameContent);
         }
+
+        public Grid GetGrid() => this.Grid;
 
         public override void Draw(RenderTarget drawer)
         {

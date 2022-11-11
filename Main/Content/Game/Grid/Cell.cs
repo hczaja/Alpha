@@ -73,7 +73,7 @@ namespace Main.Content.Game
 
             if (!this._fogOfWar.IsVisibleFor(this._currentPlayer.ID))
             {
-                this.Rectangle.FillColor = this._fogOfWar.GetFogColor();
+                this.Rectangle.FillColor = FogOfWar.GetFogColor();
                 drawer.Draw(this.Rectangle);
                 return;
             }
@@ -90,6 +90,20 @@ namespace Main.Content.Game
             this.Unit?.Draw(drawer);
             this.Resource?.Draw(drawer);
             this.Building?.Draw(drawer);
+        }
+
+        public Color GetCellColorLayer()
+        {
+            var result = FogOfWar.GetFogColor();
+
+            if (!this._fogOfWar.IsVisibleFor(this._currentPlayer.ID))
+                return result;
+
+            result = this.Terrain.GetColor();
+
+            if (this.Building is not null) result = this.Building.GetBuildingColorLayer();
+
+            return result;
         }
 
         public void Select()

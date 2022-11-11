@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Main.Utils.Camera
 {
-    internal class GameCamera : IEventHandler<MouseEvent>
+    public class GameCamera : IEventHandler<MouseEvent>
     {
         public Direction MoveDirection { get; private set; }
         public static readonly float MoveSpeed = 4.0f;

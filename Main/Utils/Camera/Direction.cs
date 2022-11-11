@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Main.Utils.Camera
 {
-    internal enum Direction
+    public enum Direction
     {
         Unknown, Left, TopLeft, Top, TopRight, Right, BottomRight, Bottom, BottomLeft 
     }

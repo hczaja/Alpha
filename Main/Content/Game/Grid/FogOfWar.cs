@@ -24,6 +24,6 @@ namespace Main.Content.Game
         public void HideFor(int playerId) => this.Visibility[playerId] = false;
         public bool IsVisibleFor(int playerId) => this.Visibility[playerId];
 
-        public Color GetFogColor() => new Color(0, 51, 51);
+        public static Color GetFogColor() => new Color(0, 51, 51);
     }
 }

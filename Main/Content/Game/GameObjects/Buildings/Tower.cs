@@ -12,7 +12,7 @@ namespace Main.Content.Game.GameObjects.Buildings
     {
         private readonly Texture _texture = new Texture("Assets/Buildings/Tower.png");
 
-        public Tower(Vector2f position)
+        public Tower(Vector2f position, Player owner) : base(position, owner)
         {
             this.DrawBox = new RectangleShape(
                 new Vector2f(Cell._CellSizeX, 2 * Cell._CellSizeY));
