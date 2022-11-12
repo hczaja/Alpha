@@ -196,13 +196,31 @@ namespace Main.Content.Game
                 var startingField = map.MapData.Fields.FirstOrDefault(f => f.StartingPointFor == playerID.ToString());
 
                 var playerStartingCell = this._cells[startingField.Column, startingField.Row];
+
                 playerStartingCell.DiscoverFor(playerID);
-                foreach (var surroundingCell in playerStartingCell.Surrounding.Where(c => c.Value is not null))
-                {
-                    surroundingCell.Value.DiscoverFor(playerID);
-                }
+                DiscoverCellFor(playerStartingCell, DiscoverRange.Two, playerID);
 
                 playerStartingCell.AddBuilding(new Castle(playerStartingCell.Rectangle.Position, player));
+            }
+        }
+
+        private enum DiscoverRange
+        {
+            Zero = 0, One = 1, Two = 2, Three = 3
+        }
+
+        private void DiscoverCellFor(Cell cell, DiscoverRange range, int id)
+        {
+            if (range == DiscoverRange.Zero) return;
+
+            cell.DiscoverFor(id);
+
+            var availableSurroundingCellsToDiscover = new List<Direction> { Direction.Top, Direction.Right, Direction.Bottom, Direction.Left };
+            foreach (var surroundingCell in cell.Surrounding.Where(c => c.Value is not null && availableSurroundingCellsToDiscover.Contains(c.Key)))
+            {
+                surroundingCell.Value.DiscoverFor(id);
+                this.DiscoverCellFor(surroundingCell.Value, range - 1, id);
+
             }
         }
     }
