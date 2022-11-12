@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game.GameObjects.Units
 {
-    internal abstract class Unit : IDrawable
+    public abstract class Unit : IDrawable
     {
         public Vector2f Position { get; protected set; }
 
@@ -17,5 +17,6 @@ namespace Main.Content.Game.GameObjects.Units
         protected RectangleShape? CollideBox { get; init; }
 
         public abstract void Draw(RenderTarget drawer);
+        public abstract Texture GetUnitTextureLayer();
     }
 }

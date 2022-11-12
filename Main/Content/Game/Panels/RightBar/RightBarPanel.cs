@@ -14,7 +14,10 @@ namespace Main.Content.Game.Panels
 {
     internal class RightBarPanel : GamePanel, 
         IEventHandler<UpdateMinimapEvent>,
-        IEventHandler<BuildingSelectedEvent>
+        IEventHandler<BuildingSelectedEvent>,
+        IEventHandler<TerrainSelectedEvent>,
+        IEventHandler<UnitSelectedEvent>,
+        IEventHandler<ResourceSelectedEvent>
     {
         public static readonly Vector2f Position = new Vector2f(0.8f * GameSettings.WindowWidth, 0.05f * GameSettings.WindowHeight);
         public static readonly Vector2f Size = new Vector2f(0.2f * GameSettings.WindowWidth, 0.75f * GameSettings.WindowHeight);
@@ -54,6 +57,21 @@ namespace Main.Content.Game.Panels
         }
         
         public void Handle(BuildingSelectedEvent e) 
+        {
+            this._objectInfo.Handle(e);
+        }
+        
+        public void Handle(TerrainSelectedEvent e) 
+        {
+            this._objectInfo.Handle(e);
+        }
+        
+        public void Handle(UnitSelectedEvent e) 
+        {
+            this._objectInfo.Handle(e);
+        }
+        
+        public void Handle(ResourceSelectedEvent e) 
         {
             this._objectInfo.Handle(e);
         }

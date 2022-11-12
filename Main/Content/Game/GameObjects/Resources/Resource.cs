@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game.GameObjects.Resources
 {
-    internal abstract class Resource : IDrawable
+    public abstract class Resource : IDrawable
     {
         public Vector2f Position { get; protected set; }
 
@@ -17,5 +17,6 @@ namespace Main.Content.Game.GameObjects.Resources
         protected RectangleShape? CollideBox { get; init; }
 
         public abstract void Draw(RenderTarget drawer);
+        public abstract Texture GetResourceTextureLayer();
     }
 }

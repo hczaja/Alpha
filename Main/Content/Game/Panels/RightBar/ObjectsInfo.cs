@@ -31,8 +31,9 @@ namespace Main.Content.Game.Panels.RightBar
 
             this._image = new RectangleShape(new Vector2f(ObjectsInfo.InfoBlockSize.Y, ObjectsInfo.InfoBlockSize.Y));
             this._image.Position = this._background.Position;
-            this._image.FillColor = Color.White;
             this._image.Texture = BuildingBlockTexture;
+            this._image.OutlineColor = Color.Red;
+            this._image.OutlineThickness = 2f;
         }
 
         public void Draw(RenderTarget drawer)
@@ -48,7 +49,7 @@ namespace Main.Content.Game.Panels.RightBar
         }
     }
 
-    public class UnitInfo : IDrawable
+    public class UnitInfo : IDrawable, IEventHandler<UnitSelectedEvent>
     {
         private readonly IGameContent _gameContent;
         public static readonly Vector2f UnitBlockPosition = BuildingBlockInfo.BuildingBlockPosition + new Vector2f(0f, ObjectsInfo.InfoBlockSize.Y);
@@ -70,6 +71,8 @@ namespace Main.Content.Game.Panels.RightBar
             this._image = new RectangleShape(new Vector2f(ObjectsInfo.InfoBlockSize.Y, ObjectsInfo.InfoBlockSize.Y));
             this._image.Position = this._background.Position;
             this._image.Texture = UnitBlockTexture;
+            this._image.OutlineColor = Color.Red;
+            this._image.OutlineThickness = 2f;
         }
 
         public void Draw(RenderTarget drawer)
@@ -77,9 +80,15 @@ namespace Main.Content.Game.Panels.RightBar
             drawer.Draw(this._background);
             drawer.Draw(this._image);
         }
+
+        public void Handle(UnitSelectedEvent e)
+        {
+            var texture = e.Unit?.GetUnitTextureLayer() ?? UnitBlockTexture;
+            this._image.Texture = texture;
+        }
     }
 
-    public class ResourceInfo : IDrawable
+    public class ResourceInfo : IDrawable, IEventHandler<ResourceSelectedEvent>
     {
         private readonly IGameContent _gameContent;
         public static readonly Vector2f ResourceBlockInfo = UnitInfo.UnitBlockPosition + new Vector2f(0f, ObjectsInfo.InfoBlockSize.Y);
@@ -101,6 +110,8 @@ namespace Main.Content.Game.Panels.RightBar
             this._image = new RectangleShape(new Vector2f(ObjectsInfo.InfoBlockSize.Y, ObjectsInfo.InfoBlockSize.Y));
             this._image.Position = this._background.Position;
             this._image.Texture = ResourceBlockTexture;
+            this._image.OutlineColor = Color.Red;
+            this._image.OutlineThickness = 2f;
         }
 
         public void Draw(RenderTarget drawer)
@@ -108,9 +119,15 @@ namespace Main.Content.Game.Panels.RightBar
             drawer.Draw(this._background);
             drawer.Draw(this._image);
         }
+
+        public void Handle(ResourceSelectedEvent e)
+        {
+            var texture = e.Resource?.GetResourceTextureLayer() ?? ResourceBlockTexture;
+            this._image.Texture = texture;
+        }
     }
 
-    public class TerrainInfo : IDrawable
+    public class TerrainInfo : IDrawable, IEventHandler<TerrainSelectedEvent>
     {
         private readonly IGameContent _gameContent;
         public static readonly Vector2f TerrainBlockInfo = ResourceInfo.ResourceBlockInfo + new Vector2f(0f, ObjectsInfo.InfoBlockSize.Y);
@@ -132,6 +149,8 @@ namespace Main.Content.Game.Panels.RightBar
             this._image = new RectangleShape(new Vector2f(ObjectsInfo.InfoBlockSize.Y, ObjectsInfo.InfoBlockSize.Y));
             this._image.Position = this._background.Position;
             this._image.Texture = TerrainBlockTexture;
+            this._image.OutlineColor = Color.Red;
+            this._image.OutlineThickness = 2f;
         }
 
         public void Draw(RenderTarget drawer)
@@ -139,10 +158,27 @@ namespace Main.Content.Game.Panels.RightBar
             drawer.Draw(this._background);
             drawer.Draw(this._image);
         }
+
+        public void Handle(TerrainSelectedEvent e)
+        {
+            if (e.Terrain is not null)
+            {
+                this._image.Texture = null;
+                this._image.FillColor = e.Terrain.GetColor();
+            }
+            else
+            {
+                this._image.Texture = TerrainBlockTexture;
+                this._image.FillColor = Color.White;
+            }
+        }
     }
 
     public class ObjectsInfo : IDrawable, 
-        IEventHandler<BuildingSelectedEvent>
+        IEventHandler<BuildingSelectedEvent>,
+        IEventHandler<TerrainSelectedEvent>,
+        IEventHandler<UnitSelectedEvent>,
+        IEventHandler<ResourceSelectedEvent>
     {
         private readonly IGameContent _gameContent;
 
@@ -174,6 +210,21 @@ namespace Main.Content.Game.Panels.RightBar
         public void Handle(BuildingSelectedEvent e)
         {
             this._buildingInfo.Handle(e);
+        }
+
+        public void Handle(TerrainSelectedEvent e)
+        {
+            this._terrainInfo.Handle(e);
+        }
+
+        public void Handle(UnitSelectedEvent e)
+        {
+            this._unitInfo.Handle(e);
+        }
+
+        public void Handle(ResourceSelectedEvent e)
+        {
+            this._resourceInfo.Handle(e);
         }
     }
 }

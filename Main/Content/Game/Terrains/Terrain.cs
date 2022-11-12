@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game.Terrains
 {
-    internal sealed record Terrain
+    public sealed record Terrain
     {
         public string Name { get; }
         public TerrainType Type { get; }
