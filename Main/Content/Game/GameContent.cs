@@ -19,7 +19,10 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game
 {
-    public interface IGameContent : IWindowContent, IEventHandler<UpdateMinimapEvent>
+    public interface IGameContent : 
+        IWindowContent, 
+        IEventHandler<UpdateMinimapEvent>,
+        IEventHandler<BuildingSelectedEvent>
     {
         void ProcessNextTurn();
         Map GetMapInfo();
@@ -114,6 +117,11 @@ namespace Main.Content.Game
         }
 
         public void Handle(UpdateMinimapEvent e)
+        {
+            this._rightBarPanel.Handle(e);
+        }
+        
+        public void Handle(BuildingSelectedEvent e)
         {
             this._rightBarPanel.Handle(e);
         }

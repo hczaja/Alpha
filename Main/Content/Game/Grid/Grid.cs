@@ -182,7 +182,7 @@ namespace Main.Content.Game
                 {
                     // temporary solution
                     var field = map.MapData.Fields.FirstOrDefault(f => f.Column == i && f.Row == j);
-                    this._cells[i, j] = new Cell(i, j, currentPlayer, new Terrain(field.TerrainType));
+                    this._cells[i, j] = new Cell(i, j, currentPlayer, new Terrain(field.TerrainType), this._gameContent);
                 }
             }
         }

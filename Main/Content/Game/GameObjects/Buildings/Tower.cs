@@ -29,6 +29,8 @@ namespace Main.Content.Game.GameObjects.Buildings
             drawer.Draw(this.DrawBox);
         }
 
+        public override Texture GetBuildingTextureLayer() => _texture;
+
         public override string ToString() => nameof(Tower);
     }
 }
