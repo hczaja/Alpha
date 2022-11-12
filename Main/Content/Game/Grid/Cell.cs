@@ -34,8 +34,12 @@ namespace Main.Content.Game
         private Player _currentPlayer;
         private FogOfWar _fogOfWar;
 
-        public Cell(int i, int j, Player startingPlayer, Terrain terrain)
+        private readonly IGameContent _gameContent;
+
+        public Cell(int i, int j, Player startingPlayer, Terrain terrain, IGameContent gameContent)
         {
+            this._gameContent = gameContent;
+
             this.Rectangle = new RectangleShape();
             this.Terrain = terrain;
 
@@ -73,7 +77,7 @@ namespace Main.Content.Game
 
             if (!this._fogOfWar.IsVisibleFor(this._currentPlayer.ID))
             {
-                this.Rectangle.FillColor = this._fogOfWar.GetFogColor();
+                this.Rectangle.FillColor = FogOfWar.GetFogColor();
                 drawer.Draw(this.Rectangle);
                 return;
             }
@@ -92,6 +96,20 @@ namespace Main.Content.Game
             this.Building?.Draw(drawer);
         }
 
+        public Color GetCellColorLayer()
+        {
+            var result = FogOfWar.GetFogColor();
+
+            if (!this._fogOfWar.IsVisibleFor(this._currentPlayer.ID))
+                return result;
+
+            result = this.Terrain.GetColor();
+
+            if (this.Building is not null) result = this.Building.GetBuildingColorLayer();
+
+            return result;
+        }
+
         public void Select()
         {
             this._selected = true;
@@ -101,6 +119,8 @@ namespace Main.Content.Game
                 $" - {this.Unit?.ToString()}" +
                 $" - {this.Building?.ToString()}" +
                 $" - {this.Resource?.ToString()}");
+
+            this._gameContent.Handle(new BuildingSelectedEvent(this.Building));
         }
 
         public void Unselect()

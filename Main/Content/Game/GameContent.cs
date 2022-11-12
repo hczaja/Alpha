@@ -19,7 +19,10 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game
 {
-    public interface IGameContent : IWindowContent
+    public interface IGameContent : 
+        IWindowContent, 
+        IEventHandler<UpdateMinimapEvent>,
+        IEventHandler<BuildingSelectedEvent>
     {
         void ProcessNextTurn();
         Map GetMapInfo();
@@ -72,6 +75,7 @@ namespace Main.Content.Game
             this._notificationPanel = new NotificationPanel(this, this._turnManager, this._notificationService);
 
             this._notificationService.EnqueueNotification(players[0].ID, new NewTurnNotification(this._notificationService, players[0]));
+            this.Handle(new UpdateMinimapEvent(this._centralPanel.GetGrid()));
         }
 
         public void ProcessNextTurn()
@@ -110,6 +114,16 @@ namespace Main.Content.Game
             this._rightBarPanel.Handle(e);
             this._bottomBarPanel.Handle(e);
             this._topBarPanel.Handle(e);
+        }
+
+        public void Handle(UpdateMinimapEvent e)
+        {
+            this._rightBarPanel.Handle(e);
+        }
+        
+        public void Handle(BuildingSelectedEvent e)
+        {
+            this._rightBarPanel.Handle(e);
         }
 
         public void Handle(KeyboardEvent e) 

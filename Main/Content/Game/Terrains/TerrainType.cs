@@ -8,6 +8,6 @@ namespace Main.Content.Game.Terrains
 {
     public enum TerrainType
     {
-        Unknown, Water, Dirt, Grass
+        Unknown, Water, Dirt, Grass, Sand, Mud, Rocks
     }
 }

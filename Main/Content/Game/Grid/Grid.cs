@@ -20,12 +20,13 @@ namespace Main.Content.Game
         Small, Medium, Large
     }
 
-    internal class Grid : IDrawable, IEventHandler<MouseEvent>, IEventHandler<NewTurnEvent>
+    public class Grid : IDrawable, IEventHandler<MouseEvent>, IEventHandler<NewTurnEvent>
     {
         public readonly int _width;
         public readonly int _height;
         private readonly GameCamera _gameCamera;
         private readonly ITurnManager _turnManager;
+        private readonly IGameContent _gameContent;
 
         private Cell[,] _cells { get; init; }
         private Cell? _currentCell = null;
@@ -37,10 +38,11 @@ namespace Main.Content.Game
                 GridSize.Large => (32, 32)
             };
 
-        public Grid(Map map, GameCamera camera, ITurnManager turnManager)
+        public Grid(Map map, GameCamera camera, ITurnManager turnManager, IGameContent gameContent)
         {
             this._gameCamera = camera;
             this._turnManager = turnManager;
+            this._gameContent = gameContent;
 
             (this._width, this._height) = GetGridDimensions(map.GridSize);
 
@@ -75,6 +77,8 @@ namespace Main.Content.Game
 
             this._currentCell?.Unselect();
             this._currentCell = null;
+
+            this._gameContent.Handle(new UpdateMinimapEvent(this));
         }
 
         public void Handle(MouseEvent e)
@@ -111,6 +115,21 @@ namespace Main.Content.Game
                     this._currentCell = null;
                 }
             }
+        }
+
+        public Dictionary<(int, int), Color> GetMapColorLayer()
+        {
+            var result = new Dictionary<(int, int), Color>();
+           
+            for (int i = 0; i < this._width; i++)
+            {
+                for (int j = 0; j < this._height; j++)
+                {
+                    result.Add((i, j), this._cells[i, j].GetCellColorLayer());
+                }
+            }
+
+            return result;
         }
 
         private void InitializeSurroundings()
@@ -163,7 +182,7 @@ namespace Main.Content.Game
                 {
                     // temporary solution
                     var field = map.MapData.Fields.FirstOrDefault(f => f.Column == i && f.Row == j);
-                    this._cells[i, j] = new Cell(i, j, currentPlayer, new Terrain(field.TerrainType));
+                    this._cells[i, j] = new Cell(i, j, currentPlayer, new Terrain(field.TerrainType), this._gameContent);
                 }
             }
         }
@@ -183,7 +202,7 @@ namespace Main.Content.Game
                     surroundingCell.Value.DiscoverFor(playerID);
                 }
 
-                playerStartingCell.AddBuilding(new Castle(playerStartingCell.Rectangle.Position));
+                playerStartingCell.AddBuilding(new Castle(playerStartingCell.Rectangle.Position, player));
             }
         }
     }
