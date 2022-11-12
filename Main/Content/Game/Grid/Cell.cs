@@ -113,20 +113,25 @@ namespace Main.Content.Game
         public void Select()
         {
             this._selected = true;
-            Console.WriteLine($"Selected Cell " +
-                $"[{this.Rectangle.Position.X / _CellSizeX},{this.Rectangle.Position.Y / _CellSizeY}]" +
-                $" - {this.Terrain.Name}" +
-                $" - {this.Unit?.ToString()}" +
-                $" - {this.Building?.ToString()}" +
-                $" - {this.Resource?.ToString()}");
 
-            this._gameContent.Handle(new BuildingSelectedEvent(this.Building));
+            bool isVisible = this._fogOfWar.IsVisibleFor(this._currentPlayer.ID);
+
+            this._gameContent.Handle(new TerrainSelectedEvent(isVisible ? this.Terrain : null));
+            this._gameContent.Handle(new UnitSelectedEvent(isVisible ? this.Unit : null));
+            this._gameContent.Handle(new BuildingSelectedEvent(isVisible ? this.Building : null));
+            this._gameContent.Handle(new ResourceSelectedEvent(isVisible ? this.Resource : null));
         }
 
         public void Unselect()
         {
             this.Rectangle.OutlineColor = Color.Transparent;
+
             this._selected = false;
+
+            this._gameContent.Handle(new TerrainSelectedEvent(null));
+            this._gameContent.Handle(new UnitSelectedEvent(null));
+            this._gameContent.Handle(new BuildingSelectedEvent(null));
+            this._gameContent.Handle(new ResourceSelectedEvent(null));
         }
 
         public bool IsOccupied()

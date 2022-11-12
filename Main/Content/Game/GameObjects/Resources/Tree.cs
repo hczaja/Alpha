@@ -29,6 +29,8 @@ namespace Main.Content.Game.GameObjects.Resources
             drawer.Draw(this.DrawBox);
         }
 
+        public override Texture GetResourceTextureLayer() => _texture;
+
         public override string ToString() => nameof(Tree);
     }
 }

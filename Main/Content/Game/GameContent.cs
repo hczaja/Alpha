@@ -22,7 +22,10 @@ namespace Main.Content.Game
     public interface IGameContent : 
         IWindowContent, 
         IEventHandler<UpdateMinimapEvent>,
-        IEventHandler<BuildingSelectedEvent>
+        IEventHandler<BuildingSelectedEvent>,
+        IEventHandler<TerrainSelectedEvent>,
+        IEventHandler<UnitSelectedEvent>,
+        IEventHandler<ResourceSelectedEvent>
     {
         void ProcessNextTurn();
         Map GetMapInfo();
@@ -122,6 +125,21 @@ namespace Main.Content.Game
         }
         
         public void Handle(BuildingSelectedEvent e)
+        {
+            this._rightBarPanel.Handle(e);
+        }
+        
+        public void Handle(TerrainSelectedEvent e)
+        {
+            this._rightBarPanel.Handle(e);
+        }
+        
+        public void Handle(UnitSelectedEvent e)
+        {
+            this._rightBarPanel.Handle(e);
+        }
+        
+        public void Handle(ResourceSelectedEvent e)
         {
             this._rightBarPanel.Handle(e);
         }

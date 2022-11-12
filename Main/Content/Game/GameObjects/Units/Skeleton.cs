@@ -28,5 +28,7 @@ namespace Main.Content.Game.GameObjects.Units
         {
             drawer.Draw(this.DrawBox);
         }
+
+        public override Texture GetUnitTextureLayer() => _texture;
     }
 }
