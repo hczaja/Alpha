@@ -76,7 +76,10 @@ namespace Main.Content.Game.Panels
             this._objectInfo.Handle(e);
         }
 
-        public override void Handle(MouseEvent e) { }
+        public override void Handle(MouseEvent e) 
+        {
+            this._objectInfo.Handle(e);
+        }
 
         public override void Handle(KeyboardEvent e) { }
 
