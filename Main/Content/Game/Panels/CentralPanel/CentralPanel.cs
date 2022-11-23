@@ -15,7 +15,7 @@ namespace Main.Content.Game.Panels
     internal class CentralPanel : GamePanel
     {
         public static readonly Vector2f Position = new Vector2f(0f, 0.05f * GameSettings.WindowHeight);
-        public static readonly Vector2f Size = new Vector2f(0.8f * GameSettings.WindowWidth, 0.75f * GameSettings.WindowHeight);
+        public static readonly Vector2f Size = new Vector2f(0.8f * GameSettings.WindowWidth, 0.95f * GameSettings.WindowHeight);
 
         private Grid Grid { get; init; }
         private readonly GameCamera _camera;

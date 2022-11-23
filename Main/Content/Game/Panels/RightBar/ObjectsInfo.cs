@@ -20,25 +20,36 @@ namespace Main.Content.Game.Panels.RightBar
     {
         private readonly IGameContent _gameContent;
 
-        public static readonly Vector2f InfoBlockSize = new Vector2f(RightBarPanel.Size.X, (RightBarPanel.Size.Y - RightBarPanel.Size.X) / 4f);
+        private readonly RectangleShape _background;
 
-        private BuildingBlockInfo _buildingInfo;
-        private UnitBlockInfo _unitInfo;
-        private ResourceBlockInfo _resourceInfo;
-        private TerrainBlockInfo _terrainInfo;
+        public static readonly float Margin = RightBarPanel.Size.Y * 0.05f;
+        public static readonly Vector2f TabSize = new Vector2f(RightBarPanel.Size.X / 4f, RightBarPanel.Size.X / 4f);
+
+        private BuildingBlockInfoTab _buildingInfo;
+        private UnitBlockInfoTab _unitInfo;
+        private ResourceBlockInfoTab _resourceInfo;
+        private TerrainBlockInfoTab _terrainInfo;
 
         public ObjectsInfo(IGameContent gameContent)
         {
             this._gameContent = gameContent;
 
-            this._buildingInfo = new BuildingBlockInfo(gameContent);
-            this._unitInfo = new UnitBlockInfo(gameContent);
-            this._resourceInfo = new ResourceBlockInfo(gameContent);
-            this._terrainInfo = new TerrainBlockInfo(gameContent);
+            this._background = new RectangleShape(new Vector2f(RightBarPanel.Size.X, RightBarPanel.Size.Y * 0.65f));
+            this._background.Position = RightBarPanel.Position + new Vector2f(0.0f, Options.BackgroundSize.Y + Minimap.BackgroundSize.Y);
+            this._background.FillColor = Color.Black;
+            this._background.OutlineThickness = 1f;
+            this._background.OutlineColor = Color.Red;
+
+            this._buildingInfo = new BuildingBlockInfoTab(gameContent);
+            this._unitInfo = new UnitBlockInfoTab(gameContent);
+            this._resourceInfo = new ResourceBlockInfoTab(gameContent);
+            this._terrainInfo = new TerrainBlockInfoTab(gameContent);
         }
 
         public void Draw(RenderTarget drawer)
         {
+            drawer.Draw(this._background);
+
             this._buildingInfo.Draw(drawer);
             this._unitInfo.Draw(drawer);
             this._resourceInfo.Draw(drawer);
@@ -68,8 +79,8 @@ namespace Main.Content.Game.Panels.RightBar
         public void Handle(MouseEvent e)
         {
             this._buildingInfo.Handle(e);
-            this._terrainInfo.Handle(e);
             this._unitInfo.Handle(e);
+            this._terrainInfo.Handle(e);
             this._resourceInfo.Handle(e);
         }
     }

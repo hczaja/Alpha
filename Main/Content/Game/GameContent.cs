@@ -37,7 +37,6 @@ namespace Main.Content.Game
         
         private readonly CentralPanel _centralPanel;
         private readonly RightBarPanel _rightBarPanel;
-        private readonly BottomBarPanel _bottomBarPanel;
         private readonly TopBarPanel _topBarPanel;
         private readonly NotificationPanel _notificationPanel;
 
@@ -71,7 +70,6 @@ namespace Main.Content.Game
 
             this._centralPanel = new CentralPanel(this, this._turnManager);
             this._rightBarPanel = new RightBarPanel(this, this._turnManager);
-            this._bottomBarPanel = new BottomBarPanel(this, this._turnManager);
             this._topBarPanel = new TopBarPanel(this, this._turnManager);
 
             this._notificationService = new NotificationService(players);
@@ -91,7 +89,6 @@ namespace Main.Content.Game
 
             this._centralPanel.Handle(newTurnEvent);
             this._rightBarPanel.Handle(newTurnEvent);
-            this._bottomBarPanel.Handle(newTurnEvent);
             this._topBarPanel.Handle(newTurnEvent);
         }
 
@@ -99,7 +96,6 @@ namespace Main.Content.Game
         {
             this._centralPanel.Draw(drawer);
             this._rightBarPanel.Draw(drawer);
-            this._bottomBarPanel.Draw(drawer);
             this._topBarPanel.Draw(drawer);
             this._notificationPanel.Draw(drawer);
         }
@@ -115,7 +111,6 @@ namespace Main.Content.Game
 
             this._centralPanel.Handle(e);
             this._rightBarPanel.Handle(e);
-            this._bottomBarPanel.Handle(e);
             this._topBarPanel.Handle(e);
         }
 
@@ -153,7 +148,6 @@ namespace Main.Content.Game
 
             this._centralPanel.Handle(e);
             this._rightBarPanel.Handle(e);
-            this._bottomBarPanel.Handle(e);
             this._topBarPanel.Handle(e);
         }
 
@@ -161,7 +155,6 @@ namespace Main.Content.Game
         {
             this._centralPanel.Update();
             this._rightBarPanel.Update();
-            this._bottomBarPanel.Update();
             this._notificationPanel.Update();
             this._topBarPanel.Update();
         }

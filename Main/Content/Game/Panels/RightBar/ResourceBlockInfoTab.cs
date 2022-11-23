@@ -11,32 +11,30 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game.Panels.RightBar
 {
-    public class UnitBlockInfo : IDrawable,
-        IEventHandler<UnitSelectedEvent>,
+    public class ResourceBlockInfoTab : IDrawable,
+        IEventHandler<ResourceSelectedEvent>,
         IEventHandler<MouseEvent>
     {
         private readonly IGameContent _gameContent;
-        public static readonly Vector2f BlockInfoPosition = BuildingBlockInfo.BlockInfoPosition + new Vector2f(0f, ObjectsInfo.InfoBlockSize.Y);
-        private static Texture UnitBlockTexture = new Texture("Assets/Utils/UnitTemplate.png");
+        public static readonly Vector2f BlockInfoPosition = UnitBlockInfoTab.BlockInfoPosition + new Vector2f(ObjectsInfo.TabSize.X, 0f);
+        private static Texture ResourceBlockTexture = new Texture("Assets/Utils/ResourceTemplate.png");
 
         private RectangleShape _background;
         private RectangleShape _image;
 
-        public UnitBlockInfo(IGameContent gameContent)
+        public ResourceBlockInfoTab(IGameContent gameContent)
         {
             this._gameContent = gameContent;
 
-            this._background = new RectangleShape(ObjectsInfo.InfoBlockSize);
+            this._background = new RectangleShape(ObjectsInfo.TabSize);
             this._background.Position = BlockInfoPosition;
             this._background.FillColor = Color.Black;
+            this._background.OutlineThickness = 1f;
             this._background.OutlineColor = Color.Red;
-            this._background.OutlineThickness = 2f;
 
-            this._image = new RectangleShape(new Vector2f(ObjectsInfo.InfoBlockSize.Y, ObjectsInfo.InfoBlockSize.Y));
+            this._image = new RectangleShape(ObjectsInfo.TabSize);
             this._image.Position = this._background.Position;
-            this._image.Texture = UnitBlockTexture;
-            this._image.OutlineColor = Color.Red;
-            this._image.OutlineThickness = 2f;
+            this._image.Texture = ResourceBlockTexture;
         }
 
         public void Draw(RenderTarget drawer)
@@ -45,9 +43,9 @@ namespace Main.Content.Game.Panels.RightBar
             drawer.Draw(this._image);
         }
 
-        public void Handle(UnitSelectedEvent e)
+        public void Handle(ResourceSelectedEvent e)
         {
-            var texture = e.Unit?.GetUnitTextureLayer() ?? UnitBlockTexture;
+            var texture = e.Resource?.GetResourceTextureLayer() ?? ResourceBlockTexture;
             this._image.Texture = texture;
         }
 
