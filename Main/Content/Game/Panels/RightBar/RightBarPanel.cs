@@ -20,10 +20,11 @@ namespace Main.Content.Game.Panels
         IEventHandler<ResourceSelectedEvent>
     {
         public static readonly Vector2f Position = new Vector2f(0.8f * GameSettings.WindowWidth, 0.05f * GameSettings.WindowHeight);
-        public static readonly Vector2f Size = new Vector2f(0.2f * GameSettings.WindowWidth, 0.75f * GameSettings.WindowHeight);
+        public static readonly Vector2f Size = new Vector2f(0.2f * GameSettings.WindowWidth, 0.95f * GameSettings.WindowHeight);
 
         private RectangleShape Shape { get; init; }
 
+        private readonly Options _options;
         private readonly Minimap _minimap;
         private readonly ObjectsInfo _objectInfo;
 
@@ -36,8 +37,9 @@ namespace Main.Content.Game.Panels
             this.Shape.Position = Position;
             this.Shape.FillColor = Color.Black;
             this.Shape.OutlineColor = Color.Red;
-            this.Shape.OutlineThickness = 2.0f;
+            this.Shape.OutlineThickness = 1f;
 
+            this._options = new Options(this._gameContent);
             this._minimap = new Minimap(this._gameContent);
             this._objectInfo = new ObjectsInfo(this._gameContent);
         }
@@ -47,6 +49,7 @@ namespace Main.Content.Game.Panels
             drawer.SetView(this.View);
             drawer.Draw(this.Shape);
 
+            this._options.Draw(drawer);
             this._minimap.Draw(drawer);
             this._objectInfo.Draw(drawer);
         }
@@ -79,6 +82,7 @@ namespace Main.Content.Game.Panels
         public override void Handle(MouseEvent e) 
         {
             this._objectInfo.Handle(e);
+            this._options.Handle(e);
         }
 
         public override void Handle(KeyboardEvent e) { }

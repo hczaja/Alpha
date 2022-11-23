@@ -11,32 +11,30 @@ using System.Threading.Tasks;
 
 namespace Main.Content.Game.Panels.RightBar
 {
-    public class TerrainBlockInfo : IDrawable,
-        IEventHandler<TerrainSelectedEvent>,
+    public class UnitBlockInfoTab : IDrawable,
+        IEventHandler<UnitSelectedEvent>,
         IEventHandler<MouseEvent>
     {
         private readonly IGameContent _gameContent;
-        public static readonly Vector2f BlockInfoPosition = ResourceBlockInfo.BlockInfoPosition + new Vector2f(0f, ObjectsInfo.InfoBlockSize.Y);
-        private static Texture TerrainBlockTexture = new Texture("Assets/Utils/TerrainTemplate.png");
+        public static readonly Vector2f BlockInfoPosition = BuildingBlockInfoTab.BlockInfoPosition + new Vector2f(ObjectsInfo.TabSize.X, 0f);
+        private static Texture UnitBlockTexture = new Texture("Assets/Utils/UnitTemplate.png");
 
         private RectangleShape _background;
         private RectangleShape _image;
 
-        public TerrainBlockInfo(IGameContent gameContent)
+        public UnitBlockInfoTab(IGameContent gameContent)
         {
             this._gameContent = gameContent;
 
-            this._background = new RectangleShape(ObjectsInfo.InfoBlockSize);
+            this._background = new RectangleShape(ObjectsInfo.TabSize);
             this._background.Position = BlockInfoPosition;
             this._background.FillColor = Color.Black;
+            this._background.OutlineThickness = 1f;
             this._background.OutlineColor = Color.Red;
-            this._background.OutlineThickness = 2f;
 
-            this._image = new RectangleShape(new Vector2f(ObjectsInfo.InfoBlockSize.Y, ObjectsInfo.InfoBlockSize.Y));
+            this._image = new RectangleShape(ObjectsInfo.TabSize);
             this._image.Position = this._background.Position;
-            this._image.Texture = TerrainBlockTexture;
-            this._image.OutlineColor = Color.Red;
-            this._image.OutlineThickness = 2f;
+            this._image.Texture = UnitBlockTexture;
         }
 
         public void Draw(RenderTarget drawer)
@@ -45,18 +43,10 @@ namespace Main.Content.Game.Panels.RightBar
             drawer.Draw(this._image);
         }
 
-        public void Handle(TerrainSelectedEvent e)
+        public void Handle(UnitSelectedEvent e)
         {
-            if (e.Terrain is not null)
-            {
-                this._image.Texture = null;
-                this._image.FillColor = e.Terrain.GetColor();
-            }
-            else
-            {
-                this._image.Texture = TerrainBlockTexture;
-                this._image.FillColor = Color.White;
-            }
+            var texture = e.Unit?.GetUnitTextureLayer() ?? UnitBlockTexture;
+            this._image.Texture = texture;
         }
 
         public void Handle(MouseEvent e)
@@ -69,5 +59,4 @@ namespace Main.Content.Game.Panels.RightBar
             }
         }
     }
-
 }
